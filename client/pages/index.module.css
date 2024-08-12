@@ -1,0 +1,31 @@
+.container {
+  min-height: 100vh;
+  padding: 40px 16px;
+  background: #f8f8f8;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.title {
+  padding-top: 40px;
+  font-size: 80px;
+  font-weight: 900;
+  color: transparent;
+  text-align: center;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradient 10s ease infinite;
+}

@@ -1,0 +1,28 @@
+{
+  "eslint.run": "onSave",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.referencesCodeLens.enabled": true,
+  "files.eol": "\n",
+  "editor.tabSize": 2,
+  "stylelint.validate": ["css"],
+
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.module.css": "${capture}.module.css.d.ts, ${capture}.module.css.d.ts.map",
+    "controller.ts": "validators.ts, $relay.ts",
+    "tsconfig.json": "tsconfig.tsbuildinfo"
+  }
+}
