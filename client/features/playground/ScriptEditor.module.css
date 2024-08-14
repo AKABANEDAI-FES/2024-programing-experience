@@ -1,0 +1,37 @@
+.input {
+  width: 2rem;
+  margin: 0 0.5rem;
+  text-align: center;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.main {
+  display: flex;
+  height: 100vh;
+}
+
+.scriptPalette {
+  box-sizing: border-box;
+  width: 30%;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.scriptEditSpace {
+  box-sizing: border-box;
+  width: 70%;
+  padding: 10px;
+  background-color: #fff;
+  border-left: 1px solid #ccc;
+}
+
+.block {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  margin: 5px 0;
+  color: white;
+  cursor: grab;
+  background-color: #4caf50;
+}
