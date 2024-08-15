@@ -1,3 +1,4 @@
+import { AlignBox } from 'components/AlignBox';
 import { useEffect, useState } from 'react';
 import styles from './Preview.module.css';
 
@@ -7,6 +8,7 @@ type Props = {
 
 export const Preview = (props: Props) => {
   const [step, setStep] = useState([0]);
+  const [stepSpeed, setStepSpeed] = useState(1);
   const [isStart, setIsStart] = useState(false);
   const [state, setState] = useState({
     x: 0,
@@ -15,6 +17,7 @@ export const Preview = (props: Props) => {
   });
   const { script } = props;
   useEffect(() => {
+    console.log(step);
     if (isStart) {
       const intervalId = setInterval(() => {
         if (step[0] >= (script?.length ?? 0)) {
@@ -47,17 +50,29 @@ export const Preview = (props: Props) => {
         blockMoves[block.id]();
         console.log(state);
         setStep((prev) => [prev[0] + 1]);
-      }, 1000);
+      }, stepSpeed * 1000);
       return () => clearInterval(intervalId);
     }
   }, [script, step, isStart]);
   console.log(isStart);
   return (
     <div className={styles.main}>
-      <button
-        className={isStart ? styles.stopButton : styles.startButton}
-        onClick={() => setIsStart(!isStart)}
-      ></button>
+      <AlignBox x={'|..'}>
+        <button
+          className={isStart ? styles.stopButton : styles.startButton}
+          onClick={() => setIsStart(!isStart)}
+        ></button>
+        {stepSpeed}
+        <input
+          type="range"
+          min={1}
+          defaultValue={10}
+          max={20}
+          onChange={(e) => {
+            setStepSpeed(+e.target.value / 10);
+          }}
+        ></input>
+      </AlignBox>
       <div className={styles.preview}>
         <div
           className={styles.object}
@@ -65,6 +80,7 @@ export const Preview = (props: Props) => {
             top: state.y,
             left: state.x,
             transform: `rotate(${state.direction}deg)`,
+            transitionDuration: `${stepSpeed}s`,
           }}
         ></div>
       </div>
