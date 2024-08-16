@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './Playground.module.css';
 import { Preview } from './Preview';
 import { ScriptEditor } from './ScriptEditor';
+export type Block = { id: number; arg: (Block | string)[] };
 
 const BLOCKS: {
   id: number;
@@ -13,7 +14,7 @@ const BLOCKS: {
 ];
 
 export const Playground = () => {
-  const [script, setScript] = useState<{ id: number; arg: string[] }[]>();
+  const [script, setScript] = useState<Block[]>();
   return (
     <div className={styles.main}>
       <ScriptEditor script={script} setScript={setScript} BLOCKS={BLOCKS}></ScriptEditor>

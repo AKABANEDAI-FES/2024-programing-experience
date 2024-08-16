@@ -1,9 +1,10 @@
 import { AlignBox } from 'components/AlignBox';
 import { useEffect, useState } from 'react';
+import type { Block } from './Playground';
 import styles from './Preview.module.css';
 
 type Props = {
-  script: { id: number; arg: string[] }[] | undefined;
+  script: Block[] | undefined;
 };
 
 export const Preview = (props: Props) => {
@@ -17,7 +18,6 @@ export const Preview = (props: Props) => {
   });
   const { script } = props;
   useEffect(() => {
-    console.log(step);
     if (isStart) {
       const intervalId = setInterval(() => {
         if (step[0] >= (script?.length ?? 0)) {
@@ -29,32 +29,43 @@ export const Preview = (props: Props) => {
         const block = script?.[step[0]];
         if (block === undefined) return;
 
-        const blockMoves: Record<number, () => void> = {
-          1: () =>
-            setState((prev) => ({
-              ...prev,
-              x: prev.x + Number(block.arg[0]) * Math.cos((prev.direction / 180) * Math.PI),
-              y: prev.y + Number(block.arg[0]) * Math.sin((prev.direction / 180) * Math.PI),
-            })),
-          2: () =>
-            setState((prev) => ({
-              ...prev,
-              direction: prev.direction + Number(block.arg[0]),
-            })),
-          3: () =>
-            setState((prev) => ({
-              ...prev,
-              direction: prev.direction - Number(block.arg[0]),
-            })),
+        const blockMoves = (block: Block | string): (() => void) | string => {
+          if (typeof block === 'string') {
+            return block;
+          }
+
+          const moves = {
+            1: () =>
+              setState((prev) => ({
+                ...prev,
+                x:
+                  prev.x +
+                  Number(blockMoves(block.arg[0])) * Math.cos((prev.direction / 180) * Math.PI),
+                y:
+                  prev.y +
+                  Number(blockMoves(block.arg[0])) * Math.sin((prev.direction / 180) * Math.PI),
+              })),
+            2: () =>
+              setState((prev) => ({
+                ...prev,
+                direction: prev.direction + Number(blockMoves(block.arg[0])),
+              })),
+            3: () => {
+              setState((prev) => ({
+                ...prev,
+                direction: prev.direction - Number(blockMoves(block.arg[0])),
+              }));
+            },
+          }[block.id];
+
+          return moves?.() ?? '';
         };
-        blockMoves[block.id]();
-        console.log(state);
+        blockMoves(block);
         setStep((prev) => [prev[0] + 1]);
       }, stepSpeed * 1000);
       return () => clearInterval(intervalId);
     }
   }, [script, step, isStart]);
-  console.log(isStart);
   return (
     <div className={styles.main}>
       <AlignBox x={'|..'}>

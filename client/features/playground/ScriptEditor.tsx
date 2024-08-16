@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
+import type { Block } from './Playground';
 import styles from './ScriptEditor.module.css';
 type ScriptPaletteProps = {
   BLOCKS: { id: number; contents: string[] }[];
@@ -37,16 +38,8 @@ const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
 };
 
 type ScriptEditSpaceProps = {
-  script: { id: number; arg: string[] }[] | undefined;
-  setScript: Dispatch<
-    SetStateAction<
-      | {
-          id: number;
-          arg: string[];
-        }[]
-      | undefined
-    >
-  >;
+  script: Block[] | undefined;
+  setScript: Dispatch<SetStateAction<Block[] | undefined>>;
   BLOCKS: { id: number; contents: string[] }[];
   targetBlockId: number | null;
 };
@@ -84,16 +77,8 @@ const ScriptEditSpace = (scriptEditSpaceProps: ScriptEditSpaceProps) => {
 };
 
 type Props = {
-  script: { id: number; arg: string[] }[] | undefined;
-  setScript: Dispatch<
-    SetStateAction<
-      | {
-          id: number;
-          arg: string[];
-        }[]
-      | undefined
-    >
-  >;
+  script: Block[] | undefined;
+  setScript: Dispatch<SetStateAction<Block[] | undefined>>;
   BLOCKS: { id: number; contents: string[] }[];
 };
 export const ScriptEditor = (props: Props) => {
