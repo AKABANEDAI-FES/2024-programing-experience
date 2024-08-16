@@ -62,14 +62,13 @@ export const Preview = (props: Props) => {
           className={isStart ? styles.stopButton : styles.startButton}
           onClick={() => setIsStart(!isStart)}
         ></button>
-        {stepSpeed}
         <input
           type="range"
           min={1}
           defaultValue={10}
           max={20}
           onChange={(e) => {
-            setStepSpeed(+e.target.value / 10);
+            setStepSpeed(2 - Number(e.target.value) / 10);
           }}
         ></input>
       </AlignBox>
