@@ -69,6 +69,12 @@ export const Preview = (props: Props) => {
                   }));
                 },
                 4: () => setStepDelay(Number(arg(0))),
+                5: () =>
+                  setState((prev) => ({
+                    ...prev,
+                    x: prev.x - Number(arg(0)) * Math.cos((prev.direction / 180) * Math.PI),
+                    y: prev.y - Number(arg(0)) * Math.sin((prev.direction / 180) * Math.PI),
+                  })),
               };
             };
 
