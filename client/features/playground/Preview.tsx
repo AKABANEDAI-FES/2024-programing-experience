@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const Preview = (props: Props) => {
-  const [step, setStep] = useState([0]);
+  const [stepCounts, setStepCounts] = useState([0]);
   const [stepSpeed, setStepSpeed] = useState(1);
   const [isStart, setIsStart] = useState(false);
   const [state, setState] = useState({
@@ -20,52 +20,51 @@ export const Preview = (props: Props) => {
   useEffect(() => {
     if (isStart) {
       const intervalId = setInterval(() => {
-        if (step[0] >= (script?.length ?? 0)) {
+        if (stepCounts[0] >= (script?.length ?? 0)) {
           setIsStart(false);
-          setStep([0]);
+          setStepCounts([0]);
           clearInterval(intervalId);
           return;
         }
-        const block = script?.[step[0]];
+        const block = script?.[stepCounts[0]];
         if (block === undefined) return;
 
-        const blockMoves = (block: Block | string): (() => void) | string => {
+        const step = (block: Block | string): void | string | undefined => {
           if (typeof block === 'string') {
             return block;
           }
 
           const moves = (
-            fn: (arg: Block | string) => (() => void) | string,
+            fn: (arg: Block | string) => void | string | undefined,
             args: (Block | string)[],
-          ) =>
-            ({
-              1: () =>
-                setState((prev) => ({
-                  ...prev,
-                  x: prev.x + Number(fn(args[0])) * Math.cos((prev.direction / 180) * Math.PI),
-                  y: prev.y + Number(fn(args[0])) * Math.sin((prev.direction / 180) * Math.PI),
-                })),
-              2: () =>
-                setState((prev) => ({
-                  ...prev,
-                  direction: prev.direction + Number(fn(args[0])),
-                })),
-              3: () => {
-                setState((prev) => ({
-                  ...prev,
-                  direction: prev.direction - Number(fn(args[0])),
-                }));
-              },
-            })[block.id];
+          ): Record<number, () => void> => ({
+            1: () =>
+              setState((prev) => ({
+                ...prev,
+                x: prev.x + Number(fn(args[0])) * Math.cos((prev.direction / 180) * Math.PI),
+                y: prev.y + Number(fn(args[0])) * Math.sin((prev.direction / 180) * Math.PI),
+              })),
+            2: () =>
+              setState((prev) => ({
+                ...prev,
+                direction: prev.direction + Number(fn(args[0])),
+              })),
+            3: () => {
+              setState((prev) => ({
+                ...prev,
+                direction: prev.direction - Number(fn(args[0])),
+              }));
+            },
+          });
 
-          return moves(blockMoves, block.arg)?.() ?? '';
+          return moves(step, block.arg)[block.id]?.();
         };
-        blockMoves(block);
-        setStep((prev) => [prev[0] + 1]);
+        step(block);
+        setStepCounts((prev) => [prev[0] + 1]);
       }, stepSpeed * 1000);
       return () => clearInterval(intervalId);
     }
-  }, [script, step, isStart]);
+  }, [script, stepCounts, isStart]);
   return (
     <div className={styles.main}>
       <AlignBox x={'|..'}>
