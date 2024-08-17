@@ -1,4 +1,5 @@
 import { AlignBox } from 'components/AlignBox';
+import type { Dispatch, SetStateAction } from 'react';
 import { useEffect, useState } from 'react';
 import type { Block } from './Playground';
 import styles from './Preview.module.css';
@@ -7,11 +8,17 @@ type Props = {
   script: Block[] | undefined;
 };
 
+type SpriteState = {
+  x: number;
+  y: number;
+  direction: number;
+};
+
 export const Preview = (props: Props) => {
   const [stepCounts, setStepCounts] = useState([0]);
   const [stepSpeed, setStepSpeed] = useState(1);
   const [isStart, setIsStart] = useState(false);
-  const [state, setState] = useState({
+  const [state, setState] = useState<SpriteState>({
     x: 0,
     y: 0,
     direction: 0,
@@ -37,27 +44,31 @@ export const Preview = (props: Props) => {
           const moves = (
             fn: (arg: Block | string) => void | string | undefined,
             args: (Block | string)[],
-          ): Record<number, () => void> => ({
-            1: () =>
-              setState((prev) => ({
-                ...prev,
-                x: prev.x + Number(fn(args[0])) * Math.cos((prev.direction / 180) * Math.PI),
-                y: prev.y + Number(fn(args[0])) * Math.sin((prev.direction / 180) * Math.PI),
-              })),
-            2: () =>
-              setState((prev) => ({
-                ...prev,
-                direction: prev.direction + Number(fn(args[0])),
-              })),
-            3: () => {
-              setState((prev) => ({
-                ...prev,
-                direction: prev.direction - Number(fn(args[0])),
-              }));
-            },
-          });
+            setState: Dispatch<SetStateAction<SpriteState>>,
+          ): Record<number, () => void> => {
+            const arg = (n: number) => fn(args[n]);
+            return {
+              1: () =>
+                setState((prev) => ({
+                  ...prev,
+                  x: prev.x + Number(arg(0)) * Math.cos((prev.direction / 180) * Math.PI),
+                  y: prev.y + Number(arg(0)) * Math.sin((prev.direction / 180) * Math.PI),
+                })),
+              2: () =>
+                setState((prev) => ({
+                  ...prev,
+                  direction: prev.direction + Number(arg(0)),
+                })),
+              3: () => {
+                setState((prev) => ({
+                  ...prev,
+                  direction: prev.direction - Number(arg(0)),
+                }));
+              },
+            };
+          };
 
-          return moves(step, block.arg)[block.id]?.();
+          return moves(step, block.arg, setState)[block.id]?.();
         };
         step(block);
         setStepCounts((prev) => [prev[0] + 1]);
