@@ -17,6 +17,7 @@ type SpriteState = {
 export const Preview = (props: Props) => {
   const [stepCounts, setStepCounts] = useState([0]);
   const [stepSpeed, setStepSpeed] = useState(1);
+  const [stepDelay, setStepDelay] = useState<number | null>(null);
   const [isStart, setIsStart] = useState(false);
   const [state, setState] = useState<SpriteState>({
     x: 0,
@@ -26,53 +27,58 @@ export const Preview = (props: Props) => {
   const { script } = props;
   useEffect(() => {
     if (isStart) {
-      const intervalId = setInterval(() => {
-        if (stepCounts[0] >= (script?.length ?? 0)) {
-          setIsStart(false);
-          setStepCounts([0]);
-          clearInterval(intervalId);
-          return;
-        }
-        const block = script?.[stepCounts[0]];
-        if (block === undefined) return;
-
-        const step = (block: Block | string): void | string | undefined => {
-          if (typeof block === 'string') {
-            return block;
+      const intervalId = setInterval(
+        () => {
+          if (stepCounts[0] >= (script?.length ?? 0)) {
+            setIsStart(false);
+            setStepCounts([0]);
+            clearInterval(intervalId);
+            return;
           }
+          const block = script?.[stepCounts[0]];
+          if (block === undefined) return;
 
-          const moves = (
-            fn: (arg: Block | string) => void | string | undefined,
-            args: (Block | string)[],
-            setState: Dispatch<SetStateAction<SpriteState>>,
-          ): Record<number, () => void> => {
-            const arg = (n: number) => fn(args[n]);
-            return {
-              1: () =>
-                setState((prev) => ({
-                  ...prev,
-                  x: prev.x + Number(arg(0)) * Math.cos((prev.direction / 180) * Math.PI),
-                  y: prev.y + Number(arg(0)) * Math.sin((prev.direction / 180) * Math.PI),
-                })),
-              2: () =>
-                setState((prev) => ({
-                  ...prev,
-                  direction: prev.direction + Number(arg(0)),
-                })),
-              3: () => {
-                setState((prev) => ({
-                  ...prev,
-                  direction: prev.direction - Number(arg(0)),
-                }));
-              },
+          const step = (block: Block | string): void | string | undefined => {
+            if (typeof block === 'string') {
+              return block;
+            }
+
+            const moves = (
+              fn: (arg: Block | string) => void | string | undefined,
+              args: (Block | string)[],
+              setState: Dispatch<SetStateAction<SpriteState>>,
+            ): Record<number, () => void> => {
+              const arg = (n: number) => fn(args[n]);
+              setStepDelay(null);
+              return {
+                1: () =>
+                  setState((prev) => ({
+                    ...prev,
+                    x: prev.x + Number(arg(0)) * Math.cos((prev.direction / 180) * Math.PI),
+                    y: prev.y + Number(arg(0)) * Math.sin((prev.direction / 180) * Math.PI),
+                  })),
+                2: () =>
+                  setState((prev) => ({
+                    ...prev,
+                    direction: prev.direction + Number(arg(0)),
+                  })),
+                3: () => {
+                  setState((prev) => ({
+                    ...prev,
+                    direction: prev.direction - Number(arg(0)),
+                  }));
+                },
+                4: () => setStepDelay(Number(arg(0))),
+              };
             };
-          };
 
-          return moves(step, block.arg, setState)[block.id]?.();
-        };
-        step(block);
-        setStepCounts((prev) => [prev[0] + 1]);
-      }, stepSpeed * 1000);
+            return moves(step, block.arg, setState)[block.id]?.();
+          };
+          step(block);
+          setStepCounts((prev) => [prev[0] + 1]);
+        },
+        (stepDelay ?? stepSpeed) * 1000,
+      );
       return () => clearInterval(intervalId);
     }
   }, [script, stepCounts, isStart]);
@@ -95,7 +101,7 @@ export const Preview = (props: Props) => {
       </AlignBox>
       <div className={styles.preview}>
         <div
-          className={styles.object}
+          className={styles.sprite}
           style={{
             top: state.y,
             left: state.x,

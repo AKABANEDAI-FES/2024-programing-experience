@@ -29,6 +29,7 @@
 .block {
   display: flex;
   flex-direction: row;
+  width: fit-content;
   padding: 10px;
   margin: 5px 0;
   color: white;

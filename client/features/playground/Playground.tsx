@@ -11,6 +11,7 @@ const BLOCKS: {
   { id: 1, contents: ['前へ', '$number', '歩進む'] },
   { id: 2, contents: ['右へ', '$number', '度回る'] },
   { id: 3, contents: ['左へ', '$number', '度回る'] },
+  { id: 4, contents: ['$number', '秒待つ'] },
 ];
 
 export const Playground = () => {
