@@ -34,31 +34,31 @@ export const Preview = (props: Props) => {
             return block;
           }
 
-          const moves = {
-            1: () =>
-              setState((prev) => ({
-                ...prev,
-                x:
-                  prev.x +
-                  Number(blockMoves(block.arg[0])) * Math.cos((prev.direction / 180) * Math.PI),
-                y:
-                  prev.y +
-                  Number(blockMoves(block.arg[0])) * Math.sin((prev.direction / 180) * Math.PI),
-              })),
-            2: () =>
-              setState((prev) => ({
-                ...prev,
-                direction: prev.direction + Number(blockMoves(block.arg[0])),
-              })),
-            3: () => {
-              setState((prev) => ({
-                ...prev,
-                direction: prev.direction - Number(blockMoves(block.arg[0])),
-              }));
-            },
-          }[block.id];
+          const moves = (
+            fn: (arg: Block | string) => (() => void) | string,
+            args: (Block | string)[],
+          ) =>
+            ({
+              1: () =>
+                setState((prev) => ({
+                  ...prev,
+                  x: prev.x + Number(fn(args[0])) * Math.cos((prev.direction / 180) * Math.PI),
+                  y: prev.y + Number(fn(args[0])) * Math.sin((prev.direction / 180) * Math.PI),
+                })),
+              2: () =>
+                setState((prev) => ({
+                  ...prev,
+                  direction: prev.direction + Number(fn(args[0])),
+                })),
+              3: () => {
+                setState((prev) => ({
+                  ...prev,
+                  direction: prev.direction - Number(fn(args[0])),
+                }));
+              },
+            })[block.id];
 
-          return moves?.() ?? '';
+          return moves(blockMoves, block.arg)?.() ?? '';
         };
         blockMoves(block);
         setStep((prev) => [prev[0] + 1]);
