@@ -1,9 +1,9 @@
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import type { Block } from './Playground';
+import type { Block, BLOCKS_TYPE } from './Playground';
 import styles from './ScriptEditor.module.css';
 type ScriptPaletteProps = {
-  BLOCKS: { id: number; contents: string[] }[];
+  BLOCKS: BLOCKS_TYPE;
   setTargetBlockId: Dispatch<SetStateAction<number | null>>;
 };
 const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
@@ -17,14 +17,9 @@ const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
   });
   return (
     <div className={styles.scriptPalette}>
-      {BLOCKS.map((block) => (
-        <div
-          key={block.id}
-          className={styles.block}
-          draggable
-          onDragStart={() => setTargetBlockId(block.id)}
-        >
-          {block.contents.map((content, i) =>
+      {Object.keys(BLOCKS).map((id, i) => (
+        <div key={i} className={styles.block} draggable onDragStart={() => setTargetBlockId(+id)}>
+          {BLOCKS[+id].contents.map((content, i) =>
             content.startsWith('$') ? (
               <input className={styles.input} key={i} type="text" value={10} />
             ) : (
@@ -40,7 +35,7 @@ const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
 type ScriptEditSpaceProps = {
   script: Block[] | undefined;
   setScript: Dispatch<SetStateAction<Block[] | undefined>>;
-  BLOCKS: { id: number; contents: string[] }[];
+  BLOCKS: BLOCKS_TYPE;
   targetBlockId: number | null;
 };
 
@@ -63,7 +58,7 @@ const ScriptEditSpace = (scriptEditSpaceProps: ScriptEditSpaceProps) => {
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {script?.map((block) => (
         <div className={styles.block}>
-          {BLOCKS.find((b) => b.id === block.id)?.contents.map((content, i) =>
+          {BLOCKS[block.id]?.contents.map((content, i) =>
             content.startsWith('$') ? (
               <input className={styles.input} key={i} type="text" value={10} />
             ) : (
@@ -79,7 +74,7 @@ const ScriptEditSpace = (scriptEditSpaceProps: ScriptEditSpaceProps) => {
 type Props = {
   script: Block[] | undefined;
   setScript: Dispatch<SetStateAction<Block[] | undefined>>;
-  BLOCKS: { id: number; contents: string[] }[];
+  BLOCKS: BLOCKS_TYPE;
 };
 export const ScriptEditor = (props: Props) => {
   const [targetBlockId, setTargetBlockId] = useState<number | null>(null);
