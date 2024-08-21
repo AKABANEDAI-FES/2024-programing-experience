@@ -1,7 +1,7 @@
 import { AlignBox } from 'components/AlignBox';
 import type { Dispatch, SetStateAction } from 'react';
 import { useEffect, useState } from 'react';
-import type { Block } from './Playground';
+import type { Block } from '../types';
 import styles from './Preview.module.css';
 
 type Props = {
