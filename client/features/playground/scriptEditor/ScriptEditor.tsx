@@ -17,9 +17,9 @@ const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
   });
   return (
     <div className={styles.scriptPalette}>
-      {BLOCKS.map((block, i) => (
+      {BLOCKS.map((block) => (
         <div
-          key={i}
+          key={block.id}
           className={styles.block}
           draggable
           onDragStart={() => setTargetBlockId(block.id)}
