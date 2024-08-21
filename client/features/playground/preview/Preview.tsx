@@ -1,17 +1,11 @@
 import { AlignBox } from 'components/AlignBox';
-import type { Dispatch, SetStateAction } from 'react';
 import { useEffect, useState } from 'react';
-import type { Block } from '../types';
+import { moves } from '../constants';
+import type { Block, SpriteState } from '../types';
 import styles from './Preview.module.css';
 
 type Props = {
   script: Block[] | undefined;
-};
-
-type SpriteState = {
-  x: number;
-  y: number;
-  direction: number;
 };
 
 export const Preview = (props: Props) => {
@@ -43,42 +37,7 @@ export const Preview = (props: Props) => {
               return block;
             }
 
-            const moves = (
-              fn: (arg: Block | string) => void | string | undefined,
-              args: (Block | string)[],
-              setState: Dispatch<SetStateAction<SpriteState>>,
-            ): Record<number, () => void> => {
-              const arg = (n: number) => fn(args[n]);
-              setStepDelay(null);
-              return {
-                1: () =>
-                  setState((prev) => ({
-                    ...prev,
-                    x: prev.x + Number(arg(0)) * Math.cos((prev.direction / 180) * Math.PI),
-                    y: prev.y + Number(arg(0)) * Math.sin((prev.direction / 180) * Math.PI),
-                  })),
-                2: () =>
-                  setState((prev) => ({
-                    ...prev,
-                    direction: prev.direction + Number(arg(0)),
-                  })),
-                3: () => {
-                  setState((prev) => ({
-                    ...prev,
-                    direction: prev.direction - Number(arg(0)),
-                  }));
-                },
-                4: () => setStepDelay(Number(arg(0))),
-                5: () =>
-                  setState((prev) => ({
-                    ...prev,
-                    x: prev.x - Number(arg(0)) * Math.cos((prev.direction / 180) * Math.PI),
-                    y: prev.y - Number(arg(0)) * Math.sin((prev.direction / 180) * Math.PI),
-                  })),
-              };
-            };
-
-            return moves(step, block.arg, setState)[block.id]?.();
+            return moves(step, block.arg, setState, setStepDelay)[block.id]?.();
           };
           step(block);
           setStepCounts((prev) => [prev[0] + 1]);
