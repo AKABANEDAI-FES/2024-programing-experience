@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './Playground.module.css';
-import { Preview } from './Preview';
-import { ScriptEditor } from './ScriptEditor';
+import { Preview } from './preview/Preview';
+import { ScriptEditor } from './scriptEditor/ScriptEditor';
 export type Block = { id: number; arg: (Block | string)[] };
 export type BLOCK = { id: number; contents: string[] };
 
