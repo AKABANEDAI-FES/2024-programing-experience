@@ -1,9 +1,9 @@
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import type { Block, BLOCKS_TYPE } from './Playground';
+import type { Block, BLOCK } from './Playground';
 import styles from './ScriptEditor.module.css';
 type ScriptPaletteProps = {
-  BLOCKS: BLOCKS_TYPE;
+  BLOCKS: BLOCK[];
   setTargetBlockId: Dispatch<SetStateAction<number | null>>;
 };
 const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
@@ -17,9 +17,14 @@ const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
   });
   return (
     <div className={styles.scriptPalette}>
-      {Object.keys(BLOCKS).map((id, i) => (
-        <div key={i} className={styles.block} draggable onDragStart={() => setTargetBlockId(+id)}>
-          {BLOCKS[+id].contents.map((content, i) =>
+      {BLOCKS.map((block, i) => (
+        <div
+          key={i}
+          className={styles.block}
+          draggable
+          onDragStart={() => setTargetBlockId(block.id)}
+        >
+          {block.contents.map((content, i) =>
             content.startsWith('$') ? (
               <input className={styles.input} key={i} type="text" value={10} />
             ) : (
@@ -35,7 +40,7 @@ const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
 type ScriptEditSpaceProps = {
   script: Block[] | undefined;
   setScript: Dispatch<SetStateAction<Block[] | undefined>>;
-  BLOCKS: BLOCKS_TYPE;
+  BLOCKS: BLOCK[];
   targetBlockId: number | null;
 };
 
@@ -49,7 +54,13 @@ const ScriptEditSpace = (scriptEditSpaceProps: ScriptEditSpaceProps) => {
     newScript.push({ id: targetBlockId, arg: ['10'] });
     setScript(newScript);
   };
-
+  const BLOCKS_DICT = BLOCKS.reduce(
+    (prev, curr) => {
+      prev[curr.id] = curr;
+      return prev;
+    },
+    {} as Record<number, BLOCK>,
+  );
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
@@ -58,7 +69,7 @@ const ScriptEditSpace = (scriptEditSpaceProps: ScriptEditSpaceProps) => {
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {script?.map((block) => (
         <div className={styles.block}>
-          {BLOCKS[block.id]?.contents.map((content, i) =>
+          {BLOCKS_DICT[block.id]?.contents.map((content, i) =>
             content.startsWith('$') ? (
               <input className={styles.input} key={i} type="text" value={10} />
             ) : (
@@ -74,7 +85,7 @@ const ScriptEditSpace = (scriptEditSpaceProps: ScriptEditSpaceProps) => {
 type Props = {
   script: Block[] | undefined;
   setScript: Dispatch<SetStateAction<Block[] | undefined>>;
-  BLOCKS: BLOCKS_TYPE;
+  BLOCKS: BLOCK[];
 };
 export const ScriptEditor = (props: Props) => {
   const [targetBlockId, setTargetBlockId] = useState<number | null>(null);
