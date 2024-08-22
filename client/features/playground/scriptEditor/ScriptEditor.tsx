@@ -51,6 +51,44 @@ const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
   );
 };
 
+type ScriptBlockProps = {
+  block: Block;
+  n: number;
+  handleOnChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    n: number,
+    i: number,
+    contents: string[],
+  ) => void;
+};
+
+const ScriptBlock = (props: ScriptBlockProps) => {
+  const { block, n, handleOnChange } = props;
+  return (
+    <>
+      {BLOCKS_DICT[block.id]?.contents.map((content, i, contents) => {
+        if (content.startsWith('$')) {
+          const argIndex = contents.slice(0, i).filter((content) => content.startsWith('$')).length;
+          const arg = block.arg[argIndex];
+          if (typeof arg === 'string') {
+            return (
+              <input
+                className={styles.input}
+                key={i}
+                type="text"
+                defaultValue={arg}
+                onChange={(e) => handleOnChange(e, n, i, contents)}
+              />
+            );
+          }
+          return;
+        }
+        return <div key={i}>{content}</div>;
+      })}
+    </>
+  );
+};
+
 type ScriptEditSpaceProps = {
   script: Block[] | undefined;
   setScript: Dispatch<SetStateAction<Block[] | undefined>>;
@@ -94,23 +132,7 @@ const ScriptEditSpace = (scriptEditSpaceProps: ScriptEditSpaceProps) => {
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {script?.map((block, n) => (
         <div className={styles.block}>
-          {BLOCKS_DICT[block.id]?.contents.map((content, i, contents) =>
-            content.startsWith('$') ? (
-              <input
-                className={styles.input}
-                key={i}
-                type="text"
-                defaultValue={
-                  block.arg[
-                    contents.slice(0, i).filter((content) => content.startsWith('$')).length
-                  ] as string
-                }
-                onChange={(e) => handleOnChange(e, n, i, contents)}
-              />
-            ) : (
-              <div key={i}>{content}</div>
-            ),
-          )}
+          <ScriptBlock key={n} block={block} n={n} handleOnChange={handleOnChange} />
         </div>
       ))}
     </div>
