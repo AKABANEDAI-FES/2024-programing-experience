@@ -7,7 +7,7 @@ type ScriptPaletteProps = {
   setTargetBlock: Dispatch<SetStateAction<BLOCK | null>>;
 };
 const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
-  const { setTargetBlock: setTargetBlockId } = scriptPaletteProps;
+  const { setTargetBlock } = scriptPaletteProps;
   // @ts-expect-error TS2322
   const [blocks, setBLOCKS_useState] = useState<BLOCK[]>(BLOCKS);
   const ref = useRef<HTMLInputElement>(null);
@@ -30,7 +30,7 @@ const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
           key={block.id}
           className={styles.block}
           draggable
-          onDragStart={() => setTargetBlockId(block)}
+          onDragStart={() => setTargetBlock(block)}
         >
           {block.contents.map((content, i) =>
             content.startsWith('$') ? (
@@ -123,11 +123,11 @@ type Props = {
   setScript: Dispatch<SetStateAction<Block[] | undefined>>;
 };
 export const ScriptEditor = (props: Props) => {
-  const [targetBlock, setTargetBlockId] = useState<BLOCK | null>(null);
+  const [targetBlock, setTargetBlock] = useState<BLOCK | null>(null);
   const { script, setScript } = props;
   return (
     <div className={styles.main}>
-      <ScriptPalette setTargetBlock={setTargetBlockId} />
+      <ScriptPalette setTargetBlock={setTargetBlock} />
       <ScriptEditSpace script={script} setScript={setScript} targetBlock={targetBlock} />
     </div>
   );
