@@ -58,13 +58,12 @@ type ScriptEditSpaceProps = {
 };
 
 const ScriptEditSpace = (scriptEditSpaceProps: ScriptEditSpaceProps) => {
-  const { script, setScript, targetBlock: targetBlock } = scriptEditSpaceProps;
+  const { script, setScript, targetBlock } = scriptEditSpaceProps;
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (targetBlock === null) return;
     const newScript = structuredClone(script ?? []);
-    console.log(targetBlock);
     newScript.push({
       id: targetBlock.id,
       arg: targetBlock.contents
