@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
-import type { Block, BLOCK, SpriteState } from './types';
+import type { Block, BLOCK, READONLY_BLOCK, SpriteState } from './types';
 
-export const BLOCKS: BLOCK[] = [
+export const BLOCKS: READONLY_BLOCK[] = [
   { id: 1, contents: ['前へ', '$10', '歩進む'] },
   { id: 2, contents: ['右へ', '$10', '度回る'] },
   { id: 3, contents: ['左へ', '$10', '度回る'] },
@@ -9,13 +9,13 @@ export const BLOCKS: BLOCK[] = [
   { id: 4, contents: ['$10', '秒待つ'] },
 ];
 
-export const BLOCKS_DICT = BLOCKS.reduce(
-  (prev, curr) => {
-    prev[curr.id] = curr;
-    return prev;
-  },
-  {} as Record<number, BLOCK>,
-);
+const emptyBlockDict: Record<number, BLOCK> = {};
+
+export const BLOCKS_DICT = BLOCKS.reduce((prev, curr) => {
+  // @ts-expect-error TS2322
+  prev[curr.id] = curr;
+  return prev;
+}, emptyBlockDict);
 
 export const moves = (
   fn: (arg: Block | string) => void | string | undefined,

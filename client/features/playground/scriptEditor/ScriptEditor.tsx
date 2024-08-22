@@ -8,7 +8,8 @@ type ScriptPaletteProps = {
 };
 const ScriptPalette = (scriptPaletteProps: ScriptPaletteProps) => {
   const { setTargetBlock: setTargetBlockId } = scriptPaletteProps;
-  const [blocks, setBLOCKS_useState] = useState(BLOCKS);
+  // @ts-expect-error TS2322
+  const [blocks, setBLOCKS_useState] = useState<BLOCK[]>(BLOCKS);
   const ref = useRef<HTMLInputElement>(null);
   const [width, setWidth] = useState(0);
   useEffect(() => {
