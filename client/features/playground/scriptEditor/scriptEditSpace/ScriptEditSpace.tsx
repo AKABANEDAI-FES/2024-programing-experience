@@ -1,7 +1,26 @@
 import { BLOCKS_DICT } from 'features/playground/constants';
 import type { Block, BLOCK } from 'features/playground/types';
 import type { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import styles from '../ScriptEditor.module.css';
+
+const updateScriptValue = (
+  e: React.ChangeEvent<HTMLInputElement>,
+  script: Block,
+  indexes: number[],
+) => {
+  const index = indexes.shift();
+  if (index === undefined) {
+    throw new Error('Invalid index');
+  }
+  if (indexes.length > 0) {
+    if (typeof script.arg[index] === 'string') {
+      throw new Error('Invalid indexes');
+    }
+    updateScriptValue(e, script.arg[index], indexes);
+  }
+  script.arg[index] = e.target?.value ?? '';
+};
 
 type ScriptBlockProps = {
   block: Block;
@@ -74,21 +93,8 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, indexes: number[]) => {
     const newScript = structuredClone(script ?? []);
-    const updateScriptValue = (script: Block, indexes: number[]) => {
-      const index = indexes.shift();
-      if (index === undefined) {
-        throw new Error('Invalid index');
-      }
-      if (indexes.length > 0) {
-        if (typeof script.arg[index] === 'string') {
-          throw new Error('Invalid indexes');
-        }
-        updateScriptValue(script.arg[index], indexes);
-      }
-      script.arg[index] = e.target?.value ?? '';
-    };
 
-    updateScriptValue(newScript[n], indexes);
+    updateScriptValue(e, newScript[n], indexes);
     setScript(newScript);
   };
 
