@@ -4,11 +4,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import React from 'react';
 import styles from '../ScriptEditor.module.css';
 
-const updateScriptValue = (
-  e: React.ChangeEvent<HTMLInputElement>,
-  script: Block,
-  indexes: number[],
-) => {
+const updateScriptValue = (arg: Block | string, script: Block, indexes: number[]) => {
   const index = indexes.shift();
   if (index === undefined) {
     throw new Error('Invalid index');
@@ -17,9 +13,9 @@ const updateScriptValue = (
     if (typeof script.arg[index] === 'string') {
       throw new Error('Invalid indexes');
     }
-    updateScriptValue(e, script.arg[index], indexes);
+    updateScriptValue(arg, script.arg[index], indexes);
   }
-  script.arg[index] = e.target?.value ?? '';
+  script.arg[index] = arg ?? '';
 };
 
 type ScriptBlockProps = {
@@ -94,7 +90,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, indexes: number[]) => {
     const newScript = structuredClone(script ?? []);
 
-    updateScriptValue(e, newScript[n], indexes);
+    updateScriptValue(e.target.value, newScript[n], indexes);
     setScript(newScript);
   };
 
