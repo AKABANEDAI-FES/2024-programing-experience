@@ -21,7 +21,7 @@ export const moves = (
   fn: (arg: Block | string) => void | string | undefined,
   args: (Block | string)[],
   setState: Dispatch<SetStateAction<SpriteState>>,
-  setStepDelay: Dispatch<SetStateAction<number | null>>,
+  setStepDelay: (newDelay: number | null) => void,
 ): Record<number, () => void> => {
   const arg = (n: number) => fn(args[n]);
   setStepDelay(null);

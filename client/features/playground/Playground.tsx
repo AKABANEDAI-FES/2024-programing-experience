@@ -5,11 +5,11 @@ import { ScriptEditor } from './scriptEditor/ScriptEditor';
 import type { Block } from './types';
 
 export const Playground = () => {
-  const [script, setScript] = useState<Block[]>();
+  const [scripts, setScripts] = useState<Block[][]>([[]]);
   return (
     <div className={styles.main}>
-      <ScriptEditor script={script} setScript={setScript}></ScriptEditor>
-      <Preview script={script}></Preview>
+      <ScriptEditor scripts={scripts} setScripts={setScripts}></ScriptEditor>
+      <Preview scripts={scripts}></Preview>
     </div>
   );
 };
