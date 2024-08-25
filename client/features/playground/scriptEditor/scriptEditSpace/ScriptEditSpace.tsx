@@ -20,13 +20,16 @@ const updateScriptValue = (arg: Block | string, script: Block, indexes: number[]
 
 type ScriptBlockProps = {
   block: Block;
+  targetBlock: BLOCK | null;
+  script: Block[];
   n: number;
   indexes: number[];
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>, n: number, is: number[]) => void;
+  setScript: Dispatch<SetStateAction<Block[] | undefined>>;
 };
 
 const ScriptBlock = (props: ScriptBlockProps) => {
-  const { block, n, indexes, handleOnChange } = props;
+  const { block, targetBlock, script, n, indexes, handleOnChange, setScript } = props;
   return (
     <>
       {BLOCKS_DICT[block.id]?.contents.map((content, i, contents) => {
@@ -35,6 +38,23 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           const newIndexes = [...indexes, argIndex];
           const arg = block.arg[argIndex];
           if (typeof arg === 'string') {
+            const handleDrop = (e: React.DragEvent<HTMLInputElement>) => {
+              if (targetBlock === null) return;
+              const newScript = structuredClone(script ?? []);
+              updateScriptValue(
+                {
+                  id: targetBlock.id,
+                  arg: targetBlock.contents
+                    .filter((content) => content.startsWith('$'))
+                    .map((content) => content.replace('$', '')),
+                },
+                newScript[n],
+                newIndexes,
+              );
+              setScript(newScript);
+              e.preventDefault();
+              e.stopPropagation();
+            };
             return (
               <input
                 className={styles.input}
@@ -42,6 +62,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                 type="text"
                 defaultValue={arg}
                 onChange={(e) => handleOnChange(e, n, newIndexes)}
+                onDrop={handleDrop}
               />
             );
           }
@@ -49,9 +70,12 @@ const ScriptBlock = (props: ScriptBlockProps) => {
             <ScriptBlock
               key={i}
               block={arg}
+              targetBlock={targetBlock}
+              script={script}
               n={n}
               indexes={newIndexes}
               handleOnChange={handleOnChange}
+              setScript={setScript}
             />
           );
         }
@@ -98,7 +122,16 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {script?.map((block, n) => (
         <div className={styles.block}>
-          <ScriptBlock key={n} block={block} n={n} indexes={[]} handleOnChange={handleOnChange} />
+          <ScriptBlock
+            key={n}
+            block={block}
+            targetBlock={targetBlock}
+            script={script}
+            n={n}
+            indexes={[]}
+            handleOnChange={handleOnChange}
+            setScript={setScript}
+          />
         </div>
       ))}
     </div>
