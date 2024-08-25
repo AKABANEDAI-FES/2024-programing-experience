@@ -14,6 +14,7 @@ const updateScriptValue = (arg: Block | string, script: Block, indexes: number[]
       throw new Error('Invalid indexes');
     }
     updateScriptValue(arg, script.arg[index], indexes);
+    return;
   }
   script.arg[index] = arg ?? '';
 };
