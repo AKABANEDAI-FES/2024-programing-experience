@@ -23,51 +23,32 @@ export const moves = (
   setState: Dispatch<SetStateAction<SpriteState>>,
   setStepDelay: Dispatch<SetStateAction<number | null>>,
 ): Record<number, () => void> => {
-  // console.log('moves');
-  // console.log(fn);
-  // console.log(args);
   const arg = (n: number) => fn(args[n]);
   setStepDelay(null);
   return {
-    1: () => {
-      // console.log('move', 1);
-      // console.log('arg(0)', arg(0));
+    1: () =>
       setState((prev) => ({
         ...prev,
         x: prev.x + Number(arg(0)) * Math.cos((prev.direction / 180) * Math.PI),
         y: prev.y + Number(arg(0)) * Math.sin((prev.direction / 180) * Math.PI),
-      }));
-      // console.log('move end', 1);
-    },
-    2: () => {
-      // console.log('move', 2);
+      })),
+    2: () =>
       setState((prev) => ({
         ...prev,
         direction: prev.direction + Number(arg(0)),
-      }));
-      // console.log('move end', 2);
-    },
+      })),
     3: () => {
-      // console.log('move', 3);
       setState((prev) => ({
         ...prev,
         direction: prev.direction - Number(arg(0)),
       }));
-      // console.log('move end', 3);
     },
-    4: () => {
-      // console.log('move', 4);
-      setStepDelay(Number(arg(0)));
-      // console.log('move end', 4);
-    },
-    5: () => {
-      // console.log('move', 5);
+    4: () => setStepDelay(Number(arg(0))),
+    5: () =>
       setState((prev) => ({
         ...prev,
         x: prev.x - Number(arg(0)) * Math.cos((prev.direction / 180) * Math.PI),
         y: prev.y - Number(arg(0)) * Math.sin((prev.direction / 180) * Math.PI),
-      }));
-      // console.log('move end', 5);
-    },
+      })),
   };
 };
