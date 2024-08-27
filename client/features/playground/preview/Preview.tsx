@@ -15,19 +15,18 @@ type ScriptState = {
   stepCount: number;
 };
 
-const createScriptState = (scripts: Block[][]) =>
-  scripts?.map((script) => ({
-    script,
-    active: true,
-    stepDelay: 0,
-    stepCount: 0,
-  }));
-
 export const Preview = (props: Props) => {
   const { scripts } = props;
   const [stepSpeed, setStepSpeed] = useState(1);
   const [isStart, setIsStart] = useState(false);
-  const [scriptStates, setScriptStates] = useState<ScriptState[]>(createScriptState(scripts));
+  const [scriptStates, setScriptStates] = useState<ScriptState[]>(
+    scripts?.map((script) => ({
+      script,
+      active: true,
+      stepDelay: 0,
+      stepCount: 0,
+    })),
+  );
   const [state, setState] = useState<SpriteState>({
     x: 0,
     y: 0,
