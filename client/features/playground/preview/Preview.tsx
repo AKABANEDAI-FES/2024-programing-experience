@@ -40,7 +40,7 @@ export const Preview = (props: Props) => {
       if (active && isStart) {
         const intervalId = setInterval(
           () => {
-            if (stepCount >= (script.length ?? 0)) {
+            if (stepCount >= script.length) {
               newScriptStates[i].active = false;
               newScriptStates[i].stepCount = 0;
               newScriptStates[i].stepDelay = 0;
