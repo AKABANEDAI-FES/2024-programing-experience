@@ -33,43 +33,57 @@ export const Preview = (props: Props) => {
     direction: 0,
   });
 
-  useEffect(() => {
+  const updateScriptState = (updateFn: (newScriptStates: ScriptState[]) => void) => {
     const newScriptStates = structuredClone(scriptStates);
-    const intervalIds = scriptStates.map(({ script, active, stepDelay, stepCount }, i) => {
-      if (active && isStart) {
-        const intervalId = setInterval(
-          () => {
-            if (stepCount >= script.length) {
-              newScriptStates[i].active = false;
-              newScriptStates[i].stepCount = 0;
-              newScriptStates[i].stepDelay = 0;
-              setScriptStates([...newScriptStates]);
-              return;
-            }
-            const block = script?.[stepCount];
-            if (block === undefined) return;
+    updateFn(newScriptStates);
+    setScriptStates([...newScriptStates]);
+  };
 
-            const step = (block: Block | string): void | string | undefined => {
-              if (typeof block === 'string') {
-                return block;
-              }
-              const setStepDelay = (newDelay: number | null) => {
-                newScriptStates[i].stepDelay = newDelay;
-              };
+  const interval = (i: number, script: Block[], stepCount: number) => {
+    if (stepCount >= script.length) {
+      updateScriptState((scriptStates) => {
+        scriptStates[i].active = false;
+        scriptStates[i].stepCount = 0;
+        scriptStates[i].stepDelay = 0;
+      });
+      return;
+    }
 
-              return moves(step, block.arg, setState, setStepDelay)[block.id]?.();
-            };
-            newScriptStates[i].stepCount += 1;
-            newScriptStates[i].stepDelay = null;
-            step(block);
-            setScriptStates([...newScriptStates]);
-          },
-          (stepDelay ?? stepSpeed) * 1000,
-        );
-        return intervalId;
-      }
-      return undefined;
+    const block = script?.[stepCount];
+
+    if (block === undefined) return;
+
+    updateScriptState((scriptStates) => {
+      const step = (block: Block | string): void | string | undefined => {
+        const setStepDelay = (newDelay: number | null) => {
+          scriptStates[i].stepDelay = newDelay;
+        };
+
+        if (typeof block === 'string') {
+          return block;
+        }
+        return moves(step, block.arg, setState, setStepDelay)[block.id]?.();
+      };
+
+      scriptStates[i].stepCount += 1;
+      scriptStates[i].stepDelay = null;
+      step(block);
     });
+  };
+
+  const intervalId = ({ script, active, stepDelay, stepCount }: ScriptState, i: number) => {
+    if (active && isStart) {
+      const intervalId = setInterval(
+        () => interval(i, script, stepCount),
+        (stepDelay ?? stepSpeed) * 1000,
+      );
+      return intervalId;
+    }
+    return undefined;
+  };
+
+  useEffect(() => {
+    const intervalIds = scriptStates.map(intervalId);
     return () => {
       intervalIds?.forEach((intervalId) => clearInterval(intervalId));
     };
