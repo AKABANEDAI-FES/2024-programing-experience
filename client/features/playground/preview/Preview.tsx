@@ -35,10 +35,6 @@ export const Preview = (props: Props) => {
   });
 
   useEffect(() => {
-    setScriptStates(createScriptState(scripts));
-  }, [scripts]);
-
-  useEffect(() => {
     const newScriptStates = structuredClone(scriptStates);
     const intervalIds = scriptStates.map(({ script, active, stepDelay, stepCount }, i) => {
       if (active && isStart) {

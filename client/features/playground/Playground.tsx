@@ -9,7 +9,7 @@ export const Playground = () => {
   return (
     <div className={styles.main}>
       <ScriptEditor scripts={scripts} setScripts={setScripts}></ScriptEditor>
-      <Preview scripts={scripts}></Preview>
+      <Preview scripts={scripts} key={JSON.stringify(scripts)}></Preview>
     </div>
   );
 };
