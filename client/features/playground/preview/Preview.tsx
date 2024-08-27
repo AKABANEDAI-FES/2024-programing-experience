@@ -73,11 +73,7 @@ export const Preview = (props: Props) => {
 
   const intervalId = ({ script, active, stepDelay, stepCount }: ScriptState, i: number) => {
     if (active && isStart) {
-      const intervalId = setInterval(
-        () => interval(i, script, stepCount),
-        (stepDelay ?? stepSpeed) * 1000,
-      );
-      return intervalId;
+      return setInterval(() => interval(i, script, stepCount), (stepDelay ?? stepSpeed) * 1000);
     }
     return undefined;
   };
