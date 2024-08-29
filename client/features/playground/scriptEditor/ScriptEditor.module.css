@@ -33,6 +33,7 @@
   padding: 10px;
   margin: 5px 0;
   color: white;
+  white-space: nowrap;
   cursor: grab;
   background-color: #4caf50;
 }
