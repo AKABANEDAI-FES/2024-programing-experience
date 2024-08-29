@@ -6,16 +6,16 @@ import { ScriptEditSpace } from './scriptEditSpace/ScriptEditSpace';
 import { ScriptPalette } from './scriptPalette/ScriptPalette';
 
 type Props = {
-  script: Block[] | undefined;
-  setScript: Dispatch<SetStateAction<Block[] | undefined>>;
+  scripts: Block[][];
+  setScripts: Dispatch<SetStateAction<Block[][]>>;
 };
 export const ScriptEditor = (props: Props) => {
   const [targetBlock, setTargetBlock] = useState<BLOCK | null>(null);
-  const { script, setScript } = props;
+  const { scripts, setScripts } = props;
   return (
     <div className={styles.main}>
       <ScriptPalette setTargetBlock={setTargetBlock} />
-      <ScriptEditSpace script={script} setScript={setScript} targetBlock={targetBlock} />
+      <ScriptEditSpace scripts={scripts} setScripts={setScripts} targetBlock={targetBlock} />
     </div>
   );
 };

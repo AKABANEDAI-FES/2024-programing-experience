@@ -66,25 +66,25 @@ const ScriptBlock = (props: ScriptBlockProps) => {
 };
 
 type Props = {
-  script: Block[] | undefined;
-  setScript: Dispatch<SetStateAction<Block[] | undefined>>;
+  scripts: Block[][];
+  setScripts: Dispatch<SetStateAction<Block[][]>>;
   targetBlock: BLOCK | null;
 };
 
 export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
-  const { script, setScript, targetBlock } = scriptEditSpaceProps;
+  const { scripts, setScripts, targetBlock } = scriptEditSpaceProps;
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (targetBlock === null) return;
-    const newScript = structuredClone(script ?? []);
-    newScript.push({
+    const newScripts = structuredClone(scripts);
+    newScripts[0].push({
       id: targetBlock.id,
       arg: targetBlock.contents
         .filter((content) => content.startsWith('$'))
         .map((content) => content.replace('$', '')),
     });
-    setScript(newScript);
+    setScripts(newScripts);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -92,10 +92,10 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, indexes: number[]) => {
-    const newScript = structuredClone(script ?? []);
+    const newScripts = structuredClone(scripts);
 
-    updateScriptValue(e.target.value, newScript[n], indexes);
-    setScript(newScript);
+    updateScriptValue(e.target.value, newScripts[0][n], indexes);
+    setScripts(newScripts);
   };
 
   const handleDropToInput = (
@@ -104,7 +104,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
     indexes: number[],
   ) => {
     if (targetBlock === null) return;
-    const newScript = structuredClone(script ?? []);
+    const newScripts = structuredClone(scripts);
     updateScriptValue(
       {
         id: targetBlock.id,
@@ -112,28 +112,30 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
           .filter((content) => content.startsWith('$'))
           .map((content) => content.replace('$', '')),
       },
-      newScript[n],
+      newScripts[0][n],
       indexes,
     );
-    setScript(newScript);
+    setScripts(newScripts);
     e.preventDefault();
     e.stopPropagation();
   };
 
   return (
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
-      {script?.map((block, n) => (
-        <div className={styles.block}>
-          <ScriptBlock
-            key={n}
-            block={block}
-            n={n}
-            indexes={[]}
-            handleOnChange={handleOnChange}
-            handleDrop={handleDropToInput}
-          />
-        </div>
-      ))}
+      {scripts.map((script) =>
+        script.map((block, n) => (
+          <div className={styles.block} key={n}>
+            <ScriptBlock
+              key={n}
+              block={block}
+              n={n}
+              indexes={[]}
+              handleOnChange={handleOnChange}
+              handleDrop={handleDropToInput}
+            />
+          </div>
+        )),
+      )}
     </div>
   );
 };
