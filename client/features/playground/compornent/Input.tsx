@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   defaultValue: string;
-}
+};
 
 export const Input = (props: Props) => {
   const { defaultValue } = props;
@@ -18,6 +18,7 @@ export const Input = (props: Props) => {
     }
   };
 
+  //FIXME - 良くない`useEffect`の使いかた
   useEffect(() => {
     if (ref.current) {
       setWidth(ref.current.offsetWidth);
