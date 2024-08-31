@@ -5,22 +5,25 @@ import React from 'react';
 import styles from '../ScriptEditor.module.css';
 
 // eslint-disable-next-line complexity
-const updateScriptValue = (arg: blockArg, script: Block, indexes: number[]) => {
-  const index = indexes.shift();
+const updateScriptValue = (arg: blockArg, script: Exclude<blockArg, string>, indexes: number[]) => {
+  console.log(arg, script, indexes);
+  const newIndexes = [...indexes];
+  const index = newIndexes.shift();
   if (index === undefined) {
     throw new Error('Invalid index');
   }
-  if (indexes.length < 0) {
+  if (script instanceof Array) {
+    updateScriptValue(arg, script[index], newIndexes);
+    return;
+  }
+  if (newIndexes.length <= 0) {
     script.arg[index] = arg ?? '';
     return;
   }
   if (typeof script.arg[index] === 'string') {
     throw new Error('Invalid indexes');
   }
-  if (script.arg[index] instanceof Array) {
-    throw new Error('Invalid indexes');
-  }
-  updateScriptValue(arg, script.arg[index], indexes);
+  updateScriptValue(arg, script.arg[index], newIndexes);
   return;
 };
 
