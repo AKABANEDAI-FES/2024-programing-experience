@@ -1,18 +1,11 @@
 import { AlignBox } from 'components/AlignBox';
 import { useEffect, useState } from 'react';
 import { moves } from '../constants';
-import type { Block, SpriteState } from '../types';
+import type { Block, blockArg, ScriptState, SpriteState } from '../types';
 import styles from './Preview.module.css';
 
 type Props = {
   scripts: Block[][];
-};
-
-type ScriptState = {
-  script: Block[];
-  active: boolean;
-  stepDelay: number | null;
-  stepCount: number;
 };
 
 export const Preview = (props: Props) => {
@@ -24,7 +17,7 @@ export const Preview = (props: Props) => {
       script,
       active: true,
       stepDelay: 0,
-      stepCount: 0,
+      stepCount: [0],
     })),
   );
   const [state, setState] = useState<SpriteState>({
@@ -39,35 +32,52 @@ export const Preview = (props: Props) => {
     setScriptStates([...newScriptStates]);
   };
 
-  const interval = (i: number, script: Block[], stepCount: number) => {
-    if (stepCount >= script.length) {
+  const interval = (i: number, script: Block[], stepCount: number[]) => {
+    if (stepCount[0] >= script.length) {
       updateScriptState((scriptStates) => {
         scriptStates[i].active = false;
-        scriptStates[i].stepCount = 0;
+        scriptStates[i].stepCount = [0];
         scriptStates[i].stepDelay = 0;
       });
       return;
     }
 
-    const block = script?.[stepCount];
+    const block = script?.[stepCount[0]];
 
     if (block === undefined) return;
-
     updateScriptState((scriptStates) => {
-      const step = (block: Block | string): void | string | undefined => {
+      const step = (block: blockArg): void | string | undefined => {
         const setStepDelay = (newDelay: number | null) => {
           scriptStates[i].stepDelay = newDelay;
+        };
+        const addNestToStepCount = (nestCount: number) => {
+          if (scriptStates[i].stepCount.length !== nestCount) {
+            return;
+          }
+          scriptStates[i].stepCount.push(0);
+        };
+        const deleteNestToStepCount = () => {
+          scriptStates[i].stepCount.pop();
         };
 
         if (typeof block === 'string') {
           return block;
         }
-        return moves(step, block.arg, setState, setStepDelay)[block.id]?.();
+        if (block instanceof Array) return;
+        return moves(
+          step,
+          block.arg,
+          scriptStates[i],
+          0,
+          setState,
+          setStepDelay,
+          addNestToStepCount,
+          deleteNestToStepCount,
+        )[block.id]?.();
       };
-
-      scriptStates[i].stepCount += 1;
-      scriptStates[i].stepDelay = null;
       step(block);
+      scriptStates[i].stepCount[scriptStates[i].stepCount.length - 1] += 1;
+      scriptStates[i].stepDelay = null;
     });
   };
 

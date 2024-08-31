@@ -31,7 +31,7 @@ export const ScriptPalette = (props: Props) => {
         >
           {block.contents.map((content, i) =>
             content.startsWith('$') ? (
-              <Input key={i} defaultValue={'10'} />
+              <Input key={i} defaultValue={content.replace('$', '')} />
             ) : (
               <div key={i}>{content}</div>
             ),
