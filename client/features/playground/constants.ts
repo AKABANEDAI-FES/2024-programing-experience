@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
+import type { ScriptState } from './preview/Preview';
 import type { BLOCK, blockArg, READONLY_BLOCK, SpriteState } from './types';
 
 export const BLOCKS: READONLY_BLOCK[] = [
@@ -21,8 +22,12 @@ export const BLOCKS_DICT = BLOCKS.reduce((prev, curr) => {
 export const moves = (
   fn: (arg: blockArg) => void | string | undefined,
   args: blockArg[],
+  scriptStatus: ScriptState,
+  nestCount: number,
   setState: Dispatch<SetStateAction<SpriteState>>,
   setStepDelay: (newDelay: number | null) => void,
+  addNestToStepCount: (nestCount: number) => void,
+  deleteNestToStepCount: () => void,
 ): Record<number, () => void> => {
   const arg = (n: number) => fn(args[n]);
   setStepDelay(null);
@@ -53,13 +58,26 @@ export const moves = (
       })),
     6: () => {
       if (arg(0) === 'true') {
+        const newNestCount = nestCount + 1;
+        addNestToStepCount(newNestCount);
         const innerScripts = args[1];
         if (!(innerScripts instanceof Array)) {
           throw new Error('Invalid innerScripts');
         }
-        innerScripts.forEach((script) => {
-          moves(fn, script.arg, setState, setStepDelay)[script.id]?.();
-        });
+        if (scriptStatus.stepCount[scriptStatus.stepCount.length - 1] >= innerScripts.length) {
+          deleteNestToStepCount();
+          return;
+        }
+        moves(
+          fn,
+          innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].arg,
+          scriptStatus,
+          newNestCount,
+          setState,
+          setStepDelay,
+          addNestToStepCount,
+          deleteNestToStepCount,
+        )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
       }
     },
   };

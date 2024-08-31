@@ -55,7 +55,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           }
           if (arg instanceof Array) {
             return (
-              <div style={{ flexDirection: 'column' }}>
+              <div style={{ flexDirection: 'column' }} key={i}>
                 {arg.map((scriptBlock, j) => (
                   <ScriptBlock
                     key={`${i}-${j}`}
