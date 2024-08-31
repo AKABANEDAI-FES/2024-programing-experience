@@ -10,3 +10,10 @@ export type SpriteState = {
   y: number;
   direction: number;
 };
+
+export type ScriptState = {
+  script: Block[];
+  active: boolean;
+  stepDelay: number | null;
+  stepCount: number[];
+};

@@ -1,18 +1,11 @@
 import { AlignBox } from 'components/AlignBox';
 import { useEffect, useState } from 'react';
 import { moves } from '../constants';
-import type { Block, blockArg, SpriteState } from '../types';
+import type { Block, blockArg, ScriptState, SpriteState } from '../types';
 import styles from './Preview.module.css';
 
 type Props = {
   scripts: Block[][];
-};
-
-export type ScriptState = {
-  script: Block[];
-  active: boolean;
-  stepDelay: number | null;
-  stepCount: number[];
 };
 
 export const Preview = (props: Props) => {

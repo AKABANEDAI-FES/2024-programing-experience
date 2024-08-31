@@ -1,6 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
-import type { ScriptState } from './preview/Preview';
-import type { BLOCK, blockArg, READONLY_BLOCK, SpriteState } from './types';
+import type { BLOCK, blockArg, READONLY_BLOCK, ScriptState, SpriteState } from './types';
 
 export const BLOCKS: READONLY_BLOCK[] = [
   { id: 1, contents: ['前へ', '$10', '歩進む'] },
