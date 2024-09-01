@@ -117,6 +117,7 @@ export const moves = (
       if (scriptStatus.loopCount[scriptStatus.loopCount.length - 1] >= Number(arg(0)) - 1) {
         deleteNestFromLoopCount();
         deleteNestFromStepCount();
+        return;
       }
       if (scriptStatus.stepCount[scriptStatus.stepCount.length - 1] >= innerScripts.length - 1) {
         resetStepCount();
