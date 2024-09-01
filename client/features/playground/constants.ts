@@ -88,7 +88,6 @@ export const moves = (
         )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
       }
     },
-    // eslint-disable-next-line complexity
     7: () => {
       const newNestCount = nestCount + 1;
       addNestToStepCount(newNestCount);
@@ -112,17 +111,14 @@ export const moves = (
         deleteLoopCount,
         addLoopCount,
       )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
-      if (
-        scriptStatus.loopCount.length - 1 === newNestCount &&
-        scriptStatus.loopCount[scriptStatus.loopCount.length - 1] >= Number(arg(0)) - 1
-      ) {
+      if (scriptStatus.loopCount.length - 1 !== newNestCount) {
+        return;
+      }
+      if (scriptStatus.loopCount[scriptStatus.loopCount.length - 1] >= Number(arg(0)) - 1) {
         deleteLoopCount();
         deleteNestToStepCount();
       }
-      if (
-        scriptStatus.loopCount.length - 1 === newNestCount &&
-        scriptStatus.stepCount[scriptStatus.stepCount.length - 1] >= innerScripts.length - 1
-      ) {
+      if (scriptStatus.stepCount[scriptStatus.stepCount.length - 1] >= innerScripts.length - 1) {
         resetStepCount();
         addLoopCount();
       }
