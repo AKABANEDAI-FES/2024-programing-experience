@@ -16,4 +16,5 @@ export type ScriptState = {
   active: boolean;
   stepDelay: number | null;
   stepCount: number[];
+  loopCount: number[];
 };

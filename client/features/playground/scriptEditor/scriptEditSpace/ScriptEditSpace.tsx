@@ -6,7 +6,6 @@ import styles from '../ScriptEditor.module.css';
 
 // eslint-disable-next-line complexity
 const updateScriptValue = (arg: blockArg, script: Exclude<blockArg, string>, indexes: number[]) => {
-  console.log(arg, script, indexes);
   const newIndexes = [...indexes];
   const index = newIndexes.shift();
   if (index === undefined) {
@@ -72,7 +71,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
               </div>
             );
           }
-          console.log(block);
           return (
             <ScriptBlock
               key={i}
