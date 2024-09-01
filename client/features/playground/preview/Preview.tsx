@@ -57,19 +57,19 @@ export const Preview = (props: Props) => {
           }
           scriptStates[i].stepCount.push(0);
         };
-        const deleteNestToStepCount = () => {
+        const deleteNestFromStepCount = () => {
           scriptStates[i].stepCount.pop();
         };
         const resetStepCount = () => {
           scriptStates[i].stepCount[scriptStates[i].stepCount.length - 1] = -1;
         };
-        const setLoopCount = (nestCount: number) => {
+        const addNestToLoopCount = (nestCount: number) => {
           if (scriptStates[i].loopCount.length > nestCount) {
             return;
           }
           scriptStates[i].loopCount.push(0);
         };
-        const deleteLoopCount = () => {
+        const deleteNestFromLoopCount = () => {
           scriptStates[i].loopCount.pop();
         };
         const addLoopCount = () => {
@@ -89,9 +89,9 @@ export const Preview = (props: Props) => {
           setStepDelay,
           addNestToStepCount,
           resetStepCount,
-          deleteNestToStepCount,
-          setLoopCount,
-          deleteLoopCount,
+          deleteNestFromStepCount,
+          addNestToLoopCount,
+          deleteNestFromLoopCount,
           addLoopCount,
         )[block.id]?.();
       };

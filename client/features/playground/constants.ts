@@ -28,9 +28,9 @@ export const moves = (
   setStepDelay: (newDelay: number | null) => void,
   addNestToStepCount: (nestCount: number) => void,
   resetStepCount: () => void,
-  deleteNestToStepCount: () => void,
-  setLoopCount: (nestCount: number) => void,
-  deleteLoopCount: () => void,
+  deleteNestFromStepCount: () => void,
+  addNestToLoopCount: (nestCount: number) => void,
+  deleteNestFromLoopCount: () => void,
   addLoopCount: () => void,
 ): Record<number, () => void> => {
   const arg = (n: number) => fn(args[n]);
@@ -69,7 +69,7 @@ export const moves = (
           throw new Error('Invalid innerScripts');
         }
         if (scriptStatus.stepCount[scriptStatus.stepCount.length - 1] >= innerScripts.length) {
-          deleteNestToStepCount();
+          deleteNestFromStepCount();
           return;
         }
         moves(
@@ -81,9 +81,9 @@ export const moves = (
           setStepDelay,
           addNestToStepCount,
           resetStepCount,
-          deleteNestToStepCount,
-          setLoopCount,
-          deleteLoopCount,
+          deleteNestFromStepCount,
+          addNestToLoopCount,
+          deleteNestFromLoopCount,
           addLoopCount,
         )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
       }
@@ -91,7 +91,7 @@ export const moves = (
     7: () => {
       const newNestCount = nestCount + 1;
       addNestToStepCount(newNestCount);
-      setLoopCount(newNestCount);
+      addNestToLoopCount(newNestCount);
       const innerScripts = args[1];
       if (!(innerScripts instanceof Array)) {
         throw new Error('Invalid innerScripts');
@@ -106,17 +106,17 @@ export const moves = (
         setStepDelay,
         addNestToStepCount,
         resetStepCount,
-        deleteNestToStepCount,
-        setLoopCount,
-        deleteLoopCount,
+        deleteNestFromStepCount,
+        addNestToLoopCount,
+        deleteNestFromLoopCount,
         addLoopCount,
       )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
       if (scriptStatus.loopCount.length - 1 !== newNestCount) {
         return;
       }
       if (scriptStatus.loopCount[scriptStatus.loopCount.length - 1] >= Number(arg(0)) - 1) {
-        deleteLoopCount();
-        deleteNestToStepCount();
+        deleteNestFromLoopCount();
+        deleteNestFromStepCount();
       }
       if (scriptStatus.stepCount[scriptStatus.stepCount.length - 1] >= innerScripts.length - 1) {
         resetStepCount();
