@@ -19,6 +19,7 @@ export const Preview = (props: Props) => {
       stepDelay: 0,
       stepCount: [0],
       loopCount: [0],
+      nestStatus: [true],
     })),
   );
   const [state, setState] = useState<SpriteState>({
@@ -75,6 +76,19 @@ export const Preview = (props: Props) => {
         const addLoopCount = () => {
           scriptStates[i].loopCount[scriptStates[i].loopCount.length - 1] += 1;
         };
+        const updateNestStatus = (nestCount: number, status: boolean) => {
+          if (scriptStates[i].nestStatus.length > nestCount) {
+            if (scriptStates[i].nestStatus.length - 1 !== nestCount) {
+              return;
+            }
+            scriptStates[i].nestStatus[scriptStates[i].nestStatus.length - 1] = status;
+            return;
+          }
+          scriptStates[i].nestStatus.push(status);
+        };
+        const deleteNestFromNestStatus = () => {
+          scriptStates[i].nestStatus.pop();
+        };
 
         if (typeof block === 'string') {
           return block;
@@ -93,6 +107,8 @@ export const Preview = (props: Props) => {
           addNestToLoopCount,
           deleteNestFromLoopCount,
           addLoopCount,
+          updateNestStatus,
+          deleteNestFromNestStatus,
         )[block.id]?.();
       };
       step(block);

@@ -9,6 +9,7 @@ export const BLOCKS: READONLY_BLOCK[] = [
   { id: 4, contents: ['$10', '秒待つ'] },
   { id: 6, contents: ['もし', '$true', 'ならば', '$innerScripts', ''] },
   { id: 7, contents: ['$10', '回繰り返す', '$innerScripts', ''] },
+  { id: 8, contents: ['$true', 'なら繰り返す', '$innerScripts', ''] },
 ];
 
 const emptyBlockDict: Record<number, BLOCK> = {};
@@ -32,6 +33,8 @@ export const moves = (
   addNestToLoopCount: (nestCount: number) => void,
   deleteNestFromLoopCount: () => void,
   addLoopCount: () => void,
+  updateNestStatus: (nestCount: number, status: boolean) => void,
+  deleteNestFromNestStatus: () => void,
 ): Record<number, () => void> => {
   const arg = (n: number) => fn(args[n]);
   setStepDelay(null);
@@ -85,6 +88,8 @@ export const moves = (
           addNestToLoopCount,
           deleteNestFromLoopCount,
           addLoopCount,
+          updateNestStatus,
+          deleteNestFromNestStatus,
         )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
       }
     },
@@ -110,6 +115,8 @@ export const moves = (
         addNestToLoopCount,
         deleteNestFromLoopCount,
         addLoopCount,
+        updateNestStatus,
+        deleteNestFromNestStatus,
       )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
       if (scriptStatus.loopCount.length - 1 !== newNestCount) {
         return;
@@ -117,6 +124,49 @@ export const moves = (
       if (scriptStatus.loopCount[scriptStatus.loopCount.length - 1] >= Number(arg(0)) - 1) {
         deleteNestFromLoopCount();
         deleteNestFromStepCount();
+        return;
+      }
+      if (scriptStatus.stepCount[scriptStatus.stepCount.length - 1] >= innerScripts.length - 1) {
+        resetStepCount();
+        addLoopCount();
+      }
+    },
+    // eslint-disable-next-line complexity
+    8: () => {
+      const newNestCount = nestCount + 1;
+      addNestToStepCount(newNestCount);
+      addNestToLoopCount(newNestCount);
+      updateNestStatus(newNestCount, arg(0) === 'true');
+      const innerScripts = args[1];
+      if (!(innerScripts instanceof Array)) {
+        throw new Error('Invalid innerScripts');
+      }
+      if (scriptStatus.nestStatus[scriptStatus.nestStatus.length - 1]) {
+        moves(
+          fn,
+          innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].arg,
+          scriptStatus,
+          newNestCount,
+          setState,
+          setStepDelay,
+          addNestToStepCount,
+          resetStepCount,
+          deleteNestFromStepCount,
+          addNestToLoopCount,
+          deleteNestFromLoopCount,
+          addLoopCount,
+          updateNestStatus,
+          deleteNestFromNestStatus,
+        )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
+      }
+      if (scriptStatus.loopCount.length - 1 !== newNestCount) {
+        return;
+      }
+      if (!scriptStatus.nestStatus[scriptStatus.nestStatus.length - 1]) {
+        deleteNestFromLoopCount();
+        deleteNestFromStepCount();
+        deleteNestFromNestStatus();
+        setStepDelay(0);
         return;
       }
       if (scriptStatus.stepCount[scriptStatus.stepCount.length - 1] >= innerScripts.length - 1) {
