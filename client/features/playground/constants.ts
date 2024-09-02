@@ -33,9 +33,8 @@ export const moves = (
   addNestToLoopCount: (nestCount: number) => void,
   deleteNestFromLoopCount: () => void,
   addLoopCount: () => void,
-  addNestToNestStatus: (nestCount: number, status: boolean) => void,
+  updateNestStatus: (nestCount: number, status: boolean) => void,
   deleteNestFromNestStatus: () => void,
-  setNestStatus: (nestCount: number, status: boolean) => void,
 ): Record<number, () => void> => {
   const arg = (n: number) => fn(args[n]);
   setStepDelay(null);
@@ -89,9 +88,8 @@ export const moves = (
           addNestToLoopCount,
           deleteNestFromLoopCount,
           addLoopCount,
-          addNestToNestStatus,
+          updateNestStatus,
           deleteNestFromNestStatus,
-          setNestStatus,
         )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
       }
     },
@@ -117,9 +115,8 @@ export const moves = (
         addNestToLoopCount,
         deleteNestFromLoopCount,
         addLoopCount,
-        addNestToNestStatus,
+        updateNestStatus,
         deleteNestFromNestStatus,
-        setNestStatus,
       )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
       if (scriptStatus.loopCount.length - 1 !== newNestCount) {
         return;
@@ -139,8 +136,7 @@ export const moves = (
       const newNestCount = nestCount + 1;
       addNestToStepCount(newNestCount);
       addNestToLoopCount(newNestCount);
-      addNestToNestStatus(newNestCount, arg(0) === 'true');
-      setNestStatus(newNestCount, arg(0) === 'true');
+      updateNestStatus(newNestCount, arg(0) === 'true');
       const innerScripts = args[1];
       if (!(innerScripts instanceof Array)) {
         throw new Error('Invalid innerScripts');
@@ -159,9 +155,8 @@ export const moves = (
           addNestToLoopCount,
           deleteNestFromLoopCount,
           addLoopCount,
-          addNestToNestStatus,
+          updateNestStatus,
           deleteNestFromNestStatus,
-          setNestStatus,
         )[innerScripts[scriptStatus.stepCount[scriptStatus.stepCount.length - 1]].id]?.();
       }
       if (scriptStatus.loopCount.length - 1 !== newNestCount) {
