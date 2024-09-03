@@ -3,6 +3,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { BLOCK, blockArg, READONLY_BLOCK, ScriptState, SpriteState } from './types';
 
 export const BLOCKS: READONLY_BLOCK[] = [
+  { id: 0, contents: ['もし▶ボタンが押されたなら'] },
   { id: 1, contents: ['前へ', '$10', '歩進む'] },
   { id: 2, contents: ['右へ', '$10', '度回る'] },
   { id: 3, contents: ['左へ', '$10', '度回る'] },
@@ -41,6 +42,9 @@ export const moves = (
   const arg = (n: number) => fn(args[n]);
   setStepDelay(null);
   return {
+    0: () => {
+      setStepDelay(0);
+    },
     1: () =>
       setState((prev) => ({
         ...prev,

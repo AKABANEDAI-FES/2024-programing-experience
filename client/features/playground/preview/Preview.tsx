@@ -11,11 +11,10 @@ type Props = {
 export const Preview = (props: Props) => {
   const { scripts } = props;
   const [stepSpeed, setStepSpeed] = useState(1);
-  const [isStart, setIsStart] = useState(false);
   const [scriptStates, setScriptStates] = useState<ScriptState[]>(
     scripts?.map((script) => ({
       script,
-      active: true,
+      active: false,
       stepDelay: 0,
       stepCount: [0],
       loopCount: [0],
@@ -116,7 +115,7 @@ export const Preview = (props: Props) => {
   };
 
   const intervalId = ({ script, active, stepDelay, stepCount }: ScriptState, i: number) => {
-    if (active && isStart) {
+    if (active) {
       return setInterval(() => interval(i, script, stepCount), (stepDelay ?? stepSpeed) * 1000);
     }
     return undefined;
@@ -127,14 +126,30 @@ export const Preview = (props: Props) => {
     return () => {
       intervalIds?.forEach((intervalId) => clearInterval(intervalId));
     };
-  }, [scriptStates, isStart, stepSpeed]);
+  }, [scriptStates, stepSpeed]);
 
+  const handleStartButtonClick = () => {
+    setScriptStates(
+      scriptStates
+        .filter(({ script }) => script[0]?.id === 0)
+        .map(({ script, active, stepDelay, stepCount, loopCount, nestStatus }) => ({
+          script,
+          active: !active,
+          stepDelay,
+          stepCount,
+          loopCount,
+          nestStatus,
+        })),
+    );
+  };
   return (
     <div className={styles.main}>
       <AlignBox x={'|..'}>
         <button
-          className={isStart ? styles.stopButton : styles.startButton}
-          onClick={() => setIsStart(!isStart)}
+          className={
+            scriptStates.some(({ active }) => active) ? styles.stopButton : styles.startButton
+          }
+          onClick={handleStartButtonClick}
         ></button>
         <input
           type="range"
