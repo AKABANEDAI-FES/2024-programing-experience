@@ -76,12 +76,8 @@ export const Preview = (props: Props) => {
         const addLoopCount = () => {
           scriptStates[i].loopCount[scriptStates[i].loopCount.length - 1] += 1;
         };
-        const updateNestStatus = (nestCount: number, status: boolean) => {
+        const addNestToStatus = (nestCount: number, status: boolean) => {
           if (scriptStates[i].nestStatus.length > nestCount) {
-            if (scriptStates[i].nestStatus.length - 1 !== nestCount) {
-              return;
-            }
-            scriptStates[i].nestStatus[scriptStates[i].nestStatus.length - 1] = status;
             return;
           }
           scriptStates[i].nestStatus.push(status);
@@ -89,7 +85,9 @@ export const Preview = (props: Props) => {
         const deleteNestFromNestStatus = () => {
           scriptStates[i].nestStatus.pop();
         };
-
+        const updateNestedStatus = (nestCount: number, status: boolean) => {
+          scriptStates[i].nestStatus[scriptStates[i].nestStatus.length - 1] = status;
+        };
         if (typeof block === 'string') {
           return block;
         }
@@ -107,13 +105,13 @@ export const Preview = (props: Props) => {
           addNestToLoopCount,
           deleteNestFromLoopCount,
           addLoopCount,
-          updateNestStatus,
+          addNestToStatus,
           deleteNestFromNestStatus,
+          updateNestedStatus,
         )[block.id]?.();
       };
       step(block);
       scriptStates[i].stepCount[scriptStates[i].stepCount.length - 1] += 1;
-      scriptStates[i].stepDelay = null;
     });
   };
 
