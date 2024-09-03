@@ -48,45 +48,6 @@ export const Preview = (props: Props) => {
     if (block === undefined) return;
     updateScriptState((scriptStates) => {
       const step = (block: blockArg): void | string | undefined => {
-        const setStepDelay = (newDelay: number | null) => {
-          scriptStates[i].stepDelay = newDelay;
-        };
-        const addNestToStepCount = (nestCount: number) => {
-          if (scriptStates[i].stepCount.length > nestCount) {
-            return;
-          }
-          scriptStates[i].stepCount.push(0);
-        };
-        const deleteNestFromStepCount = () => {
-          scriptStates[i].stepCount.pop();
-        };
-        const resetStepCount = () => {
-          scriptStates[i].stepCount[scriptStates[i].stepCount.length - 1] = -1;
-        };
-        const addNestToLoopCount = (nestCount: number) => {
-          if (scriptStates[i].loopCount.length > nestCount) {
-            return;
-          }
-          scriptStates[i].loopCount.push(0);
-        };
-        const deleteNestFromLoopCount = () => {
-          scriptStates[i].loopCount.pop();
-        };
-        const addLoopCount = () => {
-          scriptStates[i].loopCount[scriptStates[i].loopCount.length - 1] += 1;
-        };
-        const addNestToStatus = (nestCount: number, status: boolean) => {
-          if (scriptStates[i].nestStatus.length > nestCount) {
-            return;
-          }
-          scriptStates[i].nestStatus.push(status);
-        };
-        const deleteNestFromNestStatus = () => {
-          scriptStates[i].nestStatus.pop();
-        };
-        const updateNestedStatus = (nestCount: number, status: boolean) => {
-          scriptStates[i].nestStatus[scriptStates[i].nestStatus.length - 1] = status;
-        };
         if (typeof block === 'string') {
           return block;
         }
@@ -97,16 +58,6 @@ export const Preview = (props: Props) => {
           scriptStates[i],
           0,
           setState,
-          setStepDelay,
-          addNestToStepCount,
-          resetStepCount,
-          deleteNestFromStepCount,
-          addNestToLoopCount,
-          deleteNestFromLoopCount,
-          addLoopCount,
-          addNestToStatus,
-          deleteNestFromNestStatus,
-          updateNestedStatus,
         )[block.id]?.();
       };
       step(block);
