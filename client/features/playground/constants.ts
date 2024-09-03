@@ -1,7 +1,12 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { BLOCK, blockArg, READONLY_BLOCK, ScriptState, SpriteState } from './types';
 import { nestedStepMoveBase } from './utils/nestedStepMoveBase';
-import { scriptStatesHandler } from './utils/scriptStatesHandler';
+import {
+  addLoopCount,
+  resetStepCount,
+  setStepDelay,
+  updateNestedStatus,
+} from './utils/scriptStatesHandler';
 
 export const BLOCKS: READONLY_BLOCK[] = [
   { id: 0, contents: ['もし▶ボタンが押されたなら'] },
@@ -30,7 +35,6 @@ export const moves = (
   nestCount: number,
   setState: Dispatch<SetStateAction<SpriteState>>,
 ): Record<number, () => void> => {
-  const { setStepDelay, resetStepCount, addLoopCount, updateNestedStatus } = scriptStatesHandler;
   const arg = (n: number) => fn(args[n]);
   setStepDelay(scriptState, null);
   return {

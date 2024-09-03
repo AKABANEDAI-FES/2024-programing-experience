@@ -1,7 +1,15 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { moves } from '../constants';
 import type { Block, blockArg, ScriptState, SpriteState } from '../types';
-import { scriptStatesHandler } from './scriptStatesHandler';
+import {
+  addNestToLoopCount,
+  addNestToStatus,
+  addNestToStepCount,
+  deleteNestFromLoopCount,
+  deleteNestFromNestStatus,
+  deleteNestFromStepCount,
+  setStepDelay,
+} from './scriptStatesHandler';
 
 export const nestedStepMoveBase = (
   fn: (arg: blockArg) => void | string | undefined,
@@ -13,16 +21,6 @@ export const nestedStepMoveBase = (
   setState: Dispatch<SetStateAction<SpriteState>>,
   afterFn?: () => void,
 ) => {
-  const {
-    setStepDelay,
-    addNestToStepCount,
-    deleteNestFromStepCount,
-    addNestToLoopCount,
-    deleteNestFromLoopCount,
-    addNestToStatus,
-    deleteNestFromNestStatus,
-  } = scriptStatesHandler;
-
   if (scriptState.nestStatus.length <= nestCount) {
     addNestToStepCount(scriptState);
     addNestToLoopCount(scriptState);
