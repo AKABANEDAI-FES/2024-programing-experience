@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import type { BLOCK, blockArg, READONLY_BLOCK, ScriptState, SpriteState } from './types';
+import { nestedStepMoveBase } from './utils/nestedStepMoveBase';
 import { scriptStatesHandler } from './utils/scriptStatesHandler';
 
 export const BLOCKS: READONLY_BLOCK[] = [
@@ -29,18 +30,7 @@ export const moves = (
   nestCount: number,
   setState: Dispatch<SetStateAction<SpriteState>>,
 ): Record<number, () => void> => {
-  const {
-    setStepDelay,
-    addNestToStepCount,
-    deleteNestFromStepCount,
-    resetStepCount,
-    addNestToLoopCount,
-    deleteNestFromLoopCount,
-    addLoopCount,
-    addNestToStatus,
-    deleteNestFromNestStatus,
-    updateNestedStatus,
-  } = scriptStatesHandler;
+  const { setStepDelay, resetStepCount, addLoopCount, updateNestedStatus } = scriptStatesHandler;
   const arg = (n: number) => fn(args[n]);
   setStepDelay(scriptState, null);
   return {
@@ -73,104 +63,64 @@ export const moves = (
       })),
     6: () => {
       const newNestCount = nestCount + 1;
-      addNestToStepCount(scriptState, newNestCount);
-      addNestToLoopCount(scriptState, newNestCount);
-      addNestToStatus(scriptState, newNestCount, arg(0) === 'true');
       const innerScripts = args[1];
       if (!(innerScripts instanceof Array)) {
         throw new Error('Invalid innerScripts');
       }
-      if (scriptState.nestStatus[newNestCount]) {
-        moves(
-          fn,
-          innerScripts[scriptState.stepCount[newNestCount]].arg,
-          scriptState,
-          newNestCount,
-          setState,
-        )[innerScripts[scriptState.stepCount[newNestCount]].id]?.();
-      }
-      if (scriptState.loopCount.length - 1 !== newNestCount) {
-        return;
-      }
-      if (scriptState.stepCount[newNestCount] >= innerScripts.length - 1) {
-        deleteNestFromLoopCount(scriptState);
-        deleteNestFromStepCount(scriptState);
-        deleteNestFromNestStatus(scriptState);
-        setStepDelay(scriptState, 0);
-      }
+      nestedStepMoveBase(
+        fn,
+        scriptState,
+        () => arg(0) === 'true',
+        newNestCount,
+        innerScripts,
+        () => scriptState.stepCount[newNestCount] > innerScripts.length - 1,
+        setState,
+      );
     },
-    // eslint-disable-next-line complexity
     7: () => {
       const newNestCount = nestCount + 1;
-      addNestToStepCount(scriptState, newNestCount);
-      addNestToLoopCount(scriptState, newNestCount);
-      addNestToStatus(
-        scriptState,
-        newNestCount,
-        scriptState.loopCount[scriptState.loopCount.length - 1] < Number(arg(0)),
-      );
       const innerScripts = args[1];
       if (!(innerScripts instanceof Array)) {
         throw new Error('Invalid innerScripts');
       }
-      if (scriptState.nestStatus[scriptState.nestStatus.length - 1]) {
-        moves(
-          fn,
-          innerScripts[scriptState.stepCount[newNestCount]].arg,
-          scriptState,
-          newNestCount,
-          setState,
-        )[innerScripts[scriptState.stepCount[newNestCount]].id]?.();
-      }
-      if (scriptState.loopCount.length - 1 !== newNestCount) {
-        return;
-      }
-      if (scriptState.loopCount[scriptState.loopCount.length - 1] >= Number(arg(0)) - 1) {
-        deleteNestFromLoopCount(scriptState);
-        deleteNestFromStepCount(scriptState);
-        deleteNestFromNestStatus(scriptState);
-        setStepDelay(scriptState, 0);
-        return;
-      }
-      if (scriptState.stepCount[newNestCount] >= innerScripts.length - 1) {
-        resetStepCount(scriptState);
-        addLoopCount(scriptState);
-      }
+      nestedStepMoveBase(
+        fn,
+        scriptState,
+        () => scriptState.loopCount[newNestCount] < Number(arg(0)),
+        newNestCount,
+        innerScripts,
+        () => scriptState.loopCount[newNestCount] > Number(arg(0)) - 1,
+        setState,
+        () => {
+          if (scriptState.stepCount[newNestCount] >= innerScripts.length - 1) {
+            resetStepCount(scriptState, newNestCount);
+            addLoopCount(scriptState, newNestCount);
+          }
+        },
+      );
     },
-    // eslint-disable-next-line complexity
     8: () => {
       const newNestCount = nestCount + 1;
-      addNestToStepCount(scriptState, newNestCount);
-      addNestToLoopCount(scriptState, newNestCount);
-      addNestToStatus(scriptState, newNestCount, arg(0) === 'true');
       const innerScripts = args[1];
       if (!(innerScripts instanceof Array)) {
         throw new Error('Invalid innerScripts');
       }
-      if (scriptState.nestStatus[newNestCount]) {
-        moves(
-          fn,
-          innerScripts[scriptState.stepCount[newNestCount]].arg,
-          scriptState,
-          newNestCount,
-          setState,
-        )[innerScripts[scriptState.stepCount[newNestCount]].id]?.();
-      }
-      if (scriptState.loopCount.length - 1 !== newNestCount) {
-        return;
-      }
-      if (!scriptState.nestStatus[newNestCount]) {
-        deleteNestFromLoopCount(scriptState);
-        deleteNestFromStepCount(scriptState);
-        deleteNestFromNestStatus(scriptState);
-        setStepDelay(scriptState, 0);
-        return;
-      }
-      if (scriptState.stepCount[newNestCount] >= innerScripts.length - 1) {
-        resetStepCount(scriptState);
-        addLoopCount(scriptState);
-        updateNestedStatus(scriptState, newNestCount, arg(0) === 'true');
-      }
+      nestedStepMoveBase(
+        fn,
+        scriptState,
+        () => arg(0) === 'true',
+        newNestCount,
+        innerScripts,
+        () => !scriptState.nestStatus[newNestCount],
+        setState,
+        () => {
+          if (scriptState.stepCount[newNestCount] >= innerScripts.length - 1) {
+            resetStepCount(scriptState, newNestCount);
+            addLoopCount(scriptState, newNestCount);
+            updateNestedStatus(scriptState, newNestCount, arg(0) === 'true');
+          }
+        },
+      );
     },
   };
 };
