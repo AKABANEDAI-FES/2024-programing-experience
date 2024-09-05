@@ -8,19 +8,19 @@ type Props = {
   scripts: Block[][];
 };
 
+const defaultScriptState = (script: Block[]) => ({
+  script,
+  active: false,
+  stepDelay: 0,
+  stepCount: [0],
+  loopCount: [0],
+  nestStatus: [true],
+});
+
 export const Preview = (props: Props) => {
   const { scripts } = props;
   const [stepSpeed, setStepSpeed] = useState(1);
-  const [scriptStates, setScriptStates] = useState<ScriptState[]>(
-    scripts?.map((script) => ({
-      script,
-      active: false,
-      stepDelay: 0,
-      stepCount: [0],
-      loopCount: [0],
-      nestStatus: [true],
-    })),
-  );
+  const [scriptStates, setScriptStates] = useState<ScriptState[]>(scripts?.map(defaultScriptState));
   const [state, setState] = useState<SpriteState>({
     x: 0,
     y: 0,
@@ -36,9 +36,7 @@ export const Preview = (props: Props) => {
   const interval = (i: number, script: Block[], stepCount: number[]) => {
     if (stepCount[0] >= script.length) {
       updateScriptState((scriptStates) => {
-        scriptStates[i].active = false;
-        scriptStates[i].stepCount = [0];
-        scriptStates[i].stepDelay = 0;
+        scriptStates[i] = defaultScriptState(scriptStates[i].script);
       });
       return;
     }
@@ -52,13 +50,7 @@ export const Preview = (props: Props) => {
           return block;
         }
         if (block instanceof Array) return;
-        return moves(
-          step,
-          block.arg,
-          scriptStates[i],
-          0,
-          setState,
-        )[block.id]?.();
+        return moves(step, block.arg, scriptStates[i], 0, setState)[block.id]?.();
       };
       step(block);
       scriptStates[i].stepCount[scriptStates[i].stepCount.length - 1] += 1;
@@ -83,14 +75,7 @@ export const Preview = (props: Props) => {
     setScriptStates(
       scriptStates
         .filter(({ script }) => script[0]?.id === 0)
-        .map(({ script, active, stepDelay, stepCount, loopCount, nestStatus }) => ({
-          script,
-          active: !active,
-          stepDelay,
-          stepCount,
-          loopCount,
-          nestStatus,
-        })),
+        .map((scriptState) => ({ ...scriptState, active: !scriptState.active, stepDelay: 0 })),
     );
   };
   return (
