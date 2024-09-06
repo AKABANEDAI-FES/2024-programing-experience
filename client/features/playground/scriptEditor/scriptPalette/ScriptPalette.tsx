@@ -30,7 +30,9 @@ export const ScriptPalette = (props: Props) => {
           onDragStart={() => setTargetBlock(block)}
         >
           {block.contents.map((content, i) =>
-            content.startsWith('$') ? (
+            content instanceof Array ? (
+              <Input key={i} defaultValue={''} />
+            ) : content.startsWith('$') ? (
               <Input key={i} defaultValue={content.replace('$', '')} />
             ) : (
               <div key={i}>{content}</div>

@@ -5,13 +5,25 @@ import React from 'react';
 import styles from '../ScriptEditor.module.css';
 
 // eslint-disable-next-line complexity
-const updateScriptValue = (arg: blockArg, script: Exclude<blockArg, string>, indexes: number[]) => {
+const updateScriptValue = (
+  arg: Exclude<blockArg, Block[]>,
+  script: Exclude<blockArg, string>,
+  indexes: number[],
+) => {
   const newIndexes = [...indexes];
   const index = newIndexes.shift();
   if (index === undefined) {
     throw new Error('Invalid index');
   }
   if (script instanceof Array) {
+    if (script[index] === undefined) {
+      // eslint-disable-next-line max-depth
+      if (typeof arg === 'string') {
+        throw new Error('Invalid arg');
+      }
+      script.push(arg);
+      return;
+    }
     updateScriptValue(arg, script[index], newIndexes);
     return;
   }
@@ -39,8 +51,10 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       {BLOCKS_DICT[block.id]?.contents.map((content, i, contents) => {
-        if (content.startsWith('$')) {
-          const argIndex = contents.slice(0, i).filter((content) => content.startsWith('$')).length;
+        if (content instanceof Array || content.startsWith('$')) {
+          const argIndex = contents
+            .slice(0, i)
+            .filter((content) => content instanceof Array || content.startsWith('$')).length;
           const newIndexes = [...indexes, argIndex];
           const arg = block.arg[argIndex];
           if (typeof arg === 'string') {
@@ -68,6 +82,12 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                     handleDrop={handleDrop}
                   />
                 ))}
+                <input
+                  className={styles.input}
+                  type="text"
+                  defaultValue={''}
+                  onDrop={(e) => handleDrop(e, n, [...newIndexes, arg.length])}
+                />
               </div>
             );
           }
@@ -104,8 +124,8 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
     newScripts[0].push({
       id: targetBlock.id,
       arg: targetBlock.contents
-        .filter((content) => content.startsWith('$'))
-        .map((content) => content.replace('$', '')),
+        .filter((content) => content instanceof Array || content.startsWith('$'))
+        .map((content) => (content instanceof Array ? [] : content.replace('$', ''))),
     });
     setScripts(newScripts);
   };
@@ -132,8 +152,8 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
       {
         id: targetBlock.id,
         arg: targetBlock.contents
-          .filter((content) => content.startsWith('$'))
-          .map((content) => content.replace('$', '')),
+          .filter((content) => content instanceof Array || content.startsWith('$'))
+          .map((content) => (content instanceof Array ? [] : content.replace('$', ''))),
       },
       newScripts[0][n],
       indexes,
