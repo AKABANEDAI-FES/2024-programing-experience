@@ -2,8 +2,8 @@ import { BLOCKS_DICT } from 'features/playground/constants';
 import type { Block, BLOCK, blockArg } from 'features/playground/types';
 import type { Dispatch, SetStateAction } from 'react';
 import React from 'react';
+import { isArg } from '../../utils/isArg';
 import styles from '../ScriptEditor.module.css';
-
 // eslint-disable-next-line complexity
 const updateScriptValue = (
   arg: Exclude<blockArg, Block[]>,
@@ -51,10 +51,8 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       {BLOCKS_DICT[block.id]?.contents.map((content, i, contents) => {
-        if (content instanceof Array || content.startsWith('$')) {
-          const argIndex = contents
-            .slice(0, i)
-            .filter((content) => content instanceof Array || content.startsWith('$')).length;
+        if (isArg(content)) {
+          const argIndex = contents.slice(0, i).filter(isArg).length;
           const newIndexes = [...indexes, argIndex];
           const arg = block.arg[argIndex];
           if (typeof arg === 'string') {
