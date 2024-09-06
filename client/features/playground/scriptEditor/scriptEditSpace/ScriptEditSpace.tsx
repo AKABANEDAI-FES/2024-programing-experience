@@ -150,7 +150,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
     if (targetBlock === null) return;
     const newScripts = structuredClone(scripts);
 
-    updateScriptValue(defaultBlock(targetBlock), newScripts[0][n], indexes);
+    updateScriptValue(defaultBlock(targetBlock), newScripts[0][n] ?? newScripts[0], indexes);
     setScripts(newScripts);
 
     e.preventDefault();
@@ -158,21 +158,35 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
   };
 
   return (
-    <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
-      {scripts.map((script) =>
-        script.map((block, n) => (
-          <div className={styles.block} key={n}>
-            <ScriptBlock
-              key={n}
-              block={block}
-              n={n}
-              indexes={[]}
-              handleOnChange={handleOnChange}
-              handleDrop={handleDropToInput}
-            />
-          </div>
-        )),
-      )}
+    <div
+      className={styles.scriptEditSpace}
+      // onDrop={handleDrop}5
+      onDragOver={handleDragOver}
+    >
+      {scripts.map((script) => (
+        <div>
+          {script.map((block, n) => (
+            <div className={styles.block} key={n}>
+              <ScriptBlock
+                key={n}
+                block={block}
+                n={n}
+                indexes={[]}
+                handleOnChange={handleOnChange}
+                handleDrop={handleDropToInput}
+              />
+            </div>
+          ))}
+          {'['}
+          <input
+            className={styles.input}
+            type="text"
+            defaultValue={''}
+            onDrop={(e) => handleDropToInput(e, script.length, [script.length])}
+          />
+          {']'}
+        </div>
+      ))}
     </div>
   );
 };
