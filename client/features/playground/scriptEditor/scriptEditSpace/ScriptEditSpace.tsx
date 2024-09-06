@@ -106,6 +106,11 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   );
 };
 
+const defaultBlock = ({ id, contents }: BLOCK) => ({
+  id,
+  arg: contents.filter(isArg).map((a) => (a instanceof Array ? [] : a)),
+});
+
 type Props = {
   scripts: Block[][];
   setScripts: Dispatch<SetStateAction<Block[][]>>;
@@ -117,14 +122,12 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+
     if (targetBlock === null) return;
+
     const newScripts = structuredClone(scripts);
-    newScripts[0].push({
-      id: targetBlock.id,
-      arg: targetBlock.contents
-        .filter((content) => content instanceof Array || content.startsWith('$'))
-        .map((content) => (content instanceof Array ? [] : content.replace('$', ''))),
-    });
+
+    newScripts[0].push(defaultBlock(targetBlock));
     setScripts(newScripts);
   };
 
@@ -146,17 +149,10 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
   ) => {
     if (targetBlock === null) return;
     const newScripts = structuredClone(scripts);
-    updateScriptValue(
-      {
-        id: targetBlock.id,
-        arg: targetBlock.contents
-          .filter((content) => content instanceof Array || content.startsWith('$'))
-          .map((content) => (content instanceof Array ? [] : content.replace('$', ''))),
-      },
-      newScripts[0][n],
-      indexes,
-    );
+
+    updateScriptValue(defaultBlock(targetBlock), newScripts[0][n], indexes);
     setScripts(newScripts);
+
     e.preventDefault();
     e.stopPropagation();
   };
