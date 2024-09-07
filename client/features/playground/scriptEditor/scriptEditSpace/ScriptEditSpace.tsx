@@ -3,7 +3,8 @@ import type { Block, BLOCK, blockArg } from 'features/playground/types';
 import type { Dispatch, SetStateAction } from 'react';
 import React from 'react';
 import { isArg } from '../../utils/isArg';
-import styles from '../ScriptEditor.module.css';
+import styles1 from '../ScriptEditor.module.css';
+import styles from './ScriptEditSpace.module.css';
 // eslint-disable-next-line complexity
 const updateScriptValue = (
   arg: Exclude<blockArg, Block[]>,
@@ -58,7 +59,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           if (typeof arg === 'string') {
             return (
               <input
-                className={styles.input}
+                className={styles1.input}
                 key={i}
                 type="text"
                 defaultValue={arg}
@@ -81,7 +82,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                   />
                 ))}
                 <input
-                  className={styles.input}
+                  className={styles1.input}
                   type="text"
                   defaultValue={''}
                   onDrop={(e) => handleDrop(e, scriptIndex, [...newIndexes, arg.length])}
@@ -153,14 +154,13 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
   ) => {
     if (targetBlock === null) return;
     const newScripts = structuredClone(scripts);
-
+    
     updateScriptValue(defaultBlock(targetBlock), newScripts[scriptIndex], indexes);
     setScripts(newScripts);
 
     e.preventDefault();
     e.stopPropagation();
   };
-
   return (
     <div
       className={styles.scriptEditSpace}
@@ -170,7 +170,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
       {scripts.map((script, scriptIndex) => (
         <div>
           {script.map((block, n) => (
-            <div className={styles.block} key={n}>
+            <div className={styles1.block} key={n}>
               <ScriptBlock
                 key={`${scriptIndex}-${n}`}
                 block={block}

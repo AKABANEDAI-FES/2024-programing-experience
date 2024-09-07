@@ -18,14 +18,6 @@
   background-color: #f0f0f0;
 }
 
-.scriptEditSpace {
-  box-sizing: border-box;
-  width: 70%;
-  padding: 10px;
-  background-color: #fff;
-  border-left: 1px solid #ccc;
-}
-
 .block {
   display: flex;
   flex-direction: row;
