@@ -40,14 +40,14 @@ const updateScriptValue = (
 
 type ScriptBlockProps = {
   block: Block;
-  n: number;
+  scriptIndex: number;
   indexes: number[];
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>, n: number, is: number[]) => void;
   handleDrop: (e: React.DragEvent<HTMLInputElement>, n: number, is: number[]) => void;
 };
 
 const ScriptBlock = (props: ScriptBlockProps) => {
-  const { block, n, indexes, handleOnChange, handleDrop } = props;
+  const { block, scriptIndex, indexes, handleOnChange, handleDrop } = props;
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       {BLOCKS_DICT[block.id]?.contents.map((content, i, contents) => {
@@ -62,8 +62,8 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                 key={i}
                 type="text"
                 defaultValue={arg}
-                onChange={(e) => handleOnChange(e, n, newIndexes)}
-                onDrop={(e) => handleDrop(e, n, newIndexes)}
+                onChange={(e) => handleOnChange(e, scriptIndex, newIndexes)}
+                onDrop={(e) => handleDrop(e, scriptIndex, newIndexes)}
               />
             );
           }
@@ -74,7 +74,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                   <ScriptBlock
                     key={`${i}-${j}`}
                     block={scriptBlock}
-                    n={n}
+                    scriptIndex={scriptIndex}
                     indexes={[...newIndexes, j]}
                     handleOnChange={handleOnChange}
                     handleDrop={handleDrop}
@@ -84,7 +84,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                   className={styles.input}
                   type="text"
                   defaultValue={''}
-                  onDrop={(e) => handleDrop(e, n, [...newIndexes, arg.length])}
+                  onDrop={(e) => handleDrop(e, scriptIndex, [...newIndexes, arg.length])}
                 />
               </div>
             );
@@ -93,7 +93,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
             <ScriptBlock
               key={i}
               block={arg}
-              n={n}
+              scriptIndex={scriptIndex}
               indexes={newIndexes}
               handleOnChange={handleOnChange}
               handleDrop={handleDrop}
@@ -135,22 +135,26 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
     event.preventDefault();
   };
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, indexes: number[]) => {
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    scriptIndex: number,
+    indexes: number[],
+  ) => {
     const newScripts = structuredClone(scripts);
 
-    updateScriptValue(e.target.value, newScripts[0][n], indexes);
+    updateScriptValue(e.target.value, newScripts[scriptIndex], indexes);
     setScripts(newScripts);
   };
 
   const handleDropToInput = (
     e: React.DragEvent<HTMLInputElement>,
-    n: number,
+    scriptIndex: number,
     indexes: number[],
   ) => {
     if (targetBlock === null) return;
     const newScripts = structuredClone(scripts);
 
-    updateScriptValue(defaultBlock(targetBlock), newScripts[0][n] ?? newScripts[0], indexes);
+    updateScriptValue(defaultBlock(targetBlock), newScripts[scriptIndex], indexes);
     setScripts(newScripts);
 
     e.preventDefault();
@@ -163,15 +167,15 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
       // onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
-      {scripts.map((script) => (
+      {scripts.map((script, scriptIndex) => (
         <div>
           {script.map((block, n) => (
             <div className={styles.block} key={n}>
               <ScriptBlock
-                key={n}
+                key={`${scriptIndex}-${n}`}
                 block={block}
-                n={n}
-                indexes={[]}
+                scriptIndex={scriptIndex}
+                indexes={[n]}
                 handleOnChange={handleOnChange}
                 handleDrop={handleDropToInput}
               />
@@ -182,7 +186,8 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
             className={styles.input}
             type="text"
             defaultValue={''}
-            onDrop={(e) => handleDropToInput(e, script.length, [script.length])}
+            onDrop={(e) => handleDropToInput(e, scriptIndex, [script.length])}
+            key={scriptIndex}
           />
           {']'}
         </div>
