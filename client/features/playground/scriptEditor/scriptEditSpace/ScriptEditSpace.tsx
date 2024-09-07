@@ -108,7 +108,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
 
 const defaultBlock = ({ id, contents }: BLOCK) => ({
   id,
-  arg: contents.filter(isArg).map((a) => (a instanceof Array ? [] : a)),
+  arg: contents.filter(isArg).map((a) => (a instanceof Array ? [] : a.replace('$', ''))),
 });
 
 type Props = {
@@ -160,7 +160,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
   return (
     <div
       className={styles.scriptEditSpace}
-      // onDrop={handleDrop}5
+      // onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
       {scripts.map((script) => (
