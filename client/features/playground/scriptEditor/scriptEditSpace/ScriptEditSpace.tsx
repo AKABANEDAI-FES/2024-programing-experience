@@ -128,7 +128,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
 
     const newScripts = structuredClone(scripts);
 
-    newScripts[0].push(defaultBlock(targetBlock));
+    newScripts.push([defaultBlock(targetBlock)]);
     setScripts(newScripts);
   };
 
@@ -148,7 +148,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
   };
 
   const handleDropToInput = (
-    e: React.DragEvent<HTMLInputElement>,
+    e: React.DragEvent<HTMLElement>,
     scriptIndex: number,
     indexes: number[],
   ) => {
@@ -162,15 +162,11 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
     e.stopPropagation();
   };
   return (
-    <div
-      className={styles.scriptEditSpace}
-      // onDrop={handleDrop}
-      onDragOver={handleDragOver}
-    >
+    <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {scripts.map((script, scriptIndex) => (
-        <div>
+        <>
           {script.map((block, n) => (
-            <div className={styles1.block} key={n}>
+            <div className={styles1.block} key={`${scriptIndex}-${n}`}>
               <ScriptBlock
                 key={`${scriptIndex}-${n}`}
                 block={block}
@@ -181,16 +177,21 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
               />
             </div>
           ))}
-          {'['}
-          <input
-            className={styles.input}
-            type="text"
-            defaultValue={''}
-            onDrop={(e) => handleDropToInput(e, scriptIndex, [script.length])}
-            key={scriptIndex}
-          />
-          {']'}
-        </div>
+          {script && (
+            <>
+              <div
+                key={scriptIndex}
+                style={{
+                  display: 'inline-block',
+                  height: '1rem',
+                  width: '1rem',
+                }}
+                onDrop={(e) => handleDropToInput(e, scriptIndex, [script.length])}
+              />
+              {']'}
+            </>
+          )}
+        </>
       ))}
     </div>
   );

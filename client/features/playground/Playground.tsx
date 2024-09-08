@@ -5,7 +5,7 @@ import { ScriptEditor } from './scriptEditor/ScriptEditor';
 import type { Block } from './types';
 
 export const Playground = () => {
-  const [scripts, setScripts] = useState<Block[][]>([[]]);
+  const [scripts, setScripts] = useState<Block[][]>([]);
   return (
     <div className={styles.main}>
       <ScriptEditor scripts={scripts} setScripts={setScripts}></ScriptEditor>
