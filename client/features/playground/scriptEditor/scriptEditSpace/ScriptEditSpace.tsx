@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { BLOCKS_DICT } from 'features/playground/constants';
 import type { Block, BLOCK, blockArg } from 'features/playground/types';
 import type { Dispatch, SetStateAction } from 'react';
@@ -25,6 +26,14 @@ const updateScriptValue = (
       script.push(arg);
       return;
     }
+    if (newIndexes.length <= 0) {
+      // eslint-disable-next-line max-depth
+      if (typeof arg === 'string') {
+        throw new Error('Invalid arg');
+      }
+      script.splice(index + 1, 0, arg);
+      return;
+    }
     updateScriptValue(arg, script[index], newIndexes);
     return;
   }
@@ -44,7 +53,7 @@ type ScriptBlockProps = {
   scriptIndex: number;
   indexes: number[];
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>, n: number, is: number[]) => void;
-  handleDrop: (e: React.DragEvent<HTMLInputElement>, n: number, is: number[]) => void;
+  handleDrop: (e: React.DragEvent<HTMLElement>, n: number, is: number[]) => void;
 };
 
 const ScriptBlock = (props: ScriptBlockProps) => {
@@ -101,7 +110,11 @@ const ScriptBlock = (props: ScriptBlockProps) => {
             />
           );
         }
-        return <div key={i}>{content}</div>;
+        return (
+          <div key={i} onDrop={(e) => handleDrop(e, scriptIndex, indexes)}>
+            {content}
+          </div>
+        );
       })}
     </div>
   );
@@ -154,7 +167,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
   ) => {
     if (targetBlock === null) return;
     const newScripts = structuredClone(scripts);
-    
+
     updateScriptValue(defaultBlock(targetBlock), newScripts[scriptIndex], indexes);
     setScripts(newScripts);
 
@@ -164,9 +177,9 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
   return (
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {scripts.map((script, scriptIndex) => (
-        <>
+        <div key={scriptIndex}>
           {script.map((block, n) => (
-            <div className={styles1.block} key={`${scriptIndex}-${n}`}>
+            <div className={styles1.block} key={n}>
               <ScriptBlock
                 key={`${scriptIndex}-${n}`}
                 block={block}
@@ -180,7 +193,6 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
           {script && (
             <>
               <div
-                key={scriptIndex}
                 style={{
                   display: 'inline-block',
                   height: '1rem',
@@ -191,7 +203,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
               {']'}
             </>
           )}
-        </>
+        </div>
       ))}
     </div>
   );
