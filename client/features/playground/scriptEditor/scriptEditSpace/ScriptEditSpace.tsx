@@ -59,7 +59,10 @@ type ScriptBlockProps = {
 const ScriptBlock = (props: ScriptBlockProps) => {
   const { block, scriptIndex, indexes, handleOnChange, handleDrop } = props;
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <div
+      style={{ display: 'flex', flexDirection: 'row' }}
+      onDrop={(e) => handleDrop(e, scriptIndex, indexes)}
+    >
       {BLOCKS_DICT[block.id]?.contents.map((content, i, contents) => {
         if (isArg(content)) {
           const argIndex = contents.slice(0, i).filter(isArg).length;
@@ -110,11 +113,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
             />
           );
         }
-        return (
-          <div key={i} onDrop={(e) => handleDrop(e, scriptIndex, indexes)}>
-            {content}
-          </div>
-        );
+        return <div key={i}>{content}</div>;
       })}
     </div>
   );
