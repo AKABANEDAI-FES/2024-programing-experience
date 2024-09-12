@@ -159,15 +159,18 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                       resetParentIsDragOver={dragOverChildElement}
                     />
                   ))}
-                  <input
-                    className={styles1.input}
-                    type="text"
-                    defaultValue={''}
-                    onDrop={(e) => {
-                      setIsDragOver(false);
-                      handleDrop(e, scriptIndex, [...newIndexes, arg.length]);
-                    }}
-                  />
+                  {arg.length === 0 && (
+                    <input
+                      className={styles1.input}
+                      type="text"
+                      onDrop={(e) => {
+                        setIsDragOver(false);
+
+                        handleDrop(e, scriptIndex, [...newIndexes, 0]);
+                        prevElemNotDragOverHandler?.();
+                      }}
+                    />
+                  )}
                 </div>
               );
             }
@@ -205,7 +208,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
 
 const defaultBlock = ({ id, contents }: BLOCK) => ({
   id,
-  arg: contents.filter(isArg).map((a) => (a instanceof Array ? [] : a.replace('$', ''))),
+  arg: contents.filter(isArg).map((a) => (a instanceof Array ? a : a.replace('$', ''))),
 });
 
 type Props = {
