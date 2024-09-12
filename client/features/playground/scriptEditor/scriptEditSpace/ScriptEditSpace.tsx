@@ -1,52 +1,13 @@
 /* eslint-disable max-lines */
 import { BLOCKS_DICT } from 'features/playground/constants';
-import type { Block, BLOCK, blockArg } from 'features/playground/types';
+import type { Block, BLOCK } from 'features/playground/types';
+import { defaultBlock } from 'features/playground/utils/defaultBlock';
+import { updateScriptValue } from 'features/playground/utils/updateScriptValue';
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback, useRef, useState } from 'react';
 import { isArg } from '../../utils/isArg';
 import styles1 from '../ScriptEditor.module.css';
 import styles from './ScriptEditSpace.module.css';
-// eslint-disable-next-line complexity
-const updateScriptValue = (
-  arg: Exclude<blockArg, Block[]>,
-  script: Exclude<blockArg, string>,
-  indexes: number[],
-) => {
-  const newIndexes = [...indexes];
-  const index = newIndexes.shift();
-  if (index === undefined) {
-    throw new Error('Invalid index');
-  }
-  if (script instanceof Array) {
-    if (script[index] === undefined) {
-      // eslint-disable-next-line max-depth
-      if (typeof arg === 'string') {
-        throw new Error('Invalid arg');
-      }
-      script.push(arg);
-      return;
-    }
-    if (newIndexes.length <= 0) {
-      // eslint-disable-next-line max-depth
-      if (typeof arg === 'string') {
-        throw new Error('Invalid arg');
-      }
-      script.splice(index + 1, 0, arg);
-      return;
-    }
-    updateScriptValue(arg, script[index], newIndexes);
-    return;
-  }
-  if (newIndexes.length <= 0) {
-    script.arg[index] = arg ?? '';
-    return;
-  }
-  if (typeof script.arg[index] === 'string') {
-    throw new Error('Invalid indexes');
-  }
-  updateScriptValue(arg, script.arg[index], newIndexes);
-  return;
-};
 
 type ScriptBlockProps = {
   block: Block;
@@ -205,11 +166,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     </div>
   );
 };
-
-const defaultBlock = ({ id, contents }: BLOCK) => ({
-  id,
-  arg: contents.filter(isArg).map((a) => (a instanceof Array ? a : a.replace('$', ''))),
-});
 
 type Props = {
   scripts: Block[][];
