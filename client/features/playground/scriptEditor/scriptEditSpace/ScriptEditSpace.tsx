@@ -2,7 +2,7 @@
 import { BLOCKS_DICT } from 'features/playground/constants';
 import type { Block, BLOCK, blockArg } from 'features/playground/types';
 import type { Dispatch, SetStateAction } from 'react';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { isArg } from '../../utils/isArg';
 import styles1 from '../ScriptEditor.module.css';
 import styles from './ScriptEditSpace.module.css';
@@ -52,38 +52,72 @@ type ScriptBlockProps = {
   block: Block;
   scriptIndex: number;
   indexes: number[];
+  targetBlock: BLOCK | null;
+  isNotShadow: boolean;
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>, n: number, is: number[]) => void;
   handleDrop: (e: React.DragEvent<HTMLElement>, n: number, is: number[]) => void;
   resetParentIsDragOver?: () => void;
+  nextElmNotDragHandler?: () => void;
 };
 
 const ScriptBlock = (props: ScriptBlockProps) => {
-  const { block, scriptIndex, indexes, handleOnChange, handleDrop, resetParentIsDragOver } = props;
+  const {
+    block,
+    scriptIndex,
+    indexes,
+    targetBlock,
+    isNotShadow,
+    handleOnChange,
+    handleDrop,
+    resetParentIsDragOver,
+    nextElmNotDragHandler: prevElemNotDragOverHandler,
+  } = props;
   const [isDragOver, setIsDragOver] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const dragOverChildElement = () => {
+  const dragOverChildElement = useCallback(() => {
     setIsDragOver(false);
-  };
+  }, []);
 
+  const nextElmNotDragHandler = useCallback(() => {
+    setIsDragOver(false);
+  }, []);
   return (
-    <>
+    <div
+      onDragOver={(e) => {
+        e.preventDefault();
+
+        e.stopPropagation();
+
+        resetParentIsDragOver?.();
+
+        setIsDragOver(true);
+      }}
+      onDragLeave={(e) => {
+        e.preventDefault();
+        if (!ref.current?.contains(e.relatedTarget as Node)) {
+          setIsDragOver(false);
+        }
+      }}
+      onDragEnd={(e) => {
+        e.preventDefault();
+        if (!ref.current?.contains(e.relatedTarget as Node)) {
+          setIsDragOver(false);
+        }
+      }}
+      ref={ref}
+    >
       <div
         style={{ display: 'flex', flexDirection: 'row' }}
         onDrop={(e) => {
           setIsDragOver(false);
+
           handleDrop(e, scriptIndex, indexes);
+          prevElemNotDragOverHandler?.();
         }}
-        onMouseOver={(e) => e.stopPropagation()}
-        className={styles1.block}
-        ref={ref}
-        onDragOver={(e) => {
-          e.preventDefault();
+        onMouseOver={(e) => {
           e.stopPropagation();
-          resetParentIsDragOver?.();
-          setIsDragOver(true);
         }}
-        onDragLeave={() => setIsDragOver(false)}
-        onDragEnd={() => setIsDragOver(false)}
+        className={isNotShadow ? styles1.block : styles1.blockShadow}
       >
         {BLOCKS_DICT[block.id]?.contents.map((content, i, contents) => {
           if (isArg(content)) {
@@ -97,10 +131,14 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                   key={i}
                   type="text"
                   defaultValue={arg}
-                  onChange={(e) => handleOnChange(e, scriptIndex, newIndexes)}
+                  onChange={(e) => {
+                    handleOnChange(e, scriptIndex, newIndexes);
+                  }}
                   onDrop={(e) => {
                     setIsDragOver(false);
+
                     handleDrop(e, scriptIndex, newIndexes);
+                    prevElemNotDragOverHandler?.();
                   }}
                 />
               );
@@ -114,6 +152,8 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                       block={scriptBlock}
                       scriptIndex={scriptIndex}
                       indexes={[...newIndexes, j]}
+                      targetBlock={targetBlock}
+                      isNotShadow={isNotShadow}
                       handleOnChange={handleOnChange}
                       handleDrop={handleDrop}
                       resetParentIsDragOver={dragOverChildElement}
@@ -137,17 +177,29 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                 block={arg}
                 scriptIndex={scriptIndex}
                 indexes={newIndexes}
+                targetBlock={targetBlock}
+                isNotShadow={isNotShadow}
                 handleOnChange={handleOnChange}
                 handleDrop={handleDrop}
-                resetParentIsDragOver={dragOverChildElement}
               />
             );
           }
           return <div key={i}>{content}</div>;
         })}
       </div>
-      {isDragOver && <div className={`${styles1.block} ${styles.blockGhost}`}></div>}
-    </>
+      {isDragOver && isNotShadow && targetBlock && (
+        <ScriptBlock
+          block={defaultBlock(targetBlock)}
+          scriptIndex={scriptIndex}
+          indexes={indexes}
+          targetBlock={targetBlock}
+          isNotShadow={false}
+          handleOnChange={handleOnChange}
+          handleDrop={handleDrop}
+          nextElmNotDragHandler={nextElmNotDragHandler}
+        />
+      )}
+    </div>
   );
 };
 
@@ -205,6 +257,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
     e.preventDefault();
     e.stopPropagation();
   };
+
   return (
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {scripts.map((script, scriptIndex) => (
@@ -215,23 +268,12 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
               block={block}
               scriptIndex={scriptIndex}
               indexes={[n]}
+              targetBlock={targetBlock}
+              isNotShadow={true}
               handleOnChange={handleOnChange}
               handleDrop={handleDropToInput}
             />
           ))}
-          {script && (
-            <>
-              <div
-                style={{
-                  display: 'inline-block',
-                  height: '1rem',
-                  width: '1rem',
-                }}
-                onDrop={(e) => handleDropToInput(e, scriptIndex, [script.length])}
-              />
-              {']'}
-            </>
-          )}
         </div>
       ))}
     </div>
