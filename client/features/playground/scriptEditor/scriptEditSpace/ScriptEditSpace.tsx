@@ -1,16 +1,16 @@
 /* eslint-disable max-lines */
 import { BLOCKS_DICT } from 'features/playground/constants';
-import type { Block, BLOCK } from 'features/playground/types';
+import type { Block, BLOCK, blockArg } from 'features/playground/types';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
+import { isArg } from 'features/playground/utils/isArg';
 import { updateScriptValue } from 'features/playground/utils/updateScriptValue';
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback, useRef, useState } from 'react';
-import { isArg } from '../../utils/isArg';
 import styles1 from '../ScriptEditor.module.css';
 import styles from './ScriptEditSpace.module.css';
 
 type ScriptBlockProps = {
-  block: Block;
+  arg: blockArg;
   scriptIndex: number;
   indexes: number[];
   targetBlock: BLOCK | null;
@@ -21,9 +21,10 @@ type ScriptBlockProps = {
   nextElmNotDragHandler?: () => void;
 };
 
+// eslint-disable-next-line complexity
 const ScriptBlock = (props: ScriptBlockProps) => {
   const {
-    block,
+    arg,
     scriptIndex,
     indexes,
     targetBlock,
@@ -35,6 +36,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   } = props;
   const [isDragOver, setIsDragOver] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
   const dragOverChildElement = useCallback(() => {
     setIsDragOver(false);
   }, []);
@@ -44,14 +46,9 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   }, []);
   return (
     <div
+      ref={ref}
       onDragOver={(e) => {
-        e.preventDefault();
-
         e.stopPropagation();
-
-        resetParentIsDragOver?.();
-
-        setIsDragOver(true);
       }}
       onDragLeave={(e) => {
         e.preventDefault();
@@ -65,95 +62,95 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           setIsDragOver(false);
         }
       }}
-      ref={ref}
     >
-      <div
-        style={{ display: 'flex', flexDirection: 'row' }}
-        onDrop={(e) => {
-          setIsDragOver(false);
+      {typeof arg === 'string' ? (
+        <input
+          className={styles1.input}
+          type="text"
+          defaultValue={arg}
+          onChange={(e) => {
+            handleOnChange(e, scriptIndex, indexes);
+          }}
+          onDrop={(e) => {
+            setIsDragOver(false);
 
-          handleDrop(e, scriptIndex, indexes);
-          prevElemNotDragOverHandler?.();
-        }}
-        onMouseOver={(e) => {
-          e.stopPropagation();
-        }}
-        className={isNotShadow ? styles1.block : styles1.blockShadow}
-      >
-        {BLOCKS_DICT[block.id]?.contents.map((content, i, contents) => {
-          if (isArg(content)) {
-            const argIndex = contents.slice(0, i).filter(isArg).length;
-            const newIndexes = [...indexes, argIndex];
-            const arg = block.arg[argIndex];
-            if (typeof arg === 'string') {
+            handleDrop(e, scriptIndex, indexes);
+            prevElemNotDragOverHandler?.();
+          }}
+        />
+      ) : arg instanceof Array ? (
+        <div style={{ flexDirection: 'column' }}>
+          {arg.map((scriptBlock, j) => (
+            <ScriptBlock
+              key={j}
+              arg={scriptBlock}
+              scriptIndex={scriptIndex}
+              indexes={[...indexes, j]}
+              targetBlock={targetBlock}
+              isNotShadow={isNotShadow}
+              handleOnChange={handleOnChange}
+              handleDrop={handleDrop}
+              resetParentIsDragOver={resetParentIsDragOver}
+            />
+          ))}
+          {arg.length === 0 && (
+            <input
+              className={styles1.input}
+              type="text"
+              onDrop={(e) => {
+                setIsDragOver(false);
+
+                handleDrop(e, scriptIndex, [...indexes, 0]);
+                prevElemNotDragOverHandler?.();
+              }}
+            />
+          )}
+        </div>
+      ) : (
+        <div
+          onDrop={(e) => {
+            setIsDragOver(false);
+
+            handleDrop(e, scriptIndex, indexes);
+            prevElemNotDragOverHandler?.();
+          }}
+          onMouseOver={(e) => {
+            e.stopPropagation();
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+
+            resetParentIsDragOver?.();
+
+            setIsDragOver(true);
+          }}
+          className={isNotShadow ? styles1.block : styles1.blockShadow}
+        >
+          {BLOCKS_DICT[arg.id]?.contents.map((content, i, contents) => {
+            if (isArg(content)) {
+              const argIndex = contents.slice(0, i).filter(isArg).length;
+              const newIndexes = [...indexes, argIndex];
               return (
-                <input
-                  className={styles1.input}
+                <ScriptBlock
                   key={i}
-                  type="text"
-                  defaultValue={arg}
-                  onChange={(e) => {
-                    handleOnChange(e, scriptIndex, newIndexes);
-                  }}
-                  onDrop={(e) => {
-                    setIsDragOver(false);
-
-                    handleDrop(e, scriptIndex, newIndexes);
-                    prevElemNotDragOverHandler?.();
-                  }}
+                  arg={arg.arg[argIndex]}
+                  scriptIndex={scriptIndex}
+                  indexes={newIndexes}
+                  targetBlock={targetBlock}
+                  isNotShadow={isNotShadow}
+                  handleOnChange={handleOnChange}
+                  handleDrop={handleDrop}
+                  resetParentIsDragOver={dragOverChildElement}
                 />
               );
             }
-            if (arg instanceof Array) {
-              return (
-                <div style={{ flexDirection: 'column' }} key={i}>
-                  {arg.map((scriptBlock, j) => (
-                    <ScriptBlock
-                      key={`${i}-${j}`}
-                      block={scriptBlock}
-                      scriptIndex={scriptIndex}
-                      indexes={[...newIndexes, j]}
-                      targetBlock={targetBlock}
-                      isNotShadow={isNotShadow}
-                      handleOnChange={handleOnChange}
-                      handleDrop={handleDrop}
-                      resetParentIsDragOver={dragOverChildElement}
-                    />
-                  ))}
-                  {arg.length === 0 && (
-                    <input
-                      className={styles1.input}
-                      type="text"
-                      onDrop={(e) => {
-                        setIsDragOver(false);
-
-                        handleDrop(e, scriptIndex, [...newIndexes, 0]);
-                        prevElemNotDragOverHandler?.();
-                      }}
-                    />
-                  )}
-                </div>
-              );
-            }
-            return (
-              <ScriptBlock
-                key={i}
-                block={arg}
-                scriptIndex={scriptIndex}
-                indexes={newIndexes}
-                targetBlock={targetBlock}
-                isNotShadow={isNotShadow}
-                handleOnChange={handleOnChange}
-                handleDrop={handleDrop}
-              />
-            );
-          }
-          return <div key={i}>{content}</div>;
-        })}
-      </div>
+            return <div key={i}>{content}</div>;
+          })}
+        </div>
+      )}
       {isDragOver && isNotShadow && targetBlock && (
         <ScriptBlock
-          block={defaultBlock(targetBlock)}
+          arg={defaultBlock(targetBlock)}
           scriptIndex={scriptIndex}
           indexes={indexes}
           targetBlock={targetBlock}
@@ -224,7 +221,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
           {script.map((block, n) => (
             <ScriptBlock
               key={`${scriptIndex}-${n}`}
-              block={block}
+              arg={block}
               scriptIndex={scriptIndex}
               indexes={[n]}
               targetBlock={targetBlock}
