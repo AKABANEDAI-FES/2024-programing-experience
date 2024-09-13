@@ -18,7 +18,6 @@ type ScriptBlockProps = {
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>, n: number, is: number[]) => void;
   handleDrop: (e: React.DragEvent<HTMLElement>, n: number, is: number[]) => void;
   resetParentIsDragOver?: () => void;
-  nextElmNotDragHandler?: () => void;
 };
 
 // eslint-disable-next-line complexity
@@ -32,7 +31,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     handleOnChange,
     handleDrop,
     resetParentIsDragOver,
-    nextElmNotDragHandler: prevElemNotDragOverHandler,
   } = props;
   const [isDragOver, setIsDragOver] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -41,9 +39,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     setIsDragOver(false);
   }, []);
 
-  const nextElmNotDragHandler = useCallback(() => {
-    setIsDragOver(false);
-  }, []);
   return (
     <div
       ref={ref}
@@ -75,7 +70,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
             setIsDragOver(false);
 
             handleDrop(e, scriptIndex, indexes);
-            prevElemNotDragOverHandler?.();
           }}
         />
       ) : arg instanceof Array ? (
@@ -101,7 +95,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                 setIsDragOver(false);
 
                 handleDrop(e, scriptIndex, [...indexes, 0]);
-                prevElemNotDragOverHandler?.();
               }}
             />
           )}
@@ -112,7 +105,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
             setIsDragOver(false);
 
             handleDrop(e, scriptIndex, indexes);
-            prevElemNotDragOverHandler?.();
           }}
           onMouseOver={(e) => {
             e.stopPropagation();
@@ -157,7 +149,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           isNotShadow={false}
           handleOnChange={handleOnChange}
           handleDrop={handleDrop}
-          nextElmNotDragHandler={nextElmNotDragHandler}
         />
       )}
     </div>
