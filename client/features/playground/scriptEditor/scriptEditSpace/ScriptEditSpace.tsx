@@ -71,23 +71,23 @@ const ScriptBlock = (props: ScriptBlockProps) => {
 
             handleDrop(e, scriptIndex, indexes);
           }}
+          onMouseOver={(e) => {
+            e.stopPropagation();
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+
+            resetParentIsDragOver?.();
+
+            setIsDragOver(true);
+          }}
         />
       ) : arg instanceof Array ? (
         <div style={{ flexDirection: 'column' }}>
           {arg.map((scriptBlock, j) => (
             <ScriptBlock key={j} {...props} arg={scriptBlock} indexes={[...indexes, j]} />
           ))}
-          {arg.length === 0 && (
-            <input
-              className={styles1.input}
-              type="text"
-              onDrop={(e) => {
-                setIsDragOver(false);
-
-                handleDrop(e, scriptIndex, [...indexes, 0]);
-              }}
-            />
-          )}
+          {arg.length === 0 && <ScriptBlock {...props} arg={''} indexes={[...indexes, 0]} />}
         </div>
       ) : (
         <div
