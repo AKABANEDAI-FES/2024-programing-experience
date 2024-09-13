@@ -75,17 +75,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       ) : arg instanceof Array ? (
         <div style={{ flexDirection: 'column' }}>
           {arg.map((scriptBlock, j) => (
-            <ScriptBlock
-              key={j}
-              arg={scriptBlock}
-              scriptIndex={scriptIndex}
-              indexes={[...indexes, j]}
-              targetBlock={targetBlock}
-              isNotShadow={isNotShadow}
-              handleOnChange={handleOnChange}
-              handleDrop={handleDrop}
-              resetParentIsDragOver={resetParentIsDragOver}
-            />
+            <ScriptBlock key={j} {...props} arg={scriptBlock} indexes={[...indexes, j]} />
           ))}
           {arg.length === 0 && (
             <input
@@ -125,13 +115,9 @@ const ScriptBlock = (props: ScriptBlockProps) => {
               return (
                 <ScriptBlock
                   key={i}
+                  {...props}
                   arg={arg.arg[argIndex]}
-                  scriptIndex={scriptIndex}
                   indexes={newIndexes}
-                  targetBlock={targetBlock}
-                  isNotShadow={isNotShadow}
-                  handleOnChange={handleOnChange}
-                  handleDrop={handleDrop}
                   resetParentIsDragOver={dragOverChildElement}
                 />
               );
@@ -141,15 +127,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
         </div>
       )}
       {isDragOver && isNotShadow && targetBlock && (
-        <ScriptBlock
-          arg={defaultBlock(targetBlock)}
-          scriptIndex={scriptIndex}
-          indexes={indexes}
-          targetBlock={targetBlock}
-          isNotShadow={false}
-          handleOnChange={handleOnChange}
-          handleDrop={handleDrop}
-        />
+        <ScriptBlock {...props} arg={defaultBlock(targetBlock)} isNotShadow={false} />
       )}
     </div>
   );
