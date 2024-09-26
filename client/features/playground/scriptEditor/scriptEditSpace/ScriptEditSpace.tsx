@@ -59,9 +59,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
 
         handleDrop(e, scriptIndex, indexes);
       }}
-      onMouseOver={(e) => {
-        e.stopPropagation();
-      }}
       onDragOver={(e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -70,6 +67,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
 
         setIsDragOver(true);
       }}
+      style={{ border: '1px solid black' }}
     >
       {typeof arg === 'string' ? (
         <input
@@ -170,7 +168,7 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {scripts.map((script, scriptIndex) => (
         <div key={scriptIndex}>
-          {script.map((block, n) => (
+          {/* {script.map((block, n) => (
             <ScriptBlock
               key={`${scriptIndex}-${n}`}
               arg={block}
@@ -181,7 +179,17 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
               handleOnChange={handleOnChange}
               handleDrop={handleDropToInput}
             />
-          ))}
+          ))} */}
+          <ScriptBlock
+            key={scriptIndex}
+            arg={script}
+            scriptIndex={scriptIndex}
+            indexes={[]}
+            targetBlock={targetBlock}
+            isNotShadow={true}
+            handleOnChange={handleOnChange}
+            handleDrop={handleDropToInput}
+          />
         </div>
       ))}
     </div>
