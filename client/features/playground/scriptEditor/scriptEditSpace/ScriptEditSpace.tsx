@@ -18,6 +18,7 @@ type ScriptBlockProps = {
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>, n: number, is: number[]) => void;
   handleDrop: (e: React.DragEvent<HTMLElement>, n: number, is: number[]) => void;
   resetParentIsDragOver?: () => void;
+  dropOnPrevElement?: () => void;
 };
 
 // eslint-disable-next-line complexity
@@ -31,6 +32,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     handleOnChange,
     handleDrop,
     resetParentIsDragOver,
+    dropOnPrevElement,
   } = props;
   const [isDragOver, setIsDragOver] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -38,6 +40,10 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   const dragOverChildElement = useCallback(() => {
     setIsDragOver(false);
   }, []);
+
+  const dropOnNextElement = () => {
+    setIsDragOver(false);
+  };
 
   return (
     <div
@@ -58,16 +64,21 @@ const ScriptBlock = (props: ScriptBlockProps) => {
         setIsDragOver(false);
 
         handleDrop(e, scriptIndex, indexes);
+
+        dropOnPrevElement?.();
       }}
       onDragOver={(e) => {
-        e.stopPropagation();
         e.preventDefault();
-
-        resetParentIsDragOver?.();
+        e.stopPropagation();
+        if (typeof arg !== 'string') {
+          resetParentIsDragOver?.();
+        }
 
         setIsDragOver(true);
       }}
-      style={{ border: '1px solid black' }}
+      style={{
+        width: 'fit-content',
+      }}
     >
       {typeof arg === 'string' ? (
         <input
@@ -168,18 +179,6 @@ export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {scripts.map((script, scriptIndex) => (
         <div key={scriptIndex}>
-          {/* {script.map((block, n) => (
-            <ScriptBlock
-              key={`${scriptIndex}-${n}`}
-              arg={block}
-              scriptIndex={scriptIndex}
-              indexes={[n]}
-              targetBlock={targetBlock}
-              isNotShadow={true}
-              handleOnChange={handleOnChange}
-              handleDrop={handleDropToInput}
-            />
-          ))} */}
           <ScriptBlock
             key={scriptIndex}
             arg={script}
