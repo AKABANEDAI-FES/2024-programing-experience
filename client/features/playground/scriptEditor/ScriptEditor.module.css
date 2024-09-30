@@ -18,22 +18,28 @@
   background-color: #f0f0f0;
 }
 
-.scriptEditSpace {
-  box-sizing: border-box;
-  width: 70%;
-  padding: 10px;
-  background-color: #fff;
-  border-left: 1px solid #ccc;
-}
-
 .block {
   display: flex;
   flex-direction: row;
   width: fit-content;
-  padding: 10px;
-  margin: 5px 0;
+  padding: 0.5rem;
   color: white;
   white-space: nowrap;
   cursor: grab;
   background-color: #4caf50;
+  border: #fff4 solid 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.blockShadow {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  padding: 0.5rem;
+  color: white;
+  white-space: nowrap;
+  cursor: grab;
+  background-color: #3d8b40;
+  border: #fff4 solid 0.25rem;
+  border-radius: 0.5rem;
 }

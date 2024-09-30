@@ -15,9 +15,9 @@ export const BLOCKS: READONLY_BLOCK[] = [
   { id: 3, contents: ['左へ', '$10', '度回る'] },
   { id: 5, contents: ['後ろへ', '$10', '歩戻る'] },
   { id: 4, contents: ['$10', '秒待つ'] },
-  { id: 6, contents: ['もし', '$true', 'ならば', '$innerScripts', ''] },
-  { id: 7, contents: ['$10', '回繰り返す', '$innerScripts', ''] },
-  { id: 8, contents: ['$true', 'なら繰り返す', '$innerScripts', ''] },
+  { id: 6, contents: ['もし', '$true', 'ならば', []] },
+  { id: 7, contents: ['$10', '回繰り返す', []] },
+  { id: 8, contents: ['$true', 'なら繰り返す', []] },
 ];
 
 const emptyBlockDict: Record<number, BLOCK> = {};
