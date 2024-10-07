@@ -119,7 +119,12 @@ const ScriptBlock = (props: ScriptBlockProps) => {
         </div>
       )}
       {isDragOver && isNotShadow && targetBlock && (
-        <ScriptBlock {...props} arg={defaultBlock(targetBlock)} isNotShadow={false} />
+        <ScriptBlock
+          {...props}
+          arg={defaultBlock(targetBlock)}
+          isNotShadow={false}
+          dropOnPrevElement={dropOnNextElement}
+        />
       )}
     </div>
   );
