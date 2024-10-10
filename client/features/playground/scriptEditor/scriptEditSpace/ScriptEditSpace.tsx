@@ -23,7 +23,9 @@ type ScriptBlockProps = {
   dropOnPrevElement?: () => void;
 };
 
-// eslint-disable-next-line complexity
+const blockClassHandler = (isNotShadow: boolean) =>
+  isNotShadow ? styles1.block : styles1.blockShadow;
+
 const ScriptBlock = (props: ScriptBlockProps) => {
   const {
     arg,
@@ -102,7 +104,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           ))}
         </>
       ) : (
-        <div className={isNotShadow ? styles1.block : styles1.blockShadow}>
+        <div className={blockClassHandler(isNotShadow)}>
           {BLOCKS_DICT[arg.id]?.contents.map((content, i, contents) => {
             if (isArg(content)) {
               const argIndex = contents.slice(0, i).filter(isArg).length;
