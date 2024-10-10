@@ -1,4 +1,6 @@
 /* eslint-disable max-lines */
+import { ConditionalWrapper } from 'components/ConditionalWrapper';
+import { DefinedWrapper } from 'components/DefinedWrapper';
 import { BLOCKS_DICT } from 'features/playground/constants';
 import type { Block, BLOCK, blockArg } from 'features/playground/types';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
@@ -91,13 +93,14 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           }}
         />
       ) : arg instanceof Array ? (
-        arg.length === 0 ? (
-          <ScriptBlock {...props} arg={''} indexes={[...indexes, 0]} />
-        ) : (
-          arg.map((scriptBlock, j) => (
+        <>
+          <ConditionalWrapper isRendering={arg.length === 0}>
+            <ScriptBlock {...props} arg={''} indexes={[...indexes, 0]} />
+          </ConditionalWrapper>
+          {arg.map((scriptBlock, j) => (
             <ScriptBlock key={j} {...props} arg={scriptBlock} indexes={[...indexes, j]} />
-          ))
-        )
+          ))}
+        </>
       ) : (
         <div className={isNotShadow ? styles1.block : styles1.blockShadow}>
           {BLOCKS_DICT[arg.id]?.contents.map((content, i, contents) => {
@@ -118,14 +121,19 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           })}
         </div>
       )}
-      {isDragOver && isNotShadow && targetBlock && (
-        <ScriptBlock
-          {...props}
-          arg={defaultBlock(targetBlock)}
-          isNotShadow={false}
-          dropOnPrevElement={dropOnNextElement}
-        />
-      )}
+      <ConditionalWrapper isRendering={[isDragOver, isNotShadow].every(Boolean)}>
+        <DefinedWrapper
+          nullableArgs={{ targetBlock }}
+          children={({ targetBlock }) => (
+            <ScriptBlock
+              {...props}
+              arg={defaultBlock(targetBlock)}
+              isNotShadow={false}
+              dropOnPrevElement={dropOnNextElement}
+            />
+          )}
+        ></DefinedWrapper>
+      </ConditionalWrapper>
     </div>
   );
 };
