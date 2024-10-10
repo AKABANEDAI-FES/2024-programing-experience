@@ -5,7 +5,7 @@ import { BLOCKS_DICT } from 'features/playground/constants';
 import type { Block, BLOCK, blockArg } from 'features/playground/types';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import { isArg } from 'features/playground/utils/isArg';
-import { updateScriptValue } from 'features/playground/utils/updateScriptValue';
+import { useScripts } from 'hooks/useScripts';
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback, useRef, useState } from 'react';
 import styles1 from '../ScriptEditor.module.css';
@@ -146,49 +146,12 @@ type Props = {
   targetBlock: BLOCK | null;
 };
 
-export const ScriptEditSpace = (scriptEditSpaceProps: Props) => {
-  const { scripts, setScripts, targetBlock } = scriptEditSpaceProps;
-
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-
-    if (targetBlock === null) return;
-
-    const newScripts = structuredClone(scripts);
-
-    newScripts.push([defaultBlock(targetBlock)]);
-    setScripts(newScripts);
-  };
-
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-
-  const handleOnChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    scriptIndex: number,
-    indexes: number[],
-  ) => {
-    const newScripts = structuredClone(scripts);
-
-    updateScriptValue(e.target.value, newScripts[scriptIndex], indexes);
-    setScripts(newScripts);
-  };
-
-  const handleDropToInput = (
-    e: React.DragEvent<HTMLElement>,
-    scriptIndex: number,
-    indexes: number[],
-  ) => {
-    if (targetBlock === null) return;
-    const newScripts = structuredClone(scripts);
-
-    updateScriptValue(defaultBlock(targetBlock), newScripts[scriptIndex], indexes);
-    setScripts(newScripts);
-
-    e.preventDefault();
-    e.stopPropagation();
-  };
+export const ScriptEditSpace = ({ scripts, setScripts, targetBlock }: Props) => {
+  const { handleDrop, handleDragOver, handleOnChange, handleDropToInput } = useScripts({
+    scripts,
+    setScripts,
+    targetBlock,
+  });
 
   return (
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
