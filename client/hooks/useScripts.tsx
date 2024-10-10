@@ -1,10 +1,13 @@
 import type { BLOCK, Block } from 'features/playground/types';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import { updateScriptValue } from 'features/playground/utils/updateScriptValue';
-import { useCallback, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import { useCallback } from 'react';
 
 type UseScriptsProps = {
   targetBlock: BLOCK | null;
+  scripts: Block[][];
+  setScripts: Dispatch<SetStateAction<Block[][]>>;
 };
 
 type UseScriptsReturn = {
@@ -23,8 +26,11 @@ type UseScriptsReturn = {
   ) => void;
 };
 
-export const useScripts = ({ targetBlock }: UseScriptsProps): UseScriptsReturn => {
-  const [scripts, setScripts] = useState<Block[][]>([]);
+export const useScripts = ({
+  scripts,
+  setScripts,
+  targetBlock,
+}: UseScriptsProps): UseScriptsReturn => {
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
