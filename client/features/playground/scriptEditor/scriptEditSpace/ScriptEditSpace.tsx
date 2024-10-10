@@ -21,6 +21,7 @@ type ScriptBlockProps = {
   handleDrop: (e: React.DragEvent<HTMLElement>, n: number, is: number[]) => void;
   resetParentIsDragOver?: () => void;
   dropOnPrevElement?: () => void;
+  dropToParentElement?: (e: React.DragEvent<HTMLElement>) => void;
 };
 
 const blockClassHandler = (isNotShadow: boolean) =>
@@ -37,6 +38,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     handleDrop,
     resetParentIsDragOver,
     dropOnPrevElement,
+    dropToParentElement,
   } = props;
   const [isDragOver, setIsDragOver] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -45,9 +47,16 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     setIsDragOver(false);
   }, []);
 
-  const dropOnNextElement = () => {
+  const dropOnNextElement = useCallback(() => {
     setIsDragOver(false);
-  };
+  }, []);
+  const dropOnChildElement = useCallback((e: React.DragEvent<HTMLElement>) => {
+    setIsDragOver(false);
+
+    handleDrop(e, scriptIndex, indexes);
+
+    dropOnPrevElement?.();
+  }, []);
 
   return (
     <div
@@ -66,38 +75,52 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       }}
       onDrop={(e) => {
         setIsDragOver(false);
-
         handleDrop(e, scriptIndex, indexes);
 
         dropOnPrevElement?.();
       }}
       onDragOver={(e) => {
         e.preventDefault();
-        e.stopPropagation();
-        if (typeof arg !== 'string') {
-          resetParentIsDragOver?.();
-        }
+        resetParentIsDragOver?.();
 
-        setIsDragOver(true);
+        e.stopPropagation();
+
+        if (!(arg instanceof Array)) {
+          setIsDragOver(true);
+        }
       }}
       style={{
         width: 'fit-content',
       }}
     >
       {typeof arg === 'string' ? (
-        <input
-          className={styles1.input}
-          type="text"
-          defaultValue={arg}
-          style={{ display: !isDragOver ? 'block' : 'none' }}
-          onChange={(e) => {
-            handleOnChange(e, scriptIndex, indexes);
-          }}
-        />
+        isNotShadow ? (
+          <input
+            className={styles1.input}
+            type="text"
+            defaultValue={arg}
+            style={{ display: !isDragOver ? 'block' : 'none' }}
+            onChange={(e) => {
+              handleOnChange(e, scriptIndex, indexes);
+            }}
+            onDrop={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              dropToParentElement?.(e);
+            }}
+          />
+        ) : (
+          <div className={styles1.input}>{arg}</div>
+        )
       ) : arg instanceof Array ? (
         <>
           <ConditionalWrapper isRendering={arg.length === 0}>
-            <ScriptBlock {...props} arg={''} indexes={[...indexes, 0]} />
+            <ScriptBlock
+              {...props}
+              arg={'||||'}
+              indexes={[...indexes, 0]}
+              dropToParentElement={dropOnChildElement}
+            />
           </ConditionalWrapper>
           {arg.map((scriptBlock, j) => (
             <ScriptBlock key={j} {...props} arg={scriptBlock} indexes={[...indexes, j]} />
@@ -132,6 +155,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
               arg={defaultBlock(targetBlock)}
               isNotShadow={false}
               dropOnPrevElement={dropOnNextElement}
+              dropToParentElement={dropOnChildElement}
             />
           )}
         ></DefinedWrapper>
