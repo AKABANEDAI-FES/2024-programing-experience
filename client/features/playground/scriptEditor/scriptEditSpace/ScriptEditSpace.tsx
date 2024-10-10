@@ -12,7 +12,7 @@ import styles1 from '../ScriptEditor.module.css';
 import styles from './ScriptEditSpace.module.css';
 
 type ScriptBlockProps = {
-  arg: blockArg;
+  arg: blockArg | undefined;
   scriptIndex: number;
   indexes: number[];
   targetBlock: BLOCK | null;
@@ -91,32 +91,9 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           setIsDragOver(true);
         }
       }}
-      style={
-        {
-          // width: 'fit-content',
-        }
-      }
+      className={styles1.blockWrapper}
     >
-      {typeof arg === 'string' ? (
-        isNotShadow ? (
-          <input
-            className={styles1.input}
-            type="text"
-            defaultValue={arg}
-            style={{ display: !isDragOver ? 'block' : 'none' }}
-            onChange={(e) => {
-              handleOnChange(e, scriptIndex, indexes);
-            }}
-            onDrop={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              dropToParentElement?.(e);
-            }}
-          />
-        ) : (
-          <div className={styles1.input}>{arg}</div>
-        )
-      ) : arg instanceof Array ? (
+      {arg instanceof Array ? (
         <>
           <ConditionalWrapper isRendering={arg.length === 0}>
             <ScriptBlock
@@ -130,7 +107,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
             <ScriptBlock key={j} {...props} arg={scriptBlock} indexes={[...indexes, j]} />
           ))}
         </>
-      ) : (
+      ) : arg instanceof Object ? (
         <div className={blockClassHandler(isNotShadow)}>
           {BLOCKS_DICT[arg.id]?.contents
             .map((content, i, contents) =>
@@ -158,6 +135,24 @@ const ScriptBlock = (props: ScriptBlockProps) => {
               );
             })}
         </div>
+      ) : isNotShadow ? (
+        <input
+          className={styles1.input}
+          type="text"
+          defaultValue={arg}
+          style={{ display: !isDragOver ? 'block' : 'none' }}
+          onChange={(e) => {
+            handleOnChange(e, scriptIndex, indexes);
+          }}
+          onDrop={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            dropToParentElement?.(e);
+          }}
+          disabled={arg === undefined}
+        />
+      ) : (
+        <div className={styles1.input}>{arg}</div>
       )}
       <ConditionalWrapper isRendering={[isDragOver, isNotShadow].every(Boolean)}>
         <DefinedWrapper
