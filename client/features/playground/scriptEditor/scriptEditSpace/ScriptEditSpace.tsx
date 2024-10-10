@@ -26,6 +26,8 @@ type ScriptBlockProps = {
 
 const blockClassHandler = (isNotShadow: boolean) =>
   isNotShadow ? styles1.block : styles1.blockShadow;
+const blockDirectionHandler = (isArray: boolean) =>
+  isArray ? styles1.blockColumn : styles1.blockRow;
 
 const ScriptBlock = (props: ScriptBlockProps) => {
   const {
@@ -89,9 +91,11 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           setIsDragOver(true);
         }
       }}
-      style={{
-        width: 'fit-content',
-      }}
+      style={
+        {
+          // width: 'fit-content',
+        }
+      }
     >
       {typeof arg === 'string' ? (
         isNotShadow ? (
@@ -117,7 +121,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           <ConditionalWrapper isRendering={arg.length === 0}>
             <ScriptBlock
               {...props}
-              arg={'||||'}
+              arg={''}
               indexes={[...indexes, 0]}
               dropToParentElement={dropOnChildElement}
             />
@@ -128,22 +132,31 @@ const ScriptBlock = (props: ScriptBlockProps) => {
         </>
       ) : (
         <div className={blockClassHandler(isNotShadow)}>
-          {BLOCKS_DICT[arg.id]?.contents.map((content, i, contents) => {
-            if (isArg(content)) {
-              const argIndex = contents.slice(0, i).filter(isArg).length;
-              const newIndexes = [...indexes, argIndex];
-              return (
+          {BLOCKS_DICT[arg.id]?.contents
+            .map((content, i, contents) =>
+              isArg(content) ? (
                 <ScriptBlock
-                  key={i}
                   {...props}
-                  arg={arg.arg[argIndex]}
-                  indexes={newIndexes}
+                  arg={arg.arg[contents.slice(0, i).filter(isArg).length]}
+                  indexes={[...indexes, contents.slice(0, i).filter(isArg).length]}
                   resetParentIsDragOver={dragOverChildElement}
                 />
+              ) : (
+                <>{content}</>
+              ),
+            )
+            .reduce((acc, content, i) => {
+              if (i === 0) {
+                return content;
+              }
+              const isArray = BLOCKS_DICT[arg.id]?.contents[i] instanceof Array;
+              return (
+                <div key={i} className={blockDirectionHandler(isArray)}>
+                  {acc}
+                  {content}
+                </div>
               );
-            }
-            return <div key={i}>{content}</div>;
-          })}
+            })}
         </div>
       )}
       <ConditionalWrapper isRendering={[isDragOver, isNotShadow].every(Boolean)}>
