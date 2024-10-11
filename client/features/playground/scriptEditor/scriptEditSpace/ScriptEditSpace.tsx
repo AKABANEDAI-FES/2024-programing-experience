@@ -9,6 +9,7 @@ import { isArg } from 'features/playground/utils/isArg';
 import { useScripts } from 'hooks/useScripts';
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback, useRef, useState } from 'react';
+import { resetEvent } from 'utils/resetEvent';
 import styles1 from '../ScriptEditor.module.css';
 import styles from './ScriptEditSpace.module.css';
 
@@ -61,37 +62,27 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     dropOnPrevElement?.();
   }, []);
 
+  const handleDragFinish = (e: React.DragEvent) => {
+    if (!ref.current?.contains(e.relatedTarget as Node)) {
+      setIsDragOver(false);
+    }
+  };
   return (
     <div
       ref={ref}
-      onDragLeave={(e) => {
-        e.preventDefault();
-        if (!ref.current?.contains(e.relatedTarget as Node)) {
-          setIsDragOver(false);
-        }
-      }}
-      onDragEnd={(e) => {
-        e.preventDefault();
-        if (!ref.current?.contains(e.relatedTarget as Node)) {
-          setIsDragOver(false);
-        }
-      }}
+      onDragLeave={resetEvent('p-', (e) => handleDragFinish(e))}
+      onDragEnd={resetEvent('p-', (e) => handleDragFinish(e))}
       onDrop={(e) => {
         setIsDragOver(false);
         handleDrop(e, scriptIndex, indexes);
-
         dropOnPrevElement?.();
       }}
-      onDragOver={(e) => {
-        e.preventDefault();
+      onDragOver={resetEvent('ps', () => {
         resetParentIsDragOver?.();
-
-        e.stopPropagation();
-
         if (!(arg instanceof Array)) {
           setIsDragOver(true);
         }
-      }}
+      })}
       className={styles1.blockWrapper}
     >
       {arg instanceof Array ? (
@@ -148,11 +139,9 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           onChange={(e) => {
             handleOnChange(e, scriptIndex, indexes);
           }}
-          onDrop={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
+          onDrop={resetEvent('ps', (e) => {
             dropToParentElement?.(e);
-          }}
+          })}
           disabled={arg === undefined}
         />
       ) : (
