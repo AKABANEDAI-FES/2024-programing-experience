@@ -1,13 +1,13 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
-import type { BLOCK, Block } from '../types';
+import type { BLOCK, Scripts } from '../types';
 import styles from './ScriptEditor.module.css';
 import { ScriptEditSpace } from './scriptEditSpace/ScriptEditSpace';
 import { ScriptPalette } from './scriptPalette/ScriptPalette';
 
 type Props = {
-  scripts: Block[][];
-  setScripts: Dispatch<SetStateAction<Block[][]>>;
+  scripts: Scripts;
+  setScripts: Dispatch<SetStateAction<Scripts>>;
 };
 export const ScriptEditor = (props: Props) => {
   const [targetBlock, setTargetBlock] = useState<BLOCK | null>(null);

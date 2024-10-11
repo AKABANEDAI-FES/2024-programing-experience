@@ -19,3 +19,8 @@ export type ScriptState = {
   loopCount: number[];
   nestStatus: boolean[];
 };
+
+export type Scripts = {
+  script: Block[];
+  position: { x: number; y: number };
+}[];
