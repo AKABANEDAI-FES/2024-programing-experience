@@ -131,19 +131,20 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           )}
         </div>
       ) : isNotShadow ? (
-        <input
-          className={styles1.input}
-          type="text"
-          defaultValue={arg}
-          style={{ display: !isDragOver ? 'block' : 'none' }}
-          onChange={(e) => {
-            handleOnChange(e, scriptIndex, indexes);
-          }}
-          onDrop={resetEvent('ps', (e) => {
-            dropToParentElement?.(e);
-          })}
-          disabled={arg === undefined}
-        />
+        <ConditionalWrapper isRendering={!isDragOver}>
+          <input
+            className={styles1.input}
+            type="text"
+            defaultValue={arg}
+            onChange={(e) => {
+              handleOnChange(e, scriptIndex, indexes);
+            }}
+            onDrop={resetEvent('ps', (e) => {
+              dropToParentElement?.(e);
+            })}
+            disabled={arg === undefined}
+          />
+        </ConditionalWrapper>
       ) : (
         <div className={styles1.input}>{arg}</div>
       )}
