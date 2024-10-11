@@ -186,16 +186,18 @@ export const ScriptEditSpace = ({ scripts, setScripts, targetBlock }: Props) => 
   return (
     <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
       {scripts.map((script, scriptIndex) => (
-        <ScriptBlock
-          key={scriptIndex}
-          arg={script}
-          scriptIndex={scriptIndex}
-          indexes={[]}
-          targetBlock={targetBlock}
-          isNotShadow={true}
-          handleOnChange={handleOnChange}
-          handleDrop={handleDropToInput}
-        />
+        <div key={scriptIndex}>
+          <ScriptBlock
+            key={scriptIndex}
+            arg={script}
+            scriptIndex={scriptIndex}
+            indexes={[]}
+            targetBlock={targetBlock}
+            isNotShadow={true}
+            handleOnChange={handleOnChange}
+            handleDrop={handleDropToInput}
+          />
+        </div>
       ))}
     </div>
   );
