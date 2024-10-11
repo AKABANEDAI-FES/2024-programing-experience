@@ -4,4 +4,5 @@ import { isArg } from './isArg';
 export const defaultBlock = ({ id, contents }: BLOCK) => ({
   id,
   arg: contents.filter(isArg).map((a) => (a instanceof Array ? a : a.replace('$', ''))),
+  position: { x: 0, y: 0 },
 });

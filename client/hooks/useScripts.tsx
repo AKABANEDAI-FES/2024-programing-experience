@@ -34,10 +34,17 @@ export const useScripts = ({
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
-      if (targetBlock === null) return;
-
+      if (!targetBlock) return;
+      const containerRect = event.currentTarget.getBoundingClientRect();
+      const current_X = event.clientX - containerRect.left;
+      const current_Y = event.clientY - containerRect.top;
       const newScripts = structuredClone(scripts);
-      newScripts.push([defaultBlock(targetBlock)]);
+      newScripts.push([
+        {
+          ...defaultBlock(targetBlock),
+          position: { x: current_X, y: current_Y },
+        },
+      ]);
       setScripts(newScripts);
     },
     [scripts, setScripts, targetBlock],

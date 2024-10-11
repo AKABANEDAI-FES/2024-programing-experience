@@ -21,6 +21,7 @@ type ScriptBlockProps = {
   handleDrop: (e: React.DragEvent<HTMLElement>, n: number, is: number[]) => void;
   resetParentIsDragOver?: () => void;
   dropOnPrevElement?: () => void;
+  position?: { x: number; y: number };
 };
 
 const blockClassHandler = (isNotShadow: boolean) =>
@@ -66,9 +67,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       }}
       onDrop={(e) => {
         setIsDragOver(false);
-
         handleDrop(e, scriptIndex, indexes);
-
         dropOnPrevElement?.();
       }}
       onDragOver={(e) => {
@@ -154,9 +153,21 @@ export const ScriptEditSpace = ({ scripts, setScripts, targetBlock }: Props) => 
   });
 
   return (
-    <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
+    <div
+      className={styles.scriptEditSpace}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      style={{ position: 'relative' }}
+    >
       {scripts.map((script, scriptIndex) => (
-        <div key={scriptIndex}>
+        <div
+          key={scriptIndex}
+          style={{
+            position: 'absolute',
+            left: `${script[0]?.position?.x || 0}px`,
+            top: `${script[0]?.position?.y || 0}px`,
+          }}
+        >
           <ScriptBlock
             key={scriptIndex}
             arg={script}
