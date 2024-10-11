@@ -14,7 +14,7 @@ export const ScriptPalette = (props: Props) => {
   // @ts-expect-error TS2322
   const [blocks, setBLOCKS_useState] = useState<BLOCK[]>(BLOCKS);
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, i: number) => {
+  const _handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, i: number) => {
     const newBLOCKS = structuredClone(blocks);
     newBLOCKS[n].contents[i] = `$${e.target.value}`;
 

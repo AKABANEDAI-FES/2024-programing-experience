@@ -2,7 +2,7 @@
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import { DefinedWrapper } from 'components/DefinedWrapper';
 import { BLOCKS_DICT } from 'features/playground/constants';
-import type { Block, BLOCK, blockArg } from 'features/playground/types';
+import type { BLOCK, blockArg, Scripts } from 'features/playground/types';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import { isArg } from 'features/playground/utils/isArg';
 import { useScripts } from 'hooks/useScripts';
@@ -78,7 +78,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       onDrop={(e) => {
         setIsDragOver(false);
         handleDrop(e, scriptIndex, indexes);
-
         dropOnPrevElement?.();
       }}
       onDragOver={(e) => {
@@ -173,8 +172,8 @@ const ScriptBlock = (props: ScriptBlockProps) => {
 };
 
 type Props = {
-  scripts: Block[][];
-  setScripts: Dispatch<SetStateAction<Block[][]>>;
+  scripts: Scripts;
+  setScripts: Dispatch<SetStateAction<Scripts>>;
   targetBlock: BLOCK | null;
 };
 
@@ -186,12 +185,24 @@ export const ScriptEditSpace = ({ scripts, setScripts, targetBlock }: Props) => 
   });
 
   return (
-    <div className={styles.scriptEditSpace} onDrop={handleDrop} onDragOver={handleDragOver}>
+    <div
+      className={styles.scriptEditSpace}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      style={{ position: 'relative' }}
+    >
       {scripts.map((script, scriptIndex) => (
-        <div key={scriptIndex}>
+        <div
+          key={scriptIndex}
+          style={{
+            position: 'absolute',
+            left: `${script.position.x}px`,
+            top: `${script.position.y}px`,
+          }}
+        >
           <ScriptBlock
             key={scriptIndex}
-            arg={script}
+            arg={script.script}
             scriptIndex={scriptIndex}
             indexes={[]}
             targetBlock={targetBlock}

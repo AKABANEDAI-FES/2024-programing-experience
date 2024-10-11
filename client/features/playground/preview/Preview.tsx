@@ -1,11 +1,11 @@
 import { AlignBox } from 'components/AlignBox';
 import { useEffect, useState } from 'react';
 import { moves } from '../constants';
-import type { Block, blockArg, ScriptState, SpriteState } from '../types';
+import type { Block, blockArg, Scripts, ScriptState, SpriteState } from '../types';
 import styles from './Preview.module.css';
 
 type Props = {
-  scripts: Block[][];
+  scripts: Scripts;
 };
 
 const defaultScriptState = (script: Block[]) => ({
@@ -20,7 +20,10 @@ const defaultScriptState = (script: Block[]) => ({
 export const Preview = (props: Props) => {
   const { scripts } = props;
   const [stepSpeed, setStepSpeed] = useState(1);
-  const [scriptStates, setScriptStates] = useState<ScriptState[]>(scripts?.map(defaultScriptState));
+
+  const [scriptStates, setScriptStates] = useState<ScriptState[]>(
+    scripts?.map(({ script }) => defaultScriptState(script)),
+  );
   const [state, setState] = useState<SpriteState>({
     x: 0,
     y: 0,
