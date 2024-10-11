@@ -4,14 +4,18 @@ import { updateScriptValue } from 'features/playground/utils/updateScriptValue';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback } from 'react';
 
+type ScriptState = {
+  script: Block[];
+  position: { x: number; y: number };
+};
 type UseScriptsProps = {
   targetBlock: BLOCK | null;
-  scripts: Block[][];
-  setScripts: Dispatch<SetStateAction<Block[][]>>;
+  scripts: ScriptState[];
+  setScripts: Dispatch<SetStateAction<ScriptState[]>>;
 };
 
 type UseScriptsReturn = {
-  scripts: Block[][];
+  scripts: ScriptState[];
   handleDrop: (event: React.DragEvent<HTMLDivElement>) => void;
   handleDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
   handleOnChange: (
@@ -34,10 +38,15 @@ export const useScripts = ({
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
-      if (targetBlock === null) return;
-
+      if (!targetBlock) return;
+      const containerRect = event.currentTarget.getBoundingClientRect();
+      const current_X = event.clientX - containerRect.left;
+      const current_Y = event.clientY - containerRect.top;
       const newScripts = structuredClone(scripts);
-      newScripts.push([defaultBlock(targetBlock)]);
+      newScripts.push({
+        script: [{ ...defaultBlock(targetBlock) }],
+        position: { x: current_X, y: current_Y },
+      } as ScriptState);
       setScripts(newScripts);
     },
     [scripts, setScripts, targetBlock],
@@ -50,7 +59,7 @@ export const useScripts = ({
   const handleOnChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>, scriptIndex: number, indexes: number[]) => {
       const newScripts = structuredClone(scripts);
-      updateScriptValue(e.target.value, newScripts[scriptIndex], indexes);
+      updateScriptValue(e.target.value, newScripts[scriptIndex].script, indexes);
       setScripts(newScripts);
     },
     [scripts, setScripts],
@@ -61,7 +70,7 @@ export const useScripts = ({
       if (targetBlock === null) return;
 
       const newScripts = structuredClone(scripts);
-      updateScriptValue(defaultBlock(targetBlock), newScripts[scriptIndex], indexes);
+      updateScriptValue(defaultBlock(targetBlock), newScripts[scriptIndex].script, indexes);
       setScripts(newScripts);
 
       e.preventDefault();
