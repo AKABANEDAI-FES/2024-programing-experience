@@ -3,11 +3,14 @@ import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import { DefinedWrapper } from 'components/DefinedWrapper';
 import { BLOCKS_DICT } from 'features/playground/constants';
 import type { BLOCK, blockArg, Scripts } from 'features/playground/types';
+import { computeArgIndex } from 'features/playground/utils/computeArgIndex';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import { isArg } from 'features/playground/utils/isArg';
 import { useScripts } from 'hooks/useScripts';
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback, useRef, useState } from 'react';
+import { lambda } from 'utils/lambda';
+import { resetEvent } from 'utils/resetEvent';
 import styles1 from '../ScriptEditor.module.css';
 import styles from './ScriptEditSpace.module.css';
 
@@ -37,7 +40,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     targetBlock,
     isNotShadow,
     handleOnChange,
-    handleDrop,
+    handleDrop: updateWithDrop,
     resetParentIsDragOver,
     dropOnPrevElement,
     dropToParentElement,
@@ -55,41 +58,37 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   const dropOnChildElement = useCallback((e: React.DragEvent<HTMLElement>) => {
     setIsDragOver(false);
 
-    handleDrop(e, scriptIndex, indexes);
+    updateWithDrop(e, scriptIndex, indexes);
 
     dropOnPrevElement?.();
   }, []);
 
+  const handleDragFinish = (e: React.DragEvent) => {
+    if (!ref.current?.contains(e.relatedTarget as Node)) {
+      setIsDragOver(false);
+    }
+  };
+  const handleDrop = (e: React.DragEvent<HTMLElement>) => {
+    setIsDragOver(false);
+    if (arg !== undefined) {
+      updateWithDrop(e, scriptIndex, indexes);
+    } else {
+      dropToParentElement?.(e);
+    }
+    dropOnPrevElement?.();
+  };
   return (
     <div
       ref={ref}
-      onDragLeave={(e) => {
-        e.preventDefault();
-        if (!ref.current?.contains(e.relatedTarget as Node)) {
-          setIsDragOver(false);
-        }
-      }}
-      onDragEnd={(e) => {
-        e.preventDefault();
-        if (!ref.current?.contains(e.relatedTarget as Node)) {
-          setIsDragOver(false);
-        }
-      }}
-      onDrop={(e) => {
-        setIsDragOver(false);
-        handleDrop(e, scriptIndex, indexes);
-        dropOnPrevElement?.();
-      }}
-      onDragOver={(e) => {
-        e.preventDefault();
+      onDragLeave={resetEvent('p-', (e) => handleDragFinish(e))}
+      onDragEnd={resetEvent('p-', (e) => handleDragFinish(e))}
+      onDrop={handleDrop}
+      onDragOver={resetEvent('ps', () => {
         resetParentIsDragOver?.();
-
-        e.stopPropagation();
-
-        if (!(arg instanceof Array)) {
+        if (!(arg instanceof Array) || arg.length === 0) {
           setIsDragOver(true);
         }
-      }}
+      })}
       className={styles1.blockWrapper}
     >
       {arg instanceof Array ? (
@@ -97,7 +96,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           <ConditionalWrapper isRendering={arg.length === 0}>
             <ScriptBlock
               {...props}
-              arg={''}
+              arg={undefined}
               indexes={[...indexes, 0]}
               dropToParentElement={dropOnChildElement}
             />
@@ -108,48 +107,45 @@ const ScriptBlock = (props: ScriptBlockProps) => {
         </>
       ) : arg instanceof Object ? (
         <div className={blockClassHandler(isNotShadow)}>
-          {BLOCKS_DICT[arg.id]?.contents
-            .map((content, i, contents) =>
-              isArg(content) ? (
-                <ScriptBlock
-                  {...props}
-                  arg={arg.arg[contents.slice(0, i).filter(isArg).length]}
-                  indexes={[...indexes, contents.slice(0, i).filter(isArg).length]}
-                  resetParentIsDragOver={dragOverChildElement}
-                />
-              ) : (
-                <>{content}</>
+          {lambda({ contents: BLOCKS_DICT[arg.id]?.contents }, ({ contents }) =>
+            contents
+              .map((content, i, contents) =>
+                lambda({ index: computeArgIndex(contents, i) }, ({ index }) =>
+                  !isArg(content) ? (
+                    <>{content}</>
+                  ) : (
+                    <ScriptBlock
+                      {...props}
+                      arg={arg.arg[index]}
+                      indexes={[...indexes, index]}
+                      resetParentIsDragOver={dragOverChildElement}
+                    />
+                  ),
+                ),
+              )
+              .reduce((acc, content, i) =>
+                i === 0 ? (
+                  content
+                ) : (
+                  <div key={i} className={blockDirectionHandler(contents[i] instanceof Array)}>
+                    {acc}
+                    {content}
+                  </div>
+                ),
               ),
-            )
-            .reduce((acc, content, i) => {
-              if (i === 0) {
-                return content;
-              }
-              const isArray = BLOCKS_DICT[arg.id]?.contents[i] instanceof Array;
-              return (
-                <div key={i} className={blockDirectionHandler(isArray)}>
-                  {acc}
-                  {content}
-                </div>
-              );
-            })}
+          )}
         </div>
       ) : isNotShadow ? (
-        <input
-          className={styles1.input}
-          type="text"
-          defaultValue={arg}
-          style={{ display: !isDragOver ? 'block' : 'none' }}
-          onChange={(e) => {
-            handleOnChange(e, scriptIndex, indexes);
-          }}
-          onDrop={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            dropToParentElement?.(e);
-          }}
-          disabled={arg === undefined}
-        />
+        <ConditionalWrapper isRendering={!isDragOver && arg !== undefined}>
+          <input
+            className={styles1.input}
+            type="text"
+            defaultValue={arg}
+            onChange={(e) => {
+              handleOnChange(e, scriptIndex, indexes);
+            }}
+          />
+        </ConditionalWrapper>
       ) : (
         <div className={styles1.input}>{arg}</div>
       )}
