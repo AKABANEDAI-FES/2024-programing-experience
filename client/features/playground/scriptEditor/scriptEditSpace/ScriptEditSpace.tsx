@@ -75,12 +75,16 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       onDragEnd={resetEvent('p-', (e) => handleDragFinish(e))}
       onDrop={(e) => {
         setIsDragOver(false);
-        handleDrop(e, scriptIndex, indexes);
+        if (arg !== undefined) {
+          handleDrop(e, scriptIndex, indexes);
+        } else {
+          dropToParentElement?.(e);
+        }
         dropOnPrevElement?.();
       }}
       onDragOver={resetEvent('ps', () => {
         resetParentIsDragOver?.();
-        if (!(arg instanceof Array)) {
+        if (!(arg instanceof Array) || arg.length === 0) {
           setIsDragOver(true);
         }
       })}
@@ -91,7 +95,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           <ConditionalWrapper isRendering={arg.length === 0}>
             <ScriptBlock
               {...props}
-              arg={''}
+              arg={undefined}
               indexes={[...indexes, 0]}
               dropToParentElement={dropOnChildElement}
             />
@@ -131,7 +135,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           )}
         </div>
       ) : isNotShadow ? (
-        <ConditionalWrapper isRendering={!isDragOver}>
+        <ConditionalWrapper isRendering={!isDragOver && arg !== undefined}>
           <input
             className={styles1.input}
             type="text"
@@ -142,7 +146,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
             onDrop={resetEvent('ps', (e) => {
               dropToParentElement?.(e);
             })}
-            disabled={arg === undefined}
           />
         </ConditionalWrapper>
       ) : (
