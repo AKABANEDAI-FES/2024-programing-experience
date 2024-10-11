@@ -3,6 +3,7 @@ import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import { DefinedWrapper } from 'components/DefinedWrapper';
 import { BLOCKS_DICT } from 'features/playground/constants';
 import type { Block, BLOCK, blockArg } from 'features/playground/types';
+import { computeArgIndex } from 'features/playground/utils/computeArgIndex';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import { isArg } from 'features/playground/utils/isArg';
 import { useScripts } from 'hooks/useScripts';
@@ -110,18 +111,21 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       ) : arg instanceof Object ? (
         <div className={blockClassHandler(isNotShadow)}>
           {BLOCKS_DICT[arg.id]?.contents
-            .map((content, i, contents) =>
-              isArg(content) ? (
+            .map((content, i, contents) => {
+              if (!isArg(content)) {
+                return <>{content}</>;
+              }
+
+              const index = computeArgIndex(contents, i);
+              return (
                 <ScriptBlock
                   {...props}
-                  arg={arg.arg[contents.slice(0, i).filter(isArg).length]}
-                  indexes={[...indexes, contents.slice(0, i).filter(isArg).length]}
+                  arg={arg.arg[index]}
+                  indexes={[...indexes, index]}
                   resetParentIsDragOver={dragOverChildElement}
                 />
-              ) : (
-                <>{content}</>
-              ),
-            )
+              );
+            })
             .reduce((acc, content, i) => {
               if (i === 0) {
                 return content;
