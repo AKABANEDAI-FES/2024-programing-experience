@@ -2,7 +2,7 @@
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import { DefinedWrapper } from 'components/DefinedWrapper';
 import { BLOCKS_DICT } from 'features/playground/constants';
-import type { Block, BLOCK, blockArg } from 'features/playground/types';
+import type { BLOCK, blockArg, Scripts } from 'features/playground/types';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import { isArg } from 'features/playground/utils/isArg';
 import { useScripts } from 'hooks/useScripts';
@@ -22,7 +22,6 @@ type ScriptBlockProps = {
   resetParentIsDragOver?: () => void;
   dropOnPrevElement?: () => void;
   dropToParentElement?: (e: React.DragEvent<HTMLElement>) => void;
-  position?: { x: number; y: number };
 };
 
 const blockClassHandler = (isNotShadow: boolean) =>
@@ -173,8 +172,8 @@ const ScriptBlock = (props: ScriptBlockProps) => {
 };
 
 type Props = {
-  scripts: Block[][];
-  setScripts: Dispatch<SetStateAction<Block[][]>>;
+  scripts: Scripts;
+  setScripts: Dispatch<SetStateAction<Scripts>>;
   targetBlock: BLOCK | null;
 };
 
@@ -197,13 +196,13 @@ export const ScriptEditSpace = ({ scripts, setScripts, targetBlock }: Props) => 
           key={scriptIndex}
           style={{
             position: 'absolute',
-            left: `${script[0]?.position?.x || 0}px`,
-            top: `${script[0]?.position?.y || 0}px`,
+            left: `${script.position.x}px`,
+            top: `${script.position.y}px`,
           }}
         >
           <ScriptBlock
             key={scriptIndex}
-            arg={script}
+            arg={script.script}
             scriptIndex={scriptIndex}
             indexes={[]}
             targetBlock={targetBlock}
