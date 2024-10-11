@@ -101,34 +101,31 @@ const ScriptBlock = (props: ScriptBlockProps) => {
         </>
       ) : arg instanceof Object ? (
         <div className={blockClassHandler(isNotShadow)}>
-          {BLOCKS_DICT[arg.id]?.contents
-            .map((content, i, contents) => {
-              if (!isArg(content)) {
-                return <>{content}</>;
-              }
-
-              const index = computeArgIndex(contents, i);
-              return (
-                <ScriptBlock
-                  {...props}
-                  arg={arg.arg[index]}
-                  indexes={[...indexes, index]}
-                  resetParentIsDragOver={dragOverChildElement}
-                />
-              );
-            })
-            .reduce((acc, content, i) => {
-              if (i === 0) {
-                return content;
-              }
-              const isArray = BLOCKS_DICT[arg.id]?.contents[i] instanceof Array;
-              return (
-                <div key={i} className={blockDirectionHandler(isArray)}>
-                  {acc}
-                  {content}
-                </div>
-              );
-            })}
+          {((contents: (string | [])[]) =>
+            contents
+              .map((content, i, contents) =>
+                ((index: number) =>
+                  !isArg(content) ? (
+                    <>{content}</>
+                  ) : (
+                    <ScriptBlock
+                      {...props}
+                      arg={arg.arg[index]}
+                      indexes={[...indexes, index]}
+                      resetParentIsDragOver={dragOverChildElement}
+                    />
+                  ))(computeArgIndex(contents, i)),
+              )
+              .reduce((acc, content, i) =>
+                i === 0 ? (
+                  content
+                ) : (
+                  <div key={i} className={blockDirectionHandler(contents[i] instanceof Array)}>
+                    {acc}
+                    {content}
+                  </div>
+                ),
+              ))(BLOCKS_DICT[arg.id]?.contents)}
         </div>
       ) : isNotShadow ? (
         <input
