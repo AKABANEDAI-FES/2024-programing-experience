@@ -144,9 +144,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
             onChange={(e) => {
               handleOnChange(e, scriptIndex, indexes);
             }}
-            onDrop={resetEvent('ps', (e) => {
-              dropToParentElement?.(e);
-            })}
           />
         </ConditionalWrapper>
       ) : (
