@@ -26,7 +26,6 @@ type ScriptBlockProps = {
 
 const blockClassHandler = (isNotShadow: boolean) =>
   isNotShadow ? styles1.block : styles1.blockShadow;
-
 const ScriptBlock = (props: ScriptBlockProps) => {
   const {
     arg,
