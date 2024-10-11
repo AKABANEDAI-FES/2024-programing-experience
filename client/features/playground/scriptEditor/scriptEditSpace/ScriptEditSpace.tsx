@@ -9,6 +9,7 @@ import { isArg } from 'features/playground/utils/isArg';
 import { useScripts } from 'hooks/useScripts';
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useCallback, useRef, useState } from 'react';
+import { lambda } from 'utils/lambda';
 import { resetEvent } from 'utils/resetEvent';
 import styles1 from '../ScriptEditor.module.css';
 import styles from './ScriptEditSpace.module.css';
@@ -101,10 +102,10 @@ const ScriptBlock = (props: ScriptBlockProps) => {
         </>
       ) : arg instanceof Object ? (
         <div className={blockClassHandler(isNotShadow)}>
-          {((contents: (string | [])[]) =>
+          {lambda({ contents: BLOCKS_DICT[arg.id]?.contents }, ({ contents }) =>
             contents
               .map((content, i, contents) =>
-                ((index: number) =>
+                lambda({ index: computeArgIndex(contents, i) }, ({ index }) =>
                   !isArg(content) ? (
                     <>{content}</>
                   ) : (
@@ -114,7 +115,8 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                       indexes={[...indexes, index]}
                       resetParentIsDragOver={dragOverChildElement}
                     />
-                  ))(computeArgIndex(contents, i)),
+                  ),
+                ),
               )
               .reduce((acc, content, i) =>
                 i === 0 ? (
@@ -125,7 +127,8 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                     {content}
                   </div>
                 ),
-              ))(BLOCKS_DICT[arg.id]?.contents)}
+              ),
+          )}
         </div>
       ) : isNotShadow ? (
         <input
