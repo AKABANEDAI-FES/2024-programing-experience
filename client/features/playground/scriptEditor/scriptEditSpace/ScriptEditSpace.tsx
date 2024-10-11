@@ -40,7 +40,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     targetBlock,
     isNotShadow,
     handleOnChange,
-    handleDrop,
+    handleDrop: updateWithDrop,
     resetParentIsDragOver,
     dropOnPrevElement,
     dropToParentElement,
@@ -58,7 +58,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   const dropOnChildElement = useCallback((e: React.DragEvent<HTMLElement>) => {
     setIsDragOver(false);
 
-    handleDrop(e, scriptIndex, indexes);
+    updateWithDrop(e, scriptIndex, indexes);
 
     dropOnPrevElement?.();
   }, []);
@@ -68,20 +68,21 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       setIsDragOver(false);
     }
   };
+  const handleDrop = (e: React.DragEvent<HTMLElement>) => {
+    setIsDragOver(false);
+    if (arg !== undefined) {
+      updateWithDrop(e, scriptIndex, indexes);
+    } else {
+      dropToParentElement?.(e);
+    }
+    dropOnPrevElement?.();
+  };
   return (
     <div
       ref={ref}
       onDragLeave={resetEvent('p-', (e) => handleDragFinish(e))}
       onDragEnd={resetEvent('p-', (e) => handleDragFinish(e))}
-      onDrop={(e) => {
-        setIsDragOver(false);
-        if (arg !== undefined) {
-          handleDrop(e, scriptIndex, indexes);
-        } else {
-          dropToParentElement?.(e);
-        }
-        dropOnPrevElement?.();
-      }}
+      onDrop={handleDrop}
       onDragOver={resetEvent('ps', () => {
         resetParentIsDragOver?.();
         if (!(arg instanceof Array) || arg.length === 0) {
