@@ -45,33 +45,39 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     dropOnPrevElement,
     dropToParentElement,
   } = props;
-  const [isDragOver, setIsDragOver] = useState(false);
+  const [isDragOver, setIsDragOver] = useState<'false' | 'upper' | 'lower'>('false');
   const ref = useRef<HTMLDivElement>(null);
 
   const dragOverChildElement = useCallback(() => {
-    setIsDragOver(false);
+    setIsDragOver('false');
   }, []);
 
   const dropOnNextElement = useCallback(() => {
-    setIsDragOver(false);
+    setIsDragOver('false');
   }, []);
   const dropOnChildElement = useCallback((e: React.DragEvent<HTMLElement>) => {
-    setIsDragOver(false);
+    setIsDragOver('false');
 
-    updateWithDrop(e, scriptIndex, indexes);
+    updateWithDrop(e, scriptIndex, [
+      ...indexes.slice(0, -1),
+      indexes[indexes.length - 1] - +(isDragOver === 'upper'),
+    ]);
 
     dropOnPrevElement?.();
   }, []);
 
   const handleDragFinish = (e: React.DragEvent) => {
     if (!ref.current?.contains(e.relatedTarget as Node)) {
-      setIsDragOver(false);
+      setIsDragOver('false');
     }
   };
   const handleDrop = (e: React.DragEvent<HTMLElement>) => {
-    setIsDragOver(false);
+    setIsDragOver('false');
     if (arg !== undefined) {
-      updateWithDrop(e, scriptIndex, indexes);
+      updateWithDrop(e, scriptIndex, [
+        ...indexes.slice(0, -1),
+        indexes[indexes.length - 1] - +(isDragOver === 'upper'),
+      ]);
     } else {
       dropToParentElement?.(e);
     }
@@ -83,14 +89,32 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       onDragLeave={resetEvent('p-', (e) => handleDragFinish(e))}
       onDragEnd={resetEvent('p-', (e) => handleDragFinish(e))}
       onDrop={handleDrop}
-      onDragOver={resetEvent('ps', () => {
+      onDragOver={resetEvent('ps', (e) => {
         resetParentIsDragOver?.();
-        if (!(arg instanceof Array) || arg.length === 0) {
-          setIsDragOver(true);
+        if (!(arg instanceof Array)) {
+          const rect = ref.current?.getBoundingClientRect();
+          if (rect) {
+            const isUpper = e.clientY < rect.y + rect.height / 2;
+            setIsDragOver(isUpper ? 'upper' : 'lower');
+          }
         }
       })}
       className={styles1.blockWrapper}
     >
+      <ConditionalWrapper isRendering={[isDragOver === 'upper', isNotShadow].every(Boolean)}>
+        <DefinedWrapper
+          nullableArgs={{ targetBlock }}
+          children={({ targetBlock }) => (
+            <ScriptBlock
+              {...props}
+              arg={defaultBlock(targetBlock)}
+              isNotShadow={false}
+              dropOnPrevElement={dropOnNextElement}
+              dropToParentElement={dropOnChildElement}
+            />
+          )}
+        ></DefinedWrapper>
+      </ConditionalWrapper>
       {arg instanceof Array ? (
         <>
           <ConditionalWrapper isRendering={arg.length === 0}>
@@ -136,7 +160,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
           )}
         </div>
       ) : isNotShadow ? (
-        <ConditionalWrapper isRendering={!isDragOver && arg !== undefined}>
+        <ConditionalWrapper isRendering={isDragOver === 'false' && arg !== undefined}>
           <input
             className={styles1.input}
             type="text"
@@ -149,7 +173,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       ) : (
         <div className={styles1.input}>{arg}</div>
       )}
-      <ConditionalWrapper isRendering={[isDragOver, isNotShadow].every(Boolean)}>
+      <ConditionalWrapper isRendering={[isDragOver === 'lower', isNotShadow].every(Boolean)}>
         <DefinedWrapper
           nullableArgs={{ targetBlock }}
           children={({ targetBlock }) => (
