@@ -11,11 +11,17 @@ type Props = {
 };
 export const ScriptEditor = (props: Props) => {
   const [targetBlock, setTargetBlock] = useState<BLOCK | null>(null);
+  const [targetPos, setTargetPos] = useState({ x: 0, y: 0 });
   const { scripts, setScripts } = props;
   return (
     <div className={styles.main}>
-      <ScriptPalette setTargetBlock={setTargetBlock} />
-      <ScriptEditSpace scripts={scripts} setScripts={setScripts} targetBlock={targetBlock} />
+      <ScriptPalette setTargetBlock={setTargetBlock} setTargetPos={setTargetPos} />
+      <ScriptEditSpace
+        scripts={scripts}
+        setScripts={setScripts}
+        targetBlock={targetBlock}
+        targetPos={targetPos}
+      />
     </div>
   );
 };

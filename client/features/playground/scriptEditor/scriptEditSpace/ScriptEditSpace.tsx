@@ -195,13 +195,15 @@ type Props = {
   scripts: Scripts;
   setScripts: Dispatch<SetStateAction<Scripts>>;
   targetBlock: BLOCK | null;
+  targetPos: { x: number; y: number };
 };
 
-export const ScriptEditSpace = ({ scripts, setScripts, targetBlock }: Props) => {
+export const ScriptEditSpace = ({ scripts, setScripts, targetBlock, targetPos }: Props) => {
   const { handleDrop, handleDragOver, handleOnChange, handleDropToInput } = useScripts({
     scripts,
     setScripts,
     targetBlock,
+    targetPos,
   });
 
   return (
