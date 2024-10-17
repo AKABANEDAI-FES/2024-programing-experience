@@ -47,6 +47,8 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   } = props;
   const [isDragOver, setIsDragOver] = useState<'false' | 'upper' | 'lower'>('false');
   const ref = useRef<HTMLDivElement>(null);
+  const ref2 = useRef<HTMLDivElement>(null);
+  const ref3 = useRef<HTMLDivElement>(null);
 
   const dragOverChildElement = useCallback(() => {
     setIsDragOver('false');
@@ -83,6 +85,8 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     }
     dropOnPrevElement?.();
   };
+  const rectHandler = (rect: DOMRect | undefined) =>
+    rect ? { x: rect.x, y: rect.y, h: rect.height } : { x: 0, y: 0, h: 0 };
   return (
     <div
       ref={ref}
@@ -92,11 +96,12 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       onDragOver={resetEvent('ps', (e) => {
         resetParentIsDragOver?.();
         if (!(arg instanceof Array)) {
-          const rect = ref.current?.getBoundingClientRect();
-          if (rect) {
-            const isUpper = e.clientY < rect.y + rect.height / 2;
-            setIsDragOver(isUpper ? 'upper' : 'lower');
-          }
+          const { y, h } = rectHandler(ref.current?.getBoundingClientRect());
+          const { h: h2 } = rectHandler(ref2.current?.getBoundingClientRect());
+          const { h: h3 } = rectHandler(ref3.current?.getBoundingClientRect());
+
+          const isUpper = e.clientY < y + h2 + (h - h2 - h3) / 2;
+          setIsDragOver(isUpper ? 'upper' : 'lower');
         }
       })}
       className={styles1.blockWrapper}
@@ -105,13 +110,15 @@ const ScriptBlock = (props: ScriptBlockProps) => {
         <DefinedWrapper
           nullableArgs={{ targetBlock }}
           children={({ targetBlock }) => (
-            <ScriptBlock
-              {...props}
-              arg={defaultBlock(targetBlock)}
-              isNotShadow={false}
-              dropOnPrevElement={dropOnNextElement}
-              dropToParentElement={dropOnChildElement}
-            />
+            <div ref={ref2}>
+              <ScriptBlock
+                {...props}
+                arg={defaultBlock(targetBlock)}
+                isNotShadow={false}
+                dropOnPrevElement={dropOnNextElement}
+                dropToParentElement={dropOnChildElement}
+              />
+            </div>
           )}
         ></DefinedWrapper>
       </ConditionalWrapper>
@@ -177,13 +184,15 @@ const ScriptBlock = (props: ScriptBlockProps) => {
         <DefinedWrapper
           nullableArgs={{ targetBlock }}
           children={({ targetBlock }) => (
-            <ScriptBlock
-              {...props}
-              arg={defaultBlock(targetBlock)}
-              isNotShadow={false}
-              dropOnPrevElement={dropOnNextElement}
-              dropToParentElement={dropOnChildElement}
-            />
+            <div ref={ref3}>
+              <ScriptBlock
+                {...props}
+                arg={defaultBlock(targetBlock)}
+                isNotShadow={false}
+                dropOnPrevElement={dropOnNextElement}
+                dropToParentElement={dropOnChildElement}
+              />
+            </div>
           )}
         ></DefinedWrapper>
       </ConditionalWrapper>
