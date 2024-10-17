@@ -24,13 +24,8 @@ export const ScriptPalette = (props: Props) => {
   return (
     <div className={styles.scriptPalette} onDrop={resetEvent('-s')}>
       {blocks.map((block) => (
-        <div className={styles.scriptPaletteBlockWrapper}>
-          <div
-            key={block.id}
-            className={styles.block}
-            draggable
-            onDragStart={() => setTargetBlock(block)}
-          >
+        <div className={styles.scriptPaletteBlockWrapper} key={block.id}>
+          <div className={styles.block} draggable onDragStart={() => setTargetBlock(block)}>
             {block.contents.map((content, i) =>
               content instanceof Array ? (
                 <Input key={i} defaultValue={''} />
