@@ -199,7 +199,13 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const ScriptEditSpace = ({ scripts, setScripts, targetBlock, targetPos, children }: Props) => {
+export const ScriptEditSpace = ({
+  scripts,
+  setScripts,
+  targetBlock,
+  targetPos,
+  children,
+}: Props) => {
   const { handleDrop, handleDragOver, handleOnChange, handleDropToInput } = useScripts({
     scripts,
     setScripts,
