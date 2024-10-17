@@ -10,6 +10,7 @@ type ScriptState = {
 };
 type UseScriptsProps = {
   targetBlock: BLOCK | null;
+  targetPos: { x: number; y: number };
   scripts: ScriptState[];
   setScripts: Dispatch<SetStateAction<ScriptState[]>>;
 };
@@ -34,6 +35,7 @@ export const useScripts = ({
   scripts,
   setScripts,
   targetBlock,
+  targetPos,
 }: UseScriptsProps): UseScriptsReturn => {
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
@@ -45,7 +47,7 @@ export const useScripts = ({
       const newScripts = structuredClone(scripts);
       newScripts.push({
         script: [{ ...defaultBlock(targetBlock) }],
-        position: { x: current_X, y: current_Y },
+        position: { x: current_X + targetPos.x, y: current_Y + targetPos.y },
       } as ScriptState);
       setScripts(newScripts);
     },

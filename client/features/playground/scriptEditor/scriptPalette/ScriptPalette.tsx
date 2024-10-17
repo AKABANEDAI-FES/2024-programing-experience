@@ -8,10 +8,11 @@ import styles from '../ScriptEditor.module.css';
 
 type Props = {
   setTargetBlock: Dispatch<SetStateAction<BLOCK | null>>;
+  setTargetPos: Dispatch<SetStateAction<{ x: number; y: number }>>;
 };
 
 export const ScriptPalette = (props: Props) => {
-  const { setTargetBlock } = props;
+  const { setTargetBlock, setTargetPos } = props;
   // @ts-expect-error TS2322
   const [blocks, setBLOCKS_useState] = useState<BLOCK[]>(BLOCKS);
 
@@ -25,7 +26,17 @@ export const ScriptPalette = (props: Props) => {
     <div className={styles.scriptPalette} onDrop={resetEvent('-s')}>
       {blocks.map((block) => (
         <div className={styles.scriptPaletteBlockWrapper} key={block.id}>
-          <div className={styles.block} draggable onDragStart={() => setTargetBlock(block)}>
+          <div
+            className={styles.block}
+            draggable
+            onDragStart={(e) => {
+              setTargetBlock(block);
+              setTargetPos({
+                x: (e.target as HTMLDivElement).getBoundingClientRect().left - e.clientX,
+                y: (e.target as HTMLDivElement).getBoundingClientRect().top - e.clientY,
+              });
+            }}
+          >
             {block.contents.map((content, i) =>
               content instanceof Array ? (
                 <Input key={i} defaultValue={''} />

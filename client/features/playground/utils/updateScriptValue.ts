@@ -17,7 +17,12 @@ export const updateScriptValue = (
       if (typeof arg === 'string') {
         throw new Error('Invalid arg');
       }
-      script.push(arg);
+      // eslint-disable-next-line max-depth
+      if (index === -1) {
+        script.unshift(arg);
+      } else {
+        script.push(arg);
+      }
       return;
     }
     if (newIndexes.length <= 0) {
