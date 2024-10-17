@@ -3,6 +3,7 @@ import { BLOCKS } from 'features/playground/constants';
 import type { BLOCK } from 'features/playground/types';
 import type { Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
+import { resetEvent } from 'utils/resetEvent';
 import styles from '../ScriptEditor.module.css';
 
 type Props = {
@@ -21,23 +22,25 @@ export const ScriptPalette = (props: Props) => {
     setBLOCKS_useState(newBLOCKS);
   };
   return (
-    <div className={styles.scriptPalette}>
+    <div className={styles.scriptPalette} onDrop={resetEvent('-s')}>
       {blocks.map((block) => (
-        <div
-          key={block.id}
-          className={styles.block}
-          draggable
-          onDragStart={() => setTargetBlock(block)}
-        >
-          {block.contents.map((content, i) =>
-            content instanceof Array ? (
-              <Input key={i} defaultValue={''} />
-            ) : content.startsWith('$') ? (
-              <Input key={i} defaultValue={content.replace('$', '')} />
-            ) : (
-              <div key={i}>{content}</div>
-            ),
-          )}
+        <div className={styles.scriptPaletteBlockWrapper}>
+          <div
+            key={block.id}
+            className={styles.block}
+            draggable
+            onDragStart={() => setTargetBlock(block)}
+          >
+            {block.contents.map((content, i) =>
+              content instanceof Array ? (
+                <Input key={i} defaultValue={''} />
+              ) : content.startsWith('$') ? (
+                <Input key={i} defaultValue={content.replace('$', '')} />
+              ) : (
+                <div key={i}>{content}</div>
+              ),
+            )}
+          </div>
         </div>
       ))}
     </div>

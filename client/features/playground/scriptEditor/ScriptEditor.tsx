@@ -14,8 +14,9 @@ export const ScriptEditor = (props: Props) => {
   const { scripts, setScripts } = props;
   return (
     <div className={styles.main}>
-      <ScriptPalette setTargetBlock={setTargetBlock} />
-      <ScriptEditSpace scripts={scripts} setScripts={setScripts} targetBlock={targetBlock} />
+      <ScriptEditSpace scripts={scripts} setScripts={setScripts} targetBlock={targetBlock}>
+        <ScriptPalette setTargetBlock={setTargetBlock} />
+      </ScriptEditSpace>
     </div>
   );
 };
