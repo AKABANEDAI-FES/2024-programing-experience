@@ -1,7 +1,6 @@
 .scriptEditSpace {
   box-sizing: border-box;
-  width: 70%;
-  padding: 10px;
+  width: 100%;
   background-color: #fff;
   border-left: 1px solid #ccc;
 }
