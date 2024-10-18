@@ -49,5 +49,11 @@
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "react-markdown": "^9.0.1",
+    "tailwind-merge": "^2.5.4"
   }
 }
