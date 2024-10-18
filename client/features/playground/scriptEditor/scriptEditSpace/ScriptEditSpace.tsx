@@ -205,9 +205,16 @@ type Props = {
   setScripts: Dispatch<SetStateAction<Scripts>>;
   targetBlock: BLOCK | null;
   targetPos: { x: number; y: number };
+  children: React.ReactNode;
 };
 
-export const ScriptEditSpace = ({ scripts, setScripts, targetBlock, targetPos }: Props) => {
+export const ScriptEditSpace = ({
+  scripts,
+  setScripts,
+  targetBlock,
+  targetPos,
+  children,
+}: Props) => {
   const { handleDrop, handleDragOver, handleOnChange, handleDropToInput } = useScripts({
     scripts,
     setScripts,
@@ -222,6 +229,7 @@ export const ScriptEditSpace = ({ scripts, setScripts, targetBlock, targetPos }:
       onDragOver={handleDragOver}
       style={{ position: 'relative' }}
     >
+      {children}
       {scripts.map((script, scriptIndex) => (
         <div
           key={scriptIndex}

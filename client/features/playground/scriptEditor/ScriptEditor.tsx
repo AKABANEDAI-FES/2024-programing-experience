@@ -15,13 +15,14 @@ export const ScriptEditor = (props: Props) => {
   const { scripts, setScripts } = props;
   return (
     <div className={styles.main}>
-      <ScriptPalette setTargetBlock={setTargetBlock} setTargetPos={setTargetPos} />
       <ScriptEditSpace
         scripts={scripts}
         setScripts={setScripts}
         targetBlock={targetBlock}
         targetPos={targetPos}
-      />
+      >
+        <ScriptPalette setTargetBlock={setTargetBlock} setTargetPos={setTargetPos} />
+      </ScriptEditSpace>
     </div>
   );
 };

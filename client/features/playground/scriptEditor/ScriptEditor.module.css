@@ -22,9 +22,26 @@
 
 .scriptPalette {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   width: 30%;
+  height: 100%;
   padding: 10px;
   background-color: #f0f0f0;
+}
+
+.scriptPaletteBlockWrapper {
+  z-index: 9999;
+  width: 100%;
+  max-width: fit-content;
+  overflow: hidden;
+
+  &:hover {
+    width: fit-content;
+    overflow: visible;
+    box-shadow: 0 0 10px 5px #fff;
+  }
 }
 
 .blockWrapper {
