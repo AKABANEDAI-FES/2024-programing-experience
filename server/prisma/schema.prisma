@@ -8,11 +8,52 @@ generator client {
 }
 
 model User {
-  id         String   @id
+  id         String       @id
   email      String
   signInName String
   createdAt  DateTime
+  isAdmin    Boolean
+  language   LanguageEnum
   tasks      Task[]
+  UserQuest  UserQuest[]
+  Quest      Quest[]
+}
+
+enum LanguageEnum {
+  KANJI
+  HIRAGANA
+  ENGLISH
+}
+
+model Quest {
+  id                 String      @id
+  name               String
+  description        String
+  backgroundImageKey String?
+  exampleAnswer      Json
+  createdAt          DateTime
+  author             User        @relation(fields: [userId], references: [id])
+  UserQuest          UserQuest[]
+  userId             String
+}
+
+model UserQuest {
+  id              String            @id
+  UserQuestResult UserQuestResult[]
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String
+  quest           Quest             @relation(fields: [questId], references: [id])
+  questId         String
+}
+
+model UserQuestResult {
+  id          String    @id
+  userQuest   UserQuest @relation(fields: [userQuestId], references: [id])
+  userQuestId String
+  startAt     DateTime
+  endAt       DateTime
+  score       Int
+  answer      Json
 }
 
 model Task {
