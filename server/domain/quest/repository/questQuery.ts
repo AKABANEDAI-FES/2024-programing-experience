@@ -19,11 +19,16 @@ const toEntity = (prismaQuest: Quest & { author: User }): QuestEntity => ({
     signInName: prismaQuest.author.signInName,
   },
 });
-const toQuestGroupEntity = (prismaQuestGroup: QuestGroup): QuestGroupEntity => ({
+
+const toQuestGroupEntity = (
+  prismaQuestGroup: QuestGroup & { Quest: (Quest & { author: User })[] },
+): QuestGroupEntity => ({
   id: brandedId.questGroup.entity.parse(prismaQuestGroup.id),
   name: prismaQuestGroup.name,
   description: prismaQuestGroup.description,
+  Quests: prismaQuestGroup.Quest.map(toEntity),
 });
+
 const listByQuestGroup = async (
   tx: Prisma.TransactionClient,
   questGroupId: string,
@@ -35,13 +40,36 @@ const listByQuestGroup = async (
   return prismaQuests?.map(toEntity) ?? [];
 };
 
+const listByQuestGroupById = async (
+  tx: Prisma.TransactionClient,
+  questId: string,
+): Promise<QuestEntity[]> => {
+  const prismaQuests = await tx.questGroup
+    .findFirst({
+      where: {
+        Quest: {
+          some: {
+            id: questId,
+          },
+        },
+      },
+    })
+    .Quest({
+      orderBy: { indexInGroup: 'asc' },
+      include: { author: true },
+    });
+  return prismaQuests?.map(toEntity) ?? [];
+};
+
 const listQuestGroupByUpdatedAt = async (
   tx: Prisma.TransactionClient,
   limit?: number,
 ): Promise<QuestGroupEntity[]> => {
   const prismaQuestGroups = await tx.questGroup.findMany({
     include: {
-      Quest: true,
+      Quest: {
+        include: { author: true },
+      },
     },
   });
   return prismaQuestGroups
@@ -57,6 +85,7 @@ const listQuestGroupByUpdatedAt = async (
 export const questQuery = {
   listByQuestGroup,
   listQuestGroupByUpdatedAt,
+  listByQuestGroupById,
   findManyWithDI: depend(
     { listByQuestGroup },
     (deps, tx: Prisma.TransactionClient, questGroupId: string): Promise<QuestEntity[]> =>
@@ -67,6 +96,11 @@ export const questQuery = {
     (deps, tx: Prisma.TransactionClient, limit?: number): Promise<QuestGroupEntity[]> =>
       deps.listQuestGroupByUpdatedAt(tx, limit),
   ),
+  findManyQuestGroupByIdWithDI: depend(
+    { listByQuestGroupById },
+    (deps, tx: Prisma.TransactionClient, questId: string): Promise<QuestEntity[]> =>
+      deps.listByQuestGroupById(tx, questId),
+  ),
   findById: async (tx: Prisma.TransactionClient, questId: string): Promise<QuestEntity> =>
     tx.quest
       .findUniqueOrThrow({ where: { id: questId }, include: { author: true } })
@@ -75,5 +109,14 @@ export const questQuery = {
     tx: Prisma.TransactionClient,
     questGroupId: string,
   ): Promise<QuestGroupEntity> =>
-    tx.questGroup.findUniqueOrThrow({ where: { id: questGroupId } }).then(toQuestGroupEntity),
+    tx.questGroup
+      .findUniqueOrThrow({
+        where: { id: questGroupId },
+        include: {
+          Quest: {
+            include: { author: true },
+          },
+        },
+      })
+      .then(toQuestGroupEntity),
 };

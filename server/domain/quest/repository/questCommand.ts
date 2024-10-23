@@ -5,8 +5,9 @@ import type { QuestCreateVal, QuestDeleteVal, QuestUpdateVal } from '../model/qu
 
 export const questCommand = {
   create: async (tx: Prisma.TransactionClient, val: QuestCreateVal): Promise<void> => {
-    await tx.quest.create({
-      data: {
+    await tx.quest.upsert({
+      where: { id: val.quest.id },
+      create: {
         id: val.quest.id,
         name: val.quest.name,
         description: val.quest.description,
@@ -16,6 +17,20 @@ export const questCommand = {
         updatedAt: null,
         indexInGroup: val.quest.indexInGroup,
         authorId: val.quest.author.id,
+      },
+      update: {
+        indexInGroup: val.quest.indexInGroup,
+      },
+    });
+
+    await tx.questGroup.update({
+      where: { id: val.questGroupId },
+      data: {
+        Quest: {
+          connect: {
+            id: val.quest.id,
+          },
+        },
       },
     });
 

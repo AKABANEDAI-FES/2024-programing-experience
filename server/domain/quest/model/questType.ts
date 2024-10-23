@@ -10,18 +10,22 @@ export type QuestEntity = StrictOmit<QuestDto, 'id' | 'backgroundImage' | 'autho
   author: StrictOmit<QuestDto['author'], 'id'> & { id: EntityId['user'] };
 };
 
-export type QuestCreateServerVal = StrictOmit<
-  QuestDto,
-  'id' | 'backgroundImage' | 'createdAt' | 'author'
-> & {
-  backgroundImage?: MultipartFile;
+export type QuestCreateServerVal = {
+  quest: StrictOmit<QuestDto, 'id' | 'backgroundImage' | 'createdAt' | 'author'> & {
+    backgroundImage?: MultipartFile;
+  };
+  questGroupId: EntityId['questGroup'];
 };
 
 export type QuestUpdateServerVal = StrictOmit<QuestUpdateDto, 'backgroundImage'> & {
   backgroundImage?: MultipartFile;
 };
 
-export type QuestCreateVal = { quest: QuestEntity; s3Params?: S3PutParams };
+export type QuestCreateVal = {
+  quest: QuestEntity;
+  s3Params?: S3PutParams;
+  questGroupId: EntityId['questGroup'];
+};
 
 export type QuestUpdateVal = {
   quest: StrictOmit<QuestEntity, 'updatedAt' | 'author' | 'createdAt'> &
@@ -29,6 +33,10 @@ export type QuestUpdateVal = {
   s3Params?: S3PutParams;
 };
 
+export type QuestCreateEntityVal = {
+  quests: QuestEntity[];
+  s3Params?: S3PutParams;
+};
 export type QuestUpdateEntityVal = {
   quest: StrictOmit<QuestEntity, 'updatedAt'> & NonNullableObj<Pick<QuestEntity, 'updatedAt'>>;
   s3Params?: S3PutParams;

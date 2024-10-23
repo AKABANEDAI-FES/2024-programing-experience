@@ -16,6 +16,7 @@ export type QuestDto = {
 
 export type QuestCreateOrUpdateVal = {
   name: string;
+  
   description: string;
   image?: Blob;
   exampleAnswer: Scripts[];
