@@ -11,16 +11,11 @@ import { toQuestDto } from '../service/toQuestDto';
 export const questUseCase = {
   create: (user: UserDto, val: QuestCreateServerVal): Promise<QuestDto> =>
     transaction('RepeatableRead', async (tx) => {
-      const questGroup = await questQuery.findQuestGroupById(tx, val.questGroupId);
-      const created = questMethod.create(user, val, questGroup.Quests);
+      const created = questMethod.create(user, val);
 
-      await Promise.all(
-        created.quests.map((quest) =>
-          questCommand.create(tx, { quest, questGroupId: questGroup.id }),
-        ),
-      );
+      await questCommand.create(tx, created);
 
-      const dto = await toQuestDto(created.quests[0]);
+      const dto = await toQuestDto(created.quest);
 
       return dto;
     }),

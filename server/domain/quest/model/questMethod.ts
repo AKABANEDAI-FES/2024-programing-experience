@@ -3,42 +3,34 @@ import type { UserDto } from 'common/types/user';
 import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';
 import type {
-  QuestCreateEntityVal,
   QuestCreateServerVal,
+  QuestCreateVal,
   QuestDeleteVal,
   QuestEntity,
   QuestUpdateEntityVal,
   QuestUpdateServerVal,
 } from '../model/questType';
 export const questMethod = {
-  create: (
-    user: UserDto,
-    { quest: questVal }: QuestCreateServerVal,
-    val: QuestEntity[],
-  ): QuestCreateEntityVal => {
+  create: (user: UserDto, val: QuestCreateServerVal): QuestCreateVal => {
     const quest: QuestEntity = {
       id: brandedId.quest.entity.parse(ulid()),
-      name: questVal.name,
-      description: questVal.description,
+      name: val.name,
+      description: val.description,
       imageKey: undefined,
-      exampleAnswer: questVal.exampleAnswer,
+      exampleAnswer: val.exampleAnswer,
       createdAt: Date.now(),
       updatedAt: undefined,
-      indexInGroup: questVal.indexInGroup - 0.1,
+      indexInGroup: val.indexInGroup,
       author: { id: brandedId.user.entity.parse(user.id), signInName: user.signInName },
     };
 
-    const updatedQuests = [...val, { ...quest }]
-      .sort((a, b) => a.indexInGroup - b.indexInGroup)
-      .map((q, indexInGroup) => ({ ...q, indexInGroup }))
-      .slice(questVal.indexInGroup);
+    if (val.backgroundImage === undefined) return { quest };
 
-    if (questVal.backgroundImage === undefined) return { quests: updatedQuests };
+    const imageKey = `quests/images/${ulid()}.${val.backgroundImage.filename.split('.').at(-1)}`;
 
-    const imageKey = `quests/images/${ulid()}.${questVal.backgroundImage.filename.split('.').at(-1)}`;
     return {
-      quests: updatedQuests,
-      s3Params: { key: imageKey, data: questVal.backgroundImage },
+      quest: { ...quest, imageKey },
+      s3Params: { key: imageKey, data: val.backgroundImage },
     };
   },
   update: (user: UserDto, quest: QuestEntity, val: QuestUpdateServerVal): QuestUpdateEntityVal => {
