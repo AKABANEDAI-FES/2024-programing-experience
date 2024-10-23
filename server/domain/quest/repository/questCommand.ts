@@ -15,7 +15,33 @@ export const questCommand = {
         createdAt: new Date(val.quest.createdAt),
         updatedAt: null,
         indexInGroup: val.quest.indexInGroup,
-        authorId: val.quest.author.id,
+        authorId: val.quest.Author.id,
+        questGroupId: val.questGroupId,
+      },
+    });
+
+    await tx.questGroup.update({
+      where: { id: val.questGroupId },
+      data: {
+        Quest: {
+          connect: {
+            id: val.quest.id,
+          },
+        },
+      },
+    });
+
+    await tx.quest.updateMany({
+      where: {
+        questGroupId: val.questGroupId,
+        indexInGroup: {
+          gt: val.quest.indexInGroup,
+        },
+      },
+      data: {
+        indexInGroup: {
+          increment: 1,
+        },
       },
     });
 

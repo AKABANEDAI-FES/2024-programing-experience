@@ -10,6 +10,8 @@ export const userCommand = {
         id: user.id,
         email: user.email,
         signInName: user.signInName,
+        isAdmin: user.isAdmin,
+        language: user.language,
         createdAt: new Date(user.createdTime),
       },
     });

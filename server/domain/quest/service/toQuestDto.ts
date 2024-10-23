@@ -9,5 +9,5 @@ export const toQuestDto = async (quest: QuestEntity): Promise<QuestDto> => ({
   backgroundImage: quest.imageKey
     ? { s3Key: quest.imageKey, url: await s3.getSignedUrl(quest.imageKey) }
     : undefined,
-  author: { ...quest.author, id: brandedId.user.dto.parse(quest.author.id) },
+  Author: { ...quest.Author, id: brandedId.user.dto.parse(quest.Author.id) },
 });

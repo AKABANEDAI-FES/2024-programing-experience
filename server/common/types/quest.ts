@@ -11,7 +11,7 @@ export type QuestDto = {
   createdAt: number;
   updatedAt: number | undefined;
   indexInGroup: number;
-  author: { id: DtoId['user']; signInName: string };
+  Author: { id: DtoId['user']; signInName: string };
 };
 
 export type QuestCreateOrUpdateVal = {
@@ -21,7 +21,7 @@ export type QuestCreateOrUpdateVal = {
   exampleAnswer: Scripts[];
 };
 
-export type QuestUpdateDto = StrictOmit<QuestDto, 'id' | 'author' | 'createdAt' | 'updatedAt'> &
+export type QuestUpdateDto = StrictOmit<QuestDto, 'id' | 'Author' | 'createdAt' | 'updatedAt'> &
   NonNullableObj<Pick<QuestDto, 'updatedAt'>> & {
     questId: MaybeId['quest'];
   };
