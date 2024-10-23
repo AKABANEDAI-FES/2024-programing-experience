@@ -1,6 +1,11 @@
-export type blockArg = Block[] | Block | string;
+import type {
+  Block as CommonBlock,
+  blockArg as CommonBlockArg,
+  Scripts as CommonScripts,
+} from 'common/types/playground';
+export type blockArg = CommonBlockArg;
 
-export type Block = { id: number; arg: blockArg[] };
+export type Block = CommonBlock;
 export type BLOCK = { id: number; contents: (string | [])[] };
 
 export type READONLY_BLOCK = Readonly<{ [T in keyof BLOCK]: Readonly<BLOCK[T]> }>;
@@ -20,7 +25,4 @@ export type ScriptState = {
   nestStatus: boolean[];
 };
 
-export type Scripts = {
-  script: Block[];
-  position: { x: number; y: number };
-}[];
+export type Scripts = CommonScripts;

@@ -1,6 +1,6 @@
 export const APP_NAME = 'CATAPULT';
 
-export const BRANDED_ID_NAMES = ['user', 'task'] as const;
+export const BRANDED_ID_NAMES = ['user', 'task', 'quest', 'questGroup'] as const;
 
 export const WS_PATH = '/ws';
 

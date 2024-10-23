@@ -25,6 +25,13 @@ enum LanguageEnum {
   ENGLISH
 }
 
+model QuestGroup {
+  id          String  @id
+  name        String
+  description String
+  Quest       Quest[]
+}
+
 model Quest {
   id                 String      @id
   name               String
@@ -32,9 +39,13 @@ model Quest {
   backgroundImageKey String?
   exampleAnswer      Json
   createdAt          DateTime
-  author             User        @relation(fields: [userId], references: [id])
+  updatedAt          DateTime?
+  indexInGroup       Int
   UserQuest          UserQuest[]
-  userId             String
+  author             User        @relation(fields: [authorId], references: [id])
+  authorId           String
+  QuestGroup         QuestGroup? @relation(fields: [questGroupId], references: [id])
+  questGroupId       String?
 }
 
 model UserQuest {
