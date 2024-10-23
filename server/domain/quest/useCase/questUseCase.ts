@@ -12,7 +12,6 @@ export const questUseCase = {
   create: (user: UserDto, val: QuestCreateServerVal): Promise<QuestDto> =>
     transaction('RepeatableRead', async (tx) => {
       const questGroup = await questQuery.findQuestGroupById(tx, val.questGroupId);
-
       const created = questMethod.create(user, val);
 
       await questCommand.create(tx, { ...created, questGroupId: questGroup.id });
@@ -35,7 +34,9 @@ export const questUseCase = {
   delete: (user: UserDto, questId: MaybeId['quest']): Promise<QuestDto> =>
     transaction('RepeatableRead', async (tx) => {
       const quest = await questQuery.findById(tx, questId);
-      const deleted = questMethod.delete(user, quest);
+      const questGroup = await questQuery.findQuestGroupByQuestId(tx, quest.id);
+
+      const deleted = questMethod.delete(user, quest, questGroup?.id);
 
       await questCommand.delete(tx, deleted);
 

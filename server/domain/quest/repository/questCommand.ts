@@ -66,6 +66,20 @@ export const questCommand = {
 
     await tx.quest.delete({ where: { id: val.quest.id } });
 
+    await tx.quest.updateMany({
+      where: {
+        questGroupId: val.questGroupId,
+        indexInGroup: {
+          gt: val.quest.indexInGroup,
+        },
+      },
+      data: {
+        indexInGroup: {
+          decrement: 1,
+        },
+      },
+    });
+
     if (val.quest.imageKey !== undefined) await s3.delete(val.quest.imageKey);
   },
 };

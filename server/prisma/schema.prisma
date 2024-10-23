@@ -44,8 +44,8 @@ model Quest {
   UserQuest          UserQuest[]
   Author             User        @relation(fields: [authorId], references: [id])
   authorId           String
-  QuestGroup         QuestGroup? @relation(fields: [questGroupId], references: [id])
-  questGroupId       String?
+  QuestGroup         QuestGroup  @relation(fields: [questGroupId], references: [id])
+  questGroupId       String
 }
 
 model UserQuest {

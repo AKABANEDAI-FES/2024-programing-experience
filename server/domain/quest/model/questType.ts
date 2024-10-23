@@ -41,4 +41,8 @@ export type QuestUpdateEntityVal = {
   s3Params?: S3PutParams;
 };
 
-export type QuestDeleteVal = { deletable: boolean; quest: QuestEntity };
+export type QuestDeleteVal = {
+  deletable: boolean;
+  quest: QuestEntity;
+  questGroupId?: EntityId['questGroup'];
+};

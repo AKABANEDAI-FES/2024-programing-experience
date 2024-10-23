@@ -1,5 +1,6 @@
 import assert from 'assert';
 import type { UserDto } from 'common/types/user';
+import type { EntityId } from 'service/brandedId';
 import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';
 import type {
@@ -44,9 +45,15 @@ export const questMethod = {
       s3Params: { key: imageKey, data: val.backgroundImage },
     };
   },
-  delete: (user: UserDto, quest: QuestEntity): QuestDeleteVal => {
+  delete: (
+    user: UserDto,
+    quest: QuestEntity,
+    val: EntityId['questGroup'] | undefined,
+  ): QuestDeleteVal => {
     assert(user.id === String(quest.Author.id));
 
-    return { deletable: true, quest };
+    if (val === undefined) return { deletable: false, quest };
+
+    return { deletable: true, quest, questGroupId: val };
   },
 };

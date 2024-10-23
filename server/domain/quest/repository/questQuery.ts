@@ -81,7 +81,26 @@ const listQuestGroupByUpdatedAt = async (
     .slice(0, limit)
     .map(toQuestGroupEntity);
 };
-
+const findQuestGroupByQuestId = async (
+  tx: Prisma.TransactionClient,
+  questId: string,
+): Promise<QuestGroupEntity | null> => {
+  const prismaQuestGroup = await tx.questGroup.findFirst({
+    where: {
+      Quest: {
+        some: {
+          id: questId,
+        },
+      },
+    },
+    include: {
+      Quest: {
+        include: { Author: true },
+      },
+    },
+  });
+  return prismaQuestGroup ? toQuestGroupEntity(prismaQuestGroup) : null;
+};
 export const questQuery = {
   listByQuestGroup,
   listQuestGroupByUpdatedAt,
@@ -119,4 +138,5 @@ export const questQuery = {
         },
       })
       .then(toQuestGroupEntity),
+  findQuestGroupByQuestId,
 };
