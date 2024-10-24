@@ -16,8 +16,6 @@ export const userCommand = {
         email: user.email,
         signInName: user.signInName,
         displayName: user.displayName,
-        isAdmin: false,
-        language: 'KANJI',
         photoUrl: user.photoUrl,
         createdAt: new Date(user.createdTime),
       },
