@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /* eslint-disable max-lines */
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import { DefinedWrapper } from 'components/DefinedWrapper';
@@ -123,7 +124,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
               />
             </div>
           )}
-        ></DefinedWrapper>
+        />
       </ConditionalWrapper>
       {arg instanceof Array ? (
         <>
@@ -194,10 +195,11 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                 isNotShadow={false}
                 dropOnPrevElement={dropOnNextElement}
                 dropToParentElement={dropOnChildElement}
+                isDragOver={isDragOver}
               />
             </div>
           )}
-        ></DefinedWrapper>
+        />
       </ConditionalWrapper>
     </div>
   );
