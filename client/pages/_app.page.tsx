@@ -13,6 +13,7 @@ import {
   NEXT_PUBLIC_COGNITO_POOL_ENDPOINT,
   NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID,
   NEXT_PUBLIC_COGNITO_USER_POOL_ID,
+  NEXT_PUBLIC_OAUTH_DOMAIN,
 } from 'utils/envValues';
 import '../styles/globals.css';
 
@@ -26,6 +27,18 @@ function MyApp({ Component, pageProps }: AppProps) {
           userPoolEndpoint: NEXT_PUBLIC_COGNITO_POOL_ENDPOINT,
           userPoolId: NEXT_PUBLIC_COGNITO_USER_POOL_ID,
           userPoolClientId: NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID,
+          loginWith:
+            NEXT_PUBLIC_OAUTH_DOMAIN === undefined
+              ? undefined
+              : {
+                  oauth: {
+                    domain: NEXT_PUBLIC_OAUTH_DOMAIN,
+                    scopes: ['openid', 'profile', 'aws.cognito.signin.user.admin'],
+                    redirectSignIn: [location.origin],
+                    redirectSignOut: [location.origin],
+                    responseType: 'code',
+                  },
+                },
         },
       },
     });
