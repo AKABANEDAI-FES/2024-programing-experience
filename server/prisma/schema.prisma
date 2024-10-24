@@ -11,6 +11,8 @@ model User {
   id         String       @id
   email      String
   signInName String
+  displayName String
+  photoUrl    String?
   createdAt  DateTime
   isAdmin    Boolean
   language   LanguageEnum

@@ -1,4 +1,4 @@
-import { Playground } from 'features/playground/Playground';
+import { TaskList } from 'features/tasks/TaskList';
 import { Layout } from 'layouts/Layout';
 import styles from './index.module.css';
 
@@ -8,7 +8,7 @@ const Home = () => {
       render={(user) => (
         <div className={styles.container}>
           <div className={styles.title}>Hello {user.displayName}!</div>
-          <Playground />
+          <TaskList />
         </div>
       )}
     />

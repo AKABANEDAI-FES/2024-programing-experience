@@ -1,3 +1,5 @@
+import type { GetUserCommandOutput } from '@aws-sdk/client-cognito-identity-provider';
+import assert from 'assert';
 import { brandedId } from 'service/brandedId';
 import type { JwtUser } from 'service/types';
 import type { UserEntity } from './userType';

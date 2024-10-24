@@ -12,6 +12,7 @@ test('Dependency Injection', async () => {
   const user: UserDto = {
     id: brandedId.user.dto.parse(ulid()),
     signInName: 'dummy-user',
+    displayName: 'dummy-name',
     email: 'aa@example.com',
     isAdmin: false,
     language: 'KANJI',
