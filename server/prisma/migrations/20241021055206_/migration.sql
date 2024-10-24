@@ -9,8 +9,8 @@
 CREATE TYPE "LanguageEnum" AS ENUM ('KANJI', 'HIRAGANA', 'ENGLISH');
 
 -- AlterTable
-ALTER TABLE "User" ADD COLUMN     "isAdmin" BOOLEAN NOT NULL,
-ADD COLUMN     "language" "LanguageEnum" NOT NULL;
+ALTER TABLE "User" ADD COLUMN     "isAdmin" BOOLEAN NOT NULL default false,
+ADD COLUMN     "language" "LanguageEnum" NOT NULL default 'KANJI';
 
 -- CreateTable
 CREATE TABLE "Quest" (

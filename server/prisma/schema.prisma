@@ -8,17 +8,17 @@ generator client {
 }
 
 model User {
-  id         String       @id
-  email      String
-  signInName String
+  id          String       @id
+  email       String
+  signInName  String
   displayName String
   photoUrl    String?
-  createdAt  DateTime
-  isAdmin    Boolean
-  language   LanguageEnum
-  tasks      Task[]
-  UserQuest  UserQuest[]
-  Quest      Quest[]
+  createdAt   DateTime
+  isAdmin     Boolean      @default(false)
+  language    LanguageEnum @default(KANJI)
+  tasks       Task[]
+  UserQuest   UserQuest[]
+  Quest       Quest[]
 }
 
 enum LanguageEnum {
