@@ -40,9 +40,10 @@ export const updateScriptValue = (
     script.arg[index] = arg ?? '';
     return;
   }
-  if (typeof script.arg[index] === 'string') {
+  const scriptArg = script.arg[index];
+  if (typeof scriptArg === 'string') {
     throw new Error('Invalid indexes');
   }
-  updateScriptValue(arg, script.arg[index], newIndexes);
+  updateScriptValue(arg, scriptArg, newIndexes);
   return;
 };
