@@ -8,8 +8,8 @@ export const Playground = () => {
   const [scripts, setScripts] = useState<Scripts>([]);
   return (
     <div className={styles.main}>
-      <ScriptEditor scripts={scripts} setScripts={setScripts}></ScriptEditor>
-      <Preview scripts={scripts} key={JSON.stringify(scripts)}></Preview>
+      <ScriptEditor scripts={scripts} setScripts={setScripts} />
+      <Preview scripts={scripts} key={JSON.stringify(scripts)} />
     </div>
   );
 };

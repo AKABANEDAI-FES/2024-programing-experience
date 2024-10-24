@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import type { Dispatch, SetStateAction } from 'react';
 import { moves } from '../constants';
 import type { Block, blockArg, ScriptState, SpriteState } from '../types';
