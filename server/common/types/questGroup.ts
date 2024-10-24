@@ -1,8 +1,8 @@
-import type { EntityId } from 'service/brandedId';
+import type { DtoId } from './brandedId';
 import type { QuestDto } from './quest';
 
 export type QuestGroupDto = {
-  id: EntityId['questGroup'];
+  id: DtoId['questGroup'];
   name: string;
   description: string;
   Quests: QuestDto[];

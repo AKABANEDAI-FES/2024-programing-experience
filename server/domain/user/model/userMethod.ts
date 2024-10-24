@@ -3,10 +3,21 @@ import type { JwtUser } from 'service/types';
 import type { UserEntity } from './userType';
 
 export const userMethod = {
-  create: (jwtUser: JwtUser): UserEntity => ({
-    id: brandedId.user.entity.parse(jwtUser.sub),
-    email: jwtUser.email,
-    signInName: jwtUser['cognito:username'],
-    createdTime: Date.now(),
-  }),
+  create: (jwtUser: JwtUser, cognitoUser: GetUserCommandOutput): UserEntity => {
+    const attributes = cognitoUser.UserAttributes;
+
+    assert(attributes);
+
+    return {
+      id: brandedId.user.entity.parse(jwtUser.sub),
+      email: jwtUser.email,
+      signInName: jwtUser['cognito:username'],
+      displayName:
+        attributes.find((attr) => attr.Name === 'name')?.Value ?? jwtUser['cognito:username'],
+      isAdmin: false,
+      language: 'KANJI',
+      photoUrl: attributes.find((attr) => attr.Name === 'picture')?.Value,
+      createdTime: Date.now(),
+    };
+  },
 };

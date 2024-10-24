@@ -13,6 +13,9 @@ test('Dependency Injection', async () => {
     id: brandedId.user.dto.parse(ulid()),
     signInName: 'dummy-user',
     email: 'aa@example.com',
+    isAdmin: false,
+    language: 'KANJI',
+    photoUrl: 'https://example.com/user.png',
     createdTime: Date.now(),
   };
   const res1 = await controller(fastify()).get({ user });
