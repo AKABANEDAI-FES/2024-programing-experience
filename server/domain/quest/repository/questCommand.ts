@@ -48,7 +48,6 @@ export const questCommand = {
     if (val.s3Params !== undefined) await s3.put(val.s3Params);
   },
   update: async (tx: Prisma.TransactionClient, val: QuestUpdateVal): Promise<void> => {
-    val.quest.updatedAt;
     await tx.quest.update({
       where: { id: val.quest.id },
       data: {

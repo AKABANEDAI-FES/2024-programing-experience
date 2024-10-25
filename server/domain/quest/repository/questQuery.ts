@@ -61,7 +61,7 @@ const listByQuestGroupById = async (
   return prismaQuests?.map(toEntity) ?? [];
 };
 
-const listQuestGroupByUpdatedAt = async (
+const listQuestGroupOrderByUpdatedAt = async (
   tx: Prisma.TransactionClient,
   limit?: number,
 ): Promise<QuestGroupEntity[]> => {
@@ -103,20 +103,20 @@ const findQuestGroupByQuestId = async (
 };
 export const questQuery = {
   listByQuestGroup,
-  listQuestGroupByUpdatedAt,
-  listByQuestGroupById,
+  listQuestGroupByUpdatedAt: listQuestGroupOrderByUpdatedAt,
+  listByQuestGroupById: listQuestGroupById,
   findManyWithDI: depend(
     { listByQuestGroup },
     (deps, tx: Prisma.TransactionClient, questGroupId: string): Promise<QuestEntity[]> =>
       deps.listByQuestGroup(tx, questGroupId),
   ),
   findManyQuestGroupWithDI: depend(
-    { listQuestGroupByUpdatedAt },
+    { listQuestGroupByUpdatedAt: listQuestGroupOrderByUpdatedAt },
     (deps, tx: Prisma.TransactionClient, limit?: number): Promise<QuestGroupEntity[]> =>
       deps.listQuestGroupByUpdatedAt(tx, limit),
   ),
   findManyQuestGroupByIdWithDI: depend(
-    { listByQuestGroupById },
+    { listByQuestGroupById: listQuestGroupById },
     (deps, tx: Prisma.TransactionClient, questId: string): Promise<QuestEntity[]> =>
       deps.listByQuestGroupById(tx, questId),
   ),
