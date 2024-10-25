@@ -8,7 +8,7 @@ export default defineController(() => ({
   get: async ({ query }) => ({
     status: 200,
     body: await questQuery
-      .listQuestGroupByUpdatedAt(prismaClient, query.limit)
+      .listQuestGroupOrderByUpdatedAt(prismaClient, query.limit)
       .then((group) => Promise.all(group.map(toQuestGroupDto))),
   }),
   post: async ({ user, body }) => ({
