@@ -76,6 +76,13 @@
                     "email": {
                       "type": "string"
                     },
+                    "isAdmin": {
+                      "type": "boolean"
+                    },
+                    "language": {
+                      "enum": ["ENGLISH", "HIRAGANA", "KANJI"],
+                      "type": "string"
+                    },
                     "createdTime": {
                       "type": "number"
                     },
@@ -88,8 +95,1201 @@
                     "displayName",
                     "email",
                     "id",
+                    "isAdmin",
+                    "language",
                     "photoUrl",
                     "signInName"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/quests/{questId}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "questId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"quest\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "backgroundImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["s3Key", "url"]
+                    },
+                    "exampleAnswer": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "script": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Block"
+                            }
+                          },
+                          "position": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["x", "y"]
+                          }
+                        },
+                        "required": ["position", "script"]
+                      }
+                    },
+                    "createdAt": {
+                      "type": "number"
+                    },
+                    "updatedAt": {
+                      "type": "number"
+                    },
+                    "indexInGroup": {
+                      "type": "number"
+                    },
+                    "Author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["id", "signInName"]
+                    }
+                  },
+                  "required": [
+                    "Author",
+                    "backgroundImage",
+                    "createdAt",
+                    "description",
+                    "exampleAnswer",
+                    "id",
+                    "indexInGroup",
+                    "name",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "parameters": [
+          {
+            "name": "questId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/QuestUpdateVal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"quest\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "backgroundImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["s3Key", "url"]
+                    },
+                    "exampleAnswer": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "script": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Block"
+                            }
+                          },
+                          "position": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["x", "y"]
+                          }
+                        },
+                        "required": ["position", "script"]
+                      }
+                    },
+                    "createdAt": {
+                      "type": "number"
+                    },
+                    "updatedAt": {
+                      "type": "number"
+                    },
+                    "indexInGroup": {
+                      "type": "number"
+                    },
+                    "Author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["id", "signInName"]
+                    }
+                  },
+                  "required": [
+                    "Author",
+                    "backgroundImage",
+                    "createdAt",
+                    "description",
+                    "exampleAnswer",
+                    "id",
+                    "indexInGroup",
+                    "name",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "parameters": [
+          {
+            "name": "questId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"quest\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "backgroundImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["s3Key", "url"]
+                    },
+                    "exampleAnswer": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "script": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Block"
+                            }
+                          },
+                          "position": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["x", "y"]
+                          }
+                        },
+                        "required": ["position", "script"]
+                      }
+                    },
+                    "createdAt": {
+                      "type": "number"
+                    },
+                    "updatedAt": {
+                      "type": "number"
+                    },
+                    "indexInGroup": {
+                      "type": "number"
+                    },
+                    "Author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["id", "signInName"]
+                    }
+                  },
+                  "required": [
+                    "Author",
+                    "backgroundImage",
+                    "createdAt",
+                    "description",
+                    "exampleAnswer",
+                    "id",
+                    "indexInGroup",
+                    "name",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/quests/di/group": {
+      "get": {
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$ref": "#/components/schemas/Dto<\"questGroup\">"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "Author": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/Dto<\"user\">"
+                          },
+                          "signInName": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["id", "signInName"]
+                      },
+                      "Quests": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "$ref": "#/components/schemas/Dto<\"quest\">"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "backgroundImage": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string"
+                                },
+                                "s3Key": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["s3Key", "url"]
+                            },
+                            "exampleAnswer": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "script": {
+                                    "type": "array",
+                                    "items": {
+                                      "$ref": "#/components/schemas/Block"
+                                    }
+                                  },
+                                  "position": {
+                                    "type": "object",
+                                    "properties": {
+                                      "x": {
+                                        "type": "number"
+                                      },
+                                      "y": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": ["x", "y"]
+                                  }
+                                },
+                                "required": ["position", "script"]
+                              }
+                            },
+                            "createdAt": {
+                              "type": "number"
+                            },
+                            "updatedAt": {
+                              "type": "number"
+                            },
+                            "indexInGroup": {
+                              "type": "number"
+                            },
+                            "Author": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "$ref": "#/components/schemas/Dto<\"user\">"
+                                },
+                                "signInName": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["id", "signInName"]
+                            }
+                          },
+                          "required": [
+                            "Author",
+                            "backgroundImage",
+                            "createdAt",
+                            "description",
+                            "exampleAnswer",
+                            "id",
+                            "indexInGroup",
+                            "name",
+                            "updatedAt"
+                          ]
+                        }
+                      }
+                    },
+                    "required": ["Author", "Quests", "description", "id", "name"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/quests/di": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "questGroupId": {
+                    "type": "string"
+                  }
+                },
+                "required": ["questGroupId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$ref": "#/components/schemas/Dto<\"quest\">"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "backgroundImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "s3Key": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["s3Key", "url"]
+                      },
+                      "exampleAnswer": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "script": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/Block"
+                              }
+                            },
+                            "position": {
+                              "type": "object",
+                              "properties": {
+                                "x": {
+                                  "type": "number"
+                                },
+                                "y": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": ["x", "y"]
+                            }
+                          },
+                          "required": ["position", "script"]
+                        }
+                      },
+                      "createdAt": {
+                        "type": "number"
+                      },
+                      "updatedAt": {
+                        "type": "number"
+                      },
+                      "indexInGroup": {
+                        "type": "number"
+                      },
+                      "Author": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/Dto<\"user\">"
+                          },
+                          "signInName": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["id", "signInName"]
+                      }
+                    },
+                    "required": [
+                      "Author",
+                      "backgroundImage",
+                      "createdAt",
+                      "description",
+                      "exampleAnswer",
+                      "id",
+                      "indexInGroup",
+                      "name",
+                      "updatedAt"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/quests/group/{group_id}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "group_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$ref": "#/components/schemas/Dto<\"quest\">"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "backgroundImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "s3Key": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["s3Key", "url"]
+                      },
+                      "exampleAnswer": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "script": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/Block"
+                              }
+                            },
+                            "position": {
+                              "type": "object",
+                              "properties": {
+                                "x": {
+                                  "type": "number"
+                                },
+                                "y": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": ["x", "y"]
+                            }
+                          },
+                          "required": ["position", "script"]
+                        }
+                      },
+                      "createdAt": {
+                        "type": "number"
+                      },
+                      "updatedAt": {
+                        "type": "number"
+                      },
+                      "indexInGroup": {
+                        "type": "number"
+                      },
+                      "Author": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/Dto<\"user\">"
+                          },
+                          "signInName": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["id", "signInName"]
+                      }
+                    },
+                    "required": [
+                      "Author",
+                      "backgroundImage",
+                      "createdAt",
+                      "description",
+                      "exampleAnswer",
+                      "id",
+                      "indexInGroup",
+                      "name",
+                      "updatedAt"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/quests/group": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuestGroupCreateVal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"questGroup\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "Author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["id", "signInName"]
+                    },
+                    "Quests": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/Dto<\"quest\">"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "backgroundImage": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string"
+                              },
+                              "s3Key": {
+                                "type": "string"
+                              }
+                            },
+                            "required": ["s3Key", "url"]
+                          },
+                          "exampleAnswer": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "script": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/Block"
+                                  }
+                                },
+                                "position": {
+                                  "type": "object",
+                                  "properties": {
+                                    "x": {
+                                      "type": "number"
+                                    },
+                                    "y": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": ["x", "y"]
+                                }
+                              },
+                              "required": ["position", "script"]
+                            }
+                          },
+                          "createdAt": {
+                            "type": "number"
+                          },
+                          "updatedAt": {
+                            "type": "number"
+                          },
+                          "indexInGroup": {
+                            "type": "number"
+                          },
+                          "Author": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "$ref": "#/components/schemas/Dto<\"user\">"
+                              },
+                              "signInName": {
+                                "type": "string"
+                              }
+                            },
+                            "required": ["id", "signInName"]
+                          }
+                        },
+                        "required": [
+                          "Author",
+                          "backgroundImage",
+                          "createdAt",
+                          "description",
+                          "exampleAnswer",
+                          "id",
+                          "indexInGroup",
+                          "name",
+                          "updatedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": ["Author", "Quests", "description", "id", "name"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/quests/group/my": {
+      "get": {
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$ref": "#/components/schemas/Dto<\"questGroup\">"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "Author": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/Dto<\"user\">"
+                          },
+                          "signInName": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["id", "signInName"]
+                      },
+                      "Quests": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "$ref": "#/components/schemas/Dto<\"quest\">"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "backgroundImage": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string"
+                                },
+                                "s3Key": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["s3Key", "url"]
+                            },
+                            "exampleAnswer": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "script": {
+                                    "type": "array",
+                                    "items": {
+                                      "$ref": "#/components/schemas/Block"
+                                    }
+                                  },
+                                  "position": {
+                                    "type": "object",
+                                    "properties": {
+                                      "x": {
+                                        "type": "number"
+                                      },
+                                      "y": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": ["x", "y"]
+                                  }
+                                },
+                                "required": ["position", "script"]
+                              }
+                            },
+                            "createdAt": {
+                              "type": "number"
+                            },
+                            "updatedAt": {
+                              "type": "number"
+                            },
+                            "indexInGroup": {
+                              "type": "number"
+                            },
+                            "Author": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "$ref": "#/components/schemas/Dto<\"user\">"
+                                },
+                                "signInName": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["id", "signInName"]
+                            }
+                          },
+                          "required": [
+                            "Author",
+                            "backgroundImage",
+                            "createdAt",
+                            "description",
+                            "exampleAnswer",
+                            "id",
+                            "indexInGroup",
+                            "name",
+                            "updatedAt"
+                          ]
+                        }
+                      }
+                    },
+                    "required": ["Author", "Quests", "description", "id", "name"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/quests": {
+      "get": {
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$ref": "#/components/schemas/Dto<\"questGroup\">"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "Author": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "$ref": "#/components/schemas/Dto<\"user\">"
+                          },
+                          "signInName": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["id", "signInName"]
+                      },
+                      "Quests": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "$ref": "#/components/schemas/Dto<\"quest\">"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "backgroundImage": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string"
+                                },
+                                "s3Key": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["s3Key", "url"]
+                            },
+                            "exampleAnswer": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "script": {
+                                    "type": "array",
+                                    "items": {
+                                      "$ref": "#/components/schemas/Block"
+                                    }
+                                  },
+                                  "position": {
+                                    "type": "object",
+                                    "properties": {
+                                      "x": {
+                                        "type": "number"
+                                      },
+                                      "y": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": ["x", "y"]
+                                  }
+                                },
+                                "required": ["position", "script"]
+                              }
+                            },
+                            "createdAt": {
+                              "type": "number"
+                            },
+                            "updatedAt": {
+                              "type": "number"
+                            },
+                            "indexInGroup": {
+                              "type": "number"
+                            },
+                            "Author": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "$ref": "#/components/schemas/Dto<\"user\">"
+                                },
+                                "signInName": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["id", "signInName"]
+                            }
+                          },
+                          "required": [
+                            "Author",
+                            "backgroundImage",
+                            "createdAt",
+                            "description",
+                            "exampleAnswer",
+                            "id",
+                            "indexInGroup",
+                            "name",
+                            "updatedAt"
+                          ]
+                        }
+                      }
+                    },
+                    "required": ["Author", "Quests", "description", "id", "name"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/QuestCreateVal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"quest\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "backgroundImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["s3Key", "url"]
+                    },
+                    "exampleAnswer": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "script": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/components/schemas/Block"
+                            }
+                          },
+                          "position": {
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "number"
+                              },
+                              "y": {
+                                "type": "number"
+                              }
+                            },
+                            "required": ["x", "y"]
+                          }
+                        },
+                        "required": ["position", "script"]
+                      }
+                    },
+                    "createdAt": {
+                      "type": "number"
+                    },
+                    "updatedAt": {
+                      "type": "number"
+                    },
+                    "indexInGroup": {
+                      "type": "number"
+                    },
+                    "Author": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"user\">"
+                        },
+                        "signInName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["id", "signInName"]
+                    }
+                  },
+                  "required": [
+                    "Author",
+                    "backgroundImage",
+                    "createdAt",
+                    "description",
+                    "exampleAnswer",
+                    "id",
+                    "indexInGroup",
+                    "name",
+                    "updatedAt"
                   ]
                 }
               }
@@ -120,9 +1320,7 @@
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "done"
-                ]
+                "required": ["done"]
               }
             }
           }
@@ -156,10 +1354,7 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
+                      "required": ["s3Key", "url"]
                     },
                     "author": {
                       "type": "object",
@@ -171,20 +1366,10 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
+                      "required": ["id", "signInName"]
                     }
                   },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "required": ["author", "createdTime", "done", "id", "image", "label"]
                 }
               }
             }
@@ -231,10 +1416,7 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
+                      "required": ["s3Key", "url"]
                     },
                     "author": {
                       "type": "object",
@@ -246,20 +1428,10 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
+                      "required": ["id", "signInName"]
                     }
                   },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "required": ["author", "createdTime", "done", "id", "image", "label"]
                 }
               }
             }
@@ -300,10 +1472,7 @@
                             "type": "string"
                           }
                         },
-                        "required": [
-                          "s3Key",
-                          "url"
-                        ]
+                        "required": ["s3Key", "url"]
                       },
                       "author": {
                         "type": "object",
@@ -315,20 +1484,10 @@
                             "type": "string"
                           }
                         },
-                        "required": [
-                          "id",
-                          "signInName"
-                        ]
+                        "required": ["id", "signInName"]
                       }
                     },
-                    "required": [
-                      "author",
-                      "createdTime",
-                      "done",
-                      "id",
-                      "image",
-                      "label"
-                    ]
+                    "required": ["author", "createdTime", "done", "id", "image", "label"]
                   }
                 }
               }
@@ -380,10 +1539,7 @@
                             "type": "string"
                           }
                         },
-                        "required": [
-                          "s3Key",
-                          "url"
-                        ]
+                        "required": ["s3Key", "url"]
                       },
                       "author": {
                         "type": "object",
@@ -395,20 +1551,10 @@
                             "type": "string"
                           }
                         },
-                        "required": [
-                          "id",
-                          "signInName"
-                        ]
+                        "required": ["id", "signInName"]
                       }
                     },
-                    "required": [
-                      "author",
-                      "createdTime",
-                      "done",
-                      "id",
-                      "image",
-                      "label"
-                    ]
+                    "required": ["author", "createdTime", "done", "id", "image", "label"]
                   }
                 }
               }
@@ -430,9 +1576,7 @@
                     "$ref": "#/components/schemas/Blob"
                   }
                 },
-                "required": [
-                  "label"
-                ]
+                "required": ["label"]
               }
             }
           }
@@ -466,10 +1610,7 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
+                      "required": ["s3Key", "url"]
                     },
                     "author": {
                       "type": "object",
@@ -481,20 +1622,10 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
+                      "required": ["id", "signInName"]
                     }
                   },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "required": ["author", "createdTime", "done", "id", "image", "label"]
                 }
               }
             }
@@ -522,10 +1653,7 @@
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "done",
-                  "taskId"
-                ]
+                "required": ["done", "taskId"]
               }
             }
           }
@@ -559,10 +1687,7 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
+                      "required": ["s3Key", "url"]
                     },
                     "author": {
                       "type": "object",
@@ -574,20 +1699,10 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
+                      "required": ["id", "signInName"]
                     }
                   },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "required": ["author", "createdTime", "done", "id", "image", "label"]
                 }
               }
             }
@@ -612,9 +1727,7 @@
                     ]
                   }
                 },
-                "required": [
-                  "taskId"
-                ]
+                "required": ["taskId"]
               }
             }
           }
@@ -648,10 +1761,7 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
+                      "required": ["s3Key", "url"]
                     },
                     "author": {
                       "type": "object",
@@ -663,20 +1773,10 @@
                           "type": "string"
                         }
                       },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
+                      "required": ["id", "signInName"]
                     }
                   },
-                  "required": [
-                    "author",
-                    "createdTime",
-                    "done",
-                    "id",
-                    "image",
-                    "label"
-                  ]
+                  "required": ["author", "createdTime", "done", "id", "image", "label"]
                 }
               }
             }
@@ -699,10 +1799,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "accessToken",
-                  "idToken"
-                ]
+                "required": ["accessToken", "idToken"]
               }
             }
           }
@@ -719,9 +1816,7 @@
                       "const": "success"
                     }
                   },
-                  "required": [
-                    "status"
-                  ]
+                  "required": ["status"]
                 }
               }
             }
@@ -741,9 +1836,7 @@
                       "const": "success"
                     }
                   },
-                  "required": [
-                    "status"
-                  ]
+                  "required": ["status"]
                 }
               }
             }
@@ -774,12 +1867,7 @@
             "const": "ok"
           }
         },
-        "required": [
-          "cognito",
-          "db",
-          "s3",
-          "server"
-        ]
+        "required": ["cognito", "db", "s3", "server"]
       },
       "Dto<\"user\">": {
         "allOf": [
@@ -792,7 +1880,7 @@
           }
         ]
       },
-      "Dto<\"task\">": {
+      "Dto<\"quest\">": {
         "allOf": [
           {
             "type": "object",
@@ -803,8 +1891,104 @@
           }
         ]
       },
+      "blockArg": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/Block"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Block"
+            }
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "Block": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "arg": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/blockArg"
+            }
+          }
+        },
+        "required": ["arg", "id"]
+      },
       "FormData": {
         "type": "object"
+      },
+      "QuestUpdateVal": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"indexInGroup\">"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "backgroundImage": {
+                "$ref": "#/components/schemas/Blob"
+              },
+              "id": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Branded<\"maybe\">"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Dto<\"quest\">"
+                  }
+                ]
+              }
+            },
+            "required": ["id"]
+          }
+        ]
+      },
+      "StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"indexInGroup\">": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "exampleAnswer": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "script": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Block"
+                  }
+                },
+                "position": {
+                  "type": "object",
+                  "properties": {
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    }
+                  },
+                  "required": ["x", "y"]
+                }
+              },
+              "required": ["position", "script"]
+            }
+          }
+        },
+        "required": ["description", "exampleAnswer", "name"]
       },
       "Blob": {
         "type": "object",
@@ -816,12 +2000,134 @@
             "type": "string"
           }
         },
-        "required": [
-          "size",
-          "type"
-        ]
+        "required": ["size", "type"]
       },
       "Branded<\"maybe\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "Dto<\"questGroup\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "QuestGroupCreateVal": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StrictOmit<QuestGroupDto,\"id\"|\"Author\"|\"Quests\">"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Branded<\"maybe\">"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Dto<\"questGroup\">"
+                  }
+                ]
+              }
+            },
+            "required": ["id"]
+          }
+        ]
+      },
+      "StrictOmit<QuestGroupDto,\"id\"|\"Author\"|\"Quests\">": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": ["description", "name"]
+      },
+      "QuestCreateVal": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\">"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "backgroundImage": {
+                "$ref": "#/components/schemas/Blob"
+              },
+              "questGroupId": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Branded<\"maybe\">"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Dto<\"questGroup\">"
+                  }
+                ]
+              }
+            },
+            "required": ["questGroupId"]
+          }
+        ]
+      },
+      "StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\">": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "exampleAnswer": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "script": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Block"
+                  }
+                },
+                "position": {
+                  "type": "object",
+                  "properties": {
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    }
+                  },
+                  "required": ["x", "y"]
+                }
+              },
+              "required": ["position", "script"]
+            }
+          },
+          "indexInGroup": {
+            "type": "number"
+          }
+        },
+        "required": ["description", "exampleAnswer", "indexInGroup", "name"]
+      },
+      "Dto<\"task\">": {
         "allOf": [
           {
             "type": "object",
