@@ -5,7 +5,6 @@ const blockValidator: z.ZodSchema<Block> = z.lazy(() =>
   z.object({
     id: z.number(),
     arg: z.array(blockArgValidator),
-    a: z.number(),
   }),
 ) satisfies z.ZodType<Block>;
 
