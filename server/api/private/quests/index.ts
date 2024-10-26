@@ -1,7 +1,6 @@
 import type { DefineMethods } from 'aspida';
-import type { QuestDto } from 'common/types/quest';
+import type { QuestCreateVal, QuestDto } from 'common/types/quest';
 import type { QuestGroupDto } from 'common/types/questGroup';
-import type { QuestCreateServerVal } from 'domain/quest/model/questType';
 
 export type Methods = DefineMethods<{
   get: {
@@ -12,7 +11,7 @@ export type Methods = DefineMethods<{
   };
   post: {
     reqFormat: FormData;
-    reqBody: QuestCreateServerVal;
+    reqBody: QuestCreateVal;
     resBody: QuestDto;
   };
 }>;

@@ -1,6 +1,5 @@
 import type { DefineMethods } from 'aspida';
-import type { QuestGroupDto } from 'common/types/questGroup';
-import type { QuestGroupCreateVal } from 'domain/quest/model/questGroupType';
+import type { QuestGroupCreateVal, QuestGroupDto } from 'common/types/questGroup';
 
 export type Methods = DefineMethods<{
   post: { reqBody: QuestGroupCreateVal; resBody: QuestGroupDto };

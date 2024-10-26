@@ -1,6 +1,5 @@
 import type { DefineMethods } from 'aspida';
-import type { QuestDto } from 'common/types/quest';
-import type { QuestUpdateServerVal } from 'domain/quest/model/questType';
+import type { QuestDto, QuestUpdateVal } from 'common/types/quest';
 
 export type Methods = DefineMethods<{
   get: {
@@ -9,7 +8,7 @@ export type Methods = DefineMethods<{
 
   post: {
     reqFormat: FormData;
-    reqBody: QuestUpdateServerVal;
+    reqBody: QuestUpdateVal;
     resBody: QuestDto;
   };
   delete: {

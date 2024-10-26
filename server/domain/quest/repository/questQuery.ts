@@ -21,11 +21,15 @@ const toEntity = (prismaQuest: Quest & { Author: User }): QuestEntity => ({
 });
 
 const toQuestGroupEntity = (
-  prismaQuestGroup: QuestGroup & { Quest: (Quest & { Author: User })[] },
+  prismaQuestGroup: QuestGroup & { Quest: (Quest & { Author: User })[] } & { Author: User },
 ): QuestGroupEntity => ({
   id: brandedId.questGroup.entity.parse(prismaQuestGroup.id),
   name: prismaQuestGroup.name,
   description: prismaQuestGroup.description,
+  Author: {
+    id: brandedId.user.entity.parse(prismaQuestGroup.authorId),
+    signInName: prismaQuestGroup.Author.signInName,
+  },
   Quests: prismaQuestGroup.Quest.map(toEntity),
 });
 
@@ -50,6 +54,7 @@ const listQuestGroupByAuthorId = async (
       Quest: {
         include: { Author: true },
       },
+      Author: true,
     },
   });
   return prismaQuestGroups.map(toQuestGroupEntity);
@@ -85,6 +90,7 @@ const listQuestGroupOrderByUpdatedAt = async (
       Quest: {
         include: { Author: true },
       },
+      Author: true,
     },
   });
   return prismaQuestGroups
@@ -96,6 +102,7 @@ const listQuestGroupOrderByUpdatedAt = async (
     .slice(0, limit)
     .map(toQuestGroupEntity);
 };
+
 const findQuestGroupByQuestId = async (
   tx: Prisma.TransactionClient,
   questId: string,
@@ -112,6 +119,7 @@ const findQuestGroupByQuestId = async (
       Quest: {
         include: { Author: true },
       },
+      Author: true,
     },
   });
   return prismaQuestGroup ? toQuestGroupEntity(prismaQuestGroup) : null;
@@ -131,11 +139,6 @@ export const questQuery = {
     (deps, tx: Prisma.TransactionClient, limit?: number): Promise<QuestGroupEntity[]> =>
       deps.listQuestGroupOrderByUpdatedAt(tx, limit),
   ),
-  findManyQuestGroupByIdWithDI: depend(
-    { listQuestGroupById },
-    (deps, tx: Prisma.TransactionClient, questId: string): Promise<QuestEntity[]> =>
-      deps.listQuestGroupById(tx, questId),
-  ),
   findById: async (tx: Prisma.TransactionClient, questId: string): Promise<QuestEntity> =>
     tx.quest
       .findUniqueOrThrow({ where: { id: questId }, include: { Author: true } })
@@ -151,6 +154,7 @@ export const questQuery = {
           Quest: {
             include: { Author: true },
           },
+          Author: true,
         },
       })
       .then(toQuestGroupEntity),

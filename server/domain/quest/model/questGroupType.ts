@@ -3,10 +3,10 @@ import type { QuestGroupDto } from 'common/types/questGroup';
 import type { EntityId } from 'service/brandedId';
 import type { QuestEntity } from './questType';
 
-export type QuestGroupEntity = StrictOmit<QuestGroupDto, 'id' | 'Quests'> & {
+export type QuestGroupEntity = StrictOmit<QuestGroupDto, 'id' | 'Quests' | 'Author'> & {
   id: EntityId['questGroup'];
   Quests: QuestEntity[];
+  Author: StrictOmit<QuestGroupDto['Author'], 'id'> & { id: EntityId['user'] };
 };
-export type QuestGroupCreateVal = QuestGroupEntity;
 
-export type QuestGroupCreateServerVal = StrictOmit<QuestGroupDto, 'id' | 'Quests'>;
+export type QuestGroupCreateServerVal = StrictOmit<QuestGroupDto, 'id' | 'Quests' | 'Author'>;

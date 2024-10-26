@@ -13,6 +13,7 @@ export const questGroupMethod = {
       id: brandedId.questGroup.entity.parse(ulid()),
       name: val.name,
       description: val.description,
+      Author: { id: brandedId.user.entity.parse(user.id), signInName: user.signInName },
       Quests: [],
     };
     return questGroup;

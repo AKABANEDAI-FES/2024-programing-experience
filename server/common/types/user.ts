@@ -1,4 +1,3 @@
-import type { LanguageEnum } from '@prisma/client';
 import type { DtoId } from './brandedId';
 
 export type UserDto = {
@@ -7,7 +6,7 @@ export type UserDto = {
   displayName: string;
   email: string;
   isAdmin: boolean;
-  language: LanguageEnum;
+  language: 'KANJI' | 'HIRAGANA' | 'ENGLISH';
   createdTime: number;
   photoUrl: string | undefined;
 };

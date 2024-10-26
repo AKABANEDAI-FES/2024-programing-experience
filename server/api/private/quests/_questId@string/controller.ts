@@ -7,22 +7,21 @@ import { defineController } from './$relay';
 
 export default defineController(() => ({
   get: async ({ params }) => {
-    const quest = await questQuery.findById(prismaClient, params.quest_id);
-
+    const quest = await questQuery.findById(prismaClient, params.questId);
     return {
       status: 200,
       body: await toQuestDto(quest),
     };
   },
-  post: async ({ user, params, body }) => ({
+  post: async ({ user, body }) => ({
     status: 200,
     body: await questUseCase.update(user, {
       ...body,
-      questId: brandedId.quest.maybe.parse(params.quest_id),
+      exampleAnswer: JSON.parse(body.exampleAnswer),
     }),
   }),
   delete: async ({ user, params }) => ({
     status: 200,
-    body: await questUseCase.delete(user, brandedId.quest.maybe.parse(params.quest_id)),
+    body: await questUseCase.delete(user, brandedId.quest.maybe.parse(params.questId)),
   }),
 }));

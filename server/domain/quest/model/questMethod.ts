@@ -37,11 +37,24 @@ export const questMethod = {
     assert(user.id === String(quest.Author.id));
 
     if (val.backgroundImage === undefined)
-      return { quest: { ...quest, ...val, updatedAt: Date.now() } };
+      return {
+        quest: {
+          ...quest,
+          ...val,
+          updatedAt: Date.now(),
+          id: brandedId.quest.entity.parse(quest.id),
+        },
+      };
 
     const imageKey = `quests/images/${ulid()}.${val.backgroundImage.filename.split('.').at(-1)}`;
     return {
-      quest: { ...quest, ...val, imageKey, updatedAt: Date.now() },
+      quest: {
+        ...quest,
+        ...val,
+        imageKey,
+        updatedAt: Date.now(),
+        id: brandedId.quest.entity.parse(quest.id),
+      },
       s3Params: { key: imageKey, data: val.backgroundImage },
     };
   },

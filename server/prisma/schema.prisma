@@ -33,8 +33,8 @@ model QuestGroup {
   name        String
   description String
   Quest       Quest[]
-  Author      User?   @relation(fields: [authorId], references: [id])
-  authorId    String?
+  Author      User    @relation(fields: [authorId], references: [id])
+  authorId    String
 }
 
 model Quest {

@@ -8,6 +8,7 @@ export const questGroupCommand = {
         id: val.id,
         name: val.name,
         description: val.description,
+        authorId: val.Author.id,
       },
     });
   },

@@ -13,6 +13,9 @@ export default defineController(() => ({
   }),
   post: async ({ user, body }) => ({
     status: 201,
-    body: await questUseCase.create(user, body),
+    body: await questUseCase.create(user, {
+      ...body,
+      exampleAnswer: JSON.parse(body.exampleAnswer),
+    }),
   }),
 }));

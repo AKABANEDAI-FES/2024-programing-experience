@@ -1,6 +1,7 @@
 import type { MultipartFile } from '@fastify/multipart';
 import type { NonNullableObj, StrictOmit } from 'common/types';
-import type { QuestDto, QuestUpdateDto } from 'common/types/quest';
+import type { MaybeId } from 'common/types/brandedId';
+import type { QuestDto } from 'common/types/quest';
 import type { EntityId } from 'service/brandedId';
 import type { S3PutParams } from 'service/s3Client';
 
@@ -12,15 +13,18 @@ export type QuestEntity = StrictOmit<QuestDto, 'id' | 'backgroundImage' | 'Autho
 
 export type QuestCreateServerVal = StrictOmit<
   QuestDto,
-  'id' | 'backgroundImage' | 'createdAt' | 'Author'
+  'id' | 'backgroundImage' | 'createdAt' | 'Author' | 'updatedAt'
 > & {
   backgroundImage?: MultipartFile;
-} & {
-  questGroupId: EntityId['questGroup'];
+  questGroupId: MaybeId['questGroup'];
 };
 
-export type QuestUpdateServerVal = StrictOmit<QuestUpdateDto, 'backgroundImage'> & {
+export type QuestUpdateServerVal = StrictOmit<
+  QuestDto,
+  'id' | 'Author' | 'createdAt' | 'updatedAt' | 'indexInGroup' | 'backgroundImage'
+> & {
   backgroundImage?: MultipartFile;
+  id: MaybeId['quest'];
 };
 
 export type QuestCreateVal = {

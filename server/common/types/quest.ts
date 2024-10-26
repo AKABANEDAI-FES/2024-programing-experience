@@ -1,5 +1,5 @@
 import type { DtoId, MaybeId } from './brandedId';
-import type { NonNullableObj, StrictOmit } from './index';
+import type { StrictOmit } from './index';
 import type { Scripts } from './playground';
 
 export type QuestDto = {
@@ -14,16 +14,22 @@ export type QuestDto = {
   Author: { id: DtoId['user']; signInName: string };
 };
 
-export type QuestCreateOrUpdateVal = {
-  name: string;
-  description: string;
-  image?: Blob;
-  exampleAnswer: Scripts[];
+export type QuestCreateVal = StrictOmit<
+  QuestDto,
+  'id' | 'Author' | 'createdAt' | 'updatedAt' | 'backgroundImage' | 'exampleAnswer'
+> & {
+  backgroundImage?: Blob;
+  questGroupId: MaybeId['questGroup'];
+  exampleAnswer: string;
 };
 
-export type QuestUpdateDto = StrictOmit<QuestDto, 'id' | 'Author' | 'createdAt' | 'updatedAt'> &
-  NonNullableObj<Pick<QuestDto, 'updatedAt'>> & {
-    questId: MaybeId['quest'];
-  };
+export type QuestUpdateVal = StrictOmit<
+  QuestDto,
+  'id' | 'Author' | 'createdAt' | 'updatedAt' | 'indexInGroup' | 'backgroundImage' | 'exampleAnswer'
+> & {
+  backgroundImage?: Blob;
+  id: MaybeId['quest'];
+  exampleAnswer: string;
+};
 
 export type QuestUpdateIndexVal = { questId: MaybeId['quest']; indexInGroup: number };

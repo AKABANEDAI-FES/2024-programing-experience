@@ -1,6 +1,7 @@
 import type { MaybeId } from 'common/types/brandedId';
 import type { QuestDto } from 'common/types/quest';
 import type { UserDto } from 'common/types/user';
+import { assert } from 'console';
 import { transaction } from 'service/prismaClient';
 import { questMethod } from '../model/questMethod';
 import type { QuestCreateServerVal, QuestUpdateServerVal } from '../model/questType';
@@ -22,7 +23,7 @@ export const questUseCase = {
     }),
   update: (user: UserDto, val: QuestUpdateServerVal): Promise<QuestDto> =>
     transaction('RepeatableRead', async (tx) => {
-      const quest = await questQuery.findById(tx, val.questId);
+      const quest = await questQuery.findById(tx, val.id);
       const updated = questMethod.update(user, quest, val);
 
       await questCommand.update(tx, updated);
@@ -34,6 +35,7 @@ export const questUseCase = {
   delete: (user: UserDto, questId: MaybeId['quest']): Promise<QuestDto> =>
     transaction('RepeatableRead', async (tx) => {
       const quest = await questQuery.findById(tx, questId);
+      assert(quest !== null);
       const questGroup = await questQuery.findQuestGroupByQuestId(tx, quest.id);
 
       const deleted = questMethod.delete(user, quest, questGroup?.id);
