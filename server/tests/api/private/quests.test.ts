@@ -5,6 +5,16 @@ import { expect, test } from 'vitest';
 import { createCognitoUserClient, noCookieClient } from '../apiClient';
 import { DELETE, GET, POST } from '../utils';
 
+const sampleScripts = [
+  {
+    script: [
+      { id: 0, arg: [] },
+      { id: 1, arg: ['10'] },
+    ],
+    position: { x: 0, y: 0 },
+  },
+];
+
 // クエストの一覧を取得
 test(GET(noCookieClient.private.quests), async () => {
   const apiClient = await createCognitoUserClient();
@@ -52,7 +62,7 @@ test(POST(noCookieClient.private.quests), async () => {
     name: 'Sample Quest',
     description: 'This is a sample quest',
     backgroundImage: undefined,
-    exampleAnswer: JSON.stringify([{ script: [], position: { x: 0, y: 0 } }]),
+    exampleAnswer: JSON.stringify(sampleScripts),
     indexInGroup: 0,
     questGroupId: brandedId.questGroup.maybe.parse(res0.body.id),
   };
@@ -78,7 +88,7 @@ test(GET(noCookieClient.private.quests._questId('_questId')), async () => {
       name: 'Detail Quest',
       description: 'For detail test',
       backgroundImage: undefined,
-      exampleAnswer: JSON.stringify([{ script: [], position: { x: 0, y: 0 } }]),
+      exampleAnswer: JSON.stringify(sampleScripts),
       indexInGroup: 0,
       questGroupId: brandedId.questGroup.maybe.parse(res0.body.id),
     },
@@ -104,7 +114,7 @@ test(POST(noCookieClient.private.quests._questId('_questId')), async () => {
       name: 'Old Quest',
       description: 'To be updated',
       backgroundImage: undefined,
-      exampleAnswer: JSON.stringify([{ script: [], position: { x: 0, y: 0 } }]),
+      exampleAnswer: JSON.stringify(sampleScripts),
       indexInGroup: 0,
       questGroupId: brandedId.questGroup.maybe.parse(res0.body.id),
     },
@@ -114,7 +124,7 @@ test(POST(noCookieClient.private.quests._questId('_questId')), async () => {
     name: 'Updated Quest',
     description: 'Updated description',
     backgroundImage: undefined,
-    exampleAnswer: JSON.stringify([{ script: [], position: { x: 0, y: 0 } }]),
+    exampleAnswer: JSON.stringify(sampleScripts),
     indexInGroup: 0,
     questGroupId: brandedId.questGroup.maybe.parse('dummy'),
   };
@@ -141,7 +151,7 @@ test(DELETE(noCookieClient.private.quests._questId('_questId')), async () => {
       name: 'Old Quest',
       description: 'To be updated',
       backgroundImage: undefined,
-      exampleAnswer: JSON.stringify([{ script: [], position: { x: 0, y: 0 } }]),
+      exampleAnswer: JSON.stringify(sampleScripts),
       indexInGroup: 0,
       questGroupId: brandedId.questGroup.maybe.parse(res0.body.id),
     },
