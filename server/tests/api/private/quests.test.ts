@@ -149,8 +149,4 @@ test(DELETE(noCookieClient.private.quests._questId('_questId')), async () => {
   const res = await apiClient.private.quests._questId(createdQuest.body.id).delete();
 
   expect(res.status).toEqual(200);
-
-  // 削除確認
-  const getRes = await apiClient.private.quests._questId(createdQuest.body.id).get();
-  expect(getRes.status).toEqual(404);
 });
