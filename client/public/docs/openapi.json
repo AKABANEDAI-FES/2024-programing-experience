@@ -80,7 +80,11 @@
                       "type": "boolean"
                     },
                     "language": {
-                      "enum": ["ENGLISH", "HIRAGANA", "KANJI"],
+                      "enum": [
+                        "ENGLISH",
+                        "HIRAGANA",
+                        "KANJI"
+                      ],
                       "type": "string"
                     },
                     "createdTime": {
@@ -145,7 +149,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["s3Key", "url"]
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
                     },
                     "exampleAnswer": {
                       "type": "array",
@@ -168,10 +175,16 @@
                                 "type": "number"
                               }
                             },
-                            "required": ["x", "y"]
+                            "required": [
+                              "x",
+                              "y"
+                            ]
                           }
                         },
-                        "required": ["position", "script"]
+                        "required": [
+                          "position",
+                          "script"
+                        ]
                       }
                     },
                     "createdAt": {
@@ -193,7 +206,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     }
                   },
                   "required": [
@@ -259,7 +275,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["s3Key", "url"]
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
                     },
                     "exampleAnswer": {
                       "type": "array",
@@ -282,10 +301,16 @@
                                 "type": "number"
                               }
                             },
-                            "required": ["x", "y"]
+                            "required": [
+                              "x",
+                              "y"
+                            ]
                           }
                         },
-                        "required": ["position", "script"]
+                        "required": [
+                          "position",
+                          "script"
+                        ]
                       }
                     },
                     "createdAt": {
@@ -307,7 +332,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     }
                   },
                   "required": [
@@ -364,7 +392,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["s3Key", "url"]
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
                     },
                     "exampleAnswer": {
                       "type": "array",
@@ -387,10 +418,16 @@
                                 "type": "number"
                               }
                             },
-                            "required": ["x", "y"]
+                            "required": [
+                              "x",
+                              "y"
+                            ]
                           }
                         },
-                        "required": ["position", "script"]
+                        "required": [
+                          "position",
+                          "script"
+                        ]
                       }
                     },
                     "createdAt": {
@@ -412,7 +449,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     }
                   },
                   "required": [
@@ -463,7 +503,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["id", "signInName"]
+                        "required": [
+                          "id",
+                          "signInName"
+                        ]
                       },
                       "Quests": {
                         "type": "array",
@@ -489,7 +532,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["s3Key", "url"]
+                              "required": [
+                                "s3Key",
+                                "url"
+                              ]
                             },
                             "exampleAnswer": {
                               "type": "array",
@@ -512,10 +558,16 @@
                                         "type": "number"
                                       }
                                     },
-                                    "required": ["x", "y"]
+                                    "required": [
+                                      "x",
+                                      "y"
+                                    ]
                                   }
                                 },
-                                "required": ["position", "script"]
+                                "required": [
+                                  "position",
+                                  "script"
+                                ]
                               }
                             },
                             "createdAt": {
@@ -537,7 +589,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["id", "signInName"]
+                              "required": [
+                                "id",
+                                "signInName"
+                              ]
                             }
                           },
                           "required": [
@@ -554,7 +609,13 @@
                         }
                       }
                     },
-                    "required": ["Author", "Quests", "description", "id", "name"]
+                    "required": [
+                      "Author",
+                      "Quests",
+                      "description",
+                      "id",
+                      "name"
+                    ]
                   }
                 }
               }
@@ -575,7 +636,9 @@
                     "type": "string"
                   }
                 },
-                "required": ["questGroupId"]
+                "required": [
+                  "questGroupId"
+                ]
               }
             }
           }
@@ -608,7 +671,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["s3Key", "url"]
+                        "required": [
+                          "s3Key",
+                          "url"
+                        ]
                       },
                       "exampleAnswer": {
                         "type": "array",
@@ -631,10 +697,16 @@
                                   "type": "number"
                                 }
                               },
-                              "required": ["x", "y"]
+                              "required": [
+                                "x",
+                                "y"
+                              ]
                             }
                           },
-                          "required": ["position", "script"]
+                          "required": [
+                            "position",
+                            "script"
+                          ]
                         }
                       },
                       "createdAt": {
@@ -656,7 +728,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["id", "signInName"]
+                        "required": [
+                          "id",
+                          "signInName"
+                        ]
                       }
                     },
                     "required": [
@@ -678,11 +753,11 @@
         }
       }
     },
-    "/private/quests/group/{group_id}": {
+    "/private/quests/group/{groupId}": {
       "get": {
         "parameters": [
           {
-            "name": "group_id",
+            "name": "groupId",
             "in": "path",
             "required": true,
             "schema": {
@@ -718,7 +793,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["s3Key", "url"]
+                        "required": [
+                          "s3Key",
+                          "url"
+                        ]
                       },
                       "exampleAnswer": {
                         "type": "array",
@@ -741,10 +819,16 @@
                                   "type": "number"
                                 }
                               },
-                              "required": ["x", "y"]
+                              "required": [
+                                "x",
+                                "y"
+                              ]
                             }
                           },
-                          "required": ["position", "script"]
+                          "required": [
+                            "position",
+                            "script"
+                          ]
                         }
                       },
                       "createdAt": {
@@ -766,7 +850,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["id", "signInName"]
+                        "required": [
+                          "id",
+                          "signInName"
+                        ]
                       }
                     },
                     "required": [
@@ -825,7 +912,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     },
                     "Quests": {
                       "type": "array",
@@ -851,7 +941,10 @@
                                 "type": "string"
                               }
                             },
-                            "required": ["s3Key", "url"]
+                            "required": [
+                              "s3Key",
+                              "url"
+                            ]
                           },
                           "exampleAnswer": {
                             "type": "array",
@@ -874,10 +967,16 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": ["x", "y"]
+                                  "required": [
+                                    "x",
+                                    "y"
+                                  ]
                                 }
                               },
-                              "required": ["position", "script"]
+                              "required": [
+                                "position",
+                                "script"
+                              ]
                             }
                           },
                           "createdAt": {
@@ -899,7 +998,10 @@
                                 "type": "string"
                               }
                             },
-                            "required": ["id", "signInName"]
+                            "required": [
+                              "id",
+                              "signInName"
+                            ]
                           }
                         },
                         "required": [
@@ -916,7 +1018,13 @@
                       }
                     }
                   },
-                  "required": ["Author", "Quests", "description", "id", "name"]
+                  "required": [
+                    "Author",
+                    "Quests",
+                    "description",
+                    "id",
+                    "name"
+                  ]
                 }
               }
             }
@@ -954,7 +1062,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["id", "signInName"]
+                        "required": [
+                          "id",
+                          "signInName"
+                        ]
                       },
                       "Quests": {
                         "type": "array",
@@ -980,7 +1091,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["s3Key", "url"]
+                              "required": [
+                                "s3Key",
+                                "url"
+                              ]
                             },
                             "exampleAnswer": {
                               "type": "array",
@@ -1003,10 +1117,16 @@
                                         "type": "number"
                                       }
                                     },
-                                    "required": ["x", "y"]
+                                    "required": [
+                                      "x",
+                                      "y"
+                                    ]
                                   }
                                 },
-                                "required": ["position", "script"]
+                                "required": [
+                                  "position",
+                                  "script"
+                                ]
                               }
                             },
                             "createdAt": {
@@ -1028,7 +1148,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["id", "signInName"]
+                              "required": [
+                                "id",
+                                "signInName"
+                              ]
                             }
                           },
                           "required": [
@@ -1045,7 +1168,13 @@
                         }
                       }
                     },
-                    "required": ["Author", "Quests", "description", "id", "name"]
+                    "required": [
+                      "Author",
+                      "Quests",
+                      "description",
+                      "id",
+                      "name"
+                    ]
                   }
                 }
               }
@@ -1094,7 +1223,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["id", "signInName"]
+                        "required": [
+                          "id",
+                          "signInName"
+                        ]
                       },
                       "Quests": {
                         "type": "array",
@@ -1120,7 +1252,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["s3Key", "url"]
+                              "required": [
+                                "s3Key",
+                                "url"
+                              ]
                             },
                             "exampleAnswer": {
                               "type": "array",
@@ -1143,10 +1278,16 @@
                                         "type": "number"
                                       }
                                     },
-                                    "required": ["x", "y"]
+                                    "required": [
+                                      "x",
+                                      "y"
+                                    ]
                                   }
                                 },
-                                "required": ["position", "script"]
+                                "required": [
+                                  "position",
+                                  "script"
+                                ]
                               }
                             },
                             "createdAt": {
@@ -1168,7 +1309,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["id", "signInName"]
+                              "required": [
+                                "id",
+                                "signInName"
+                              ]
                             }
                           },
                           "required": [
@@ -1185,7 +1329,13 @@
                         }
                       }
                     },
-                    "required": ["Author", "Quests", "description", "id", "name"]
+                    "required": [
+                      "Author",
+                      "Quests",
+                      "description",
+                      "id",
+                      "name"
+                    ]
                   }
                 }
               }
@@ -1229,7 +1379,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["s3Key", "url"]
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
                     },
                     "exampleAnswer": {
                       "type": "array",
@@ -1252,10 +1405,16 @@
                                 "type": "number"
                               }
                             },
-                            "required": ["x", "y"]
+                            "required": [
+                              "x",
+                              "y"
+                            ]
                           }
                         },
-                        "required": ["position", "script"]
+                        "required": [
+                          "position",
+                          "script"
+                        ]
                       }
                     },
                     "createdAt": {
@@ -1277,7 +1436,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     }
                   },
                   "required": [
@@ -1320,7 +1482,9 @@
                     "type": "boolean"
                   }
                 },
-                "required": ["done"]
+                "required": [
+                  "done"
+                ]
               }
             }
           }
@@ -1354,7 +1518,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["s3Key", "url"]
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
                     },
                     "author": {
                       "type": "object",
@@ -1366,10 +1533,20 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     }
                   },
-                  "required": ["author", "createdTime", "done", "id", "image", "label"]
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
                 }
               }
             }
@@ -1416,7 +1593,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["s3Key", "url"]
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
                     },
                     "author": {
                       "type": "object",
@@ -1428,10 +1608,20 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     }
                   },
-                  "required": ["author", "createdTime", "done", "id", "image", "label"]
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
                 }
               }
             }
@@ -1472,7 +1662,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["s3Key", "url"]
+                        "required": [
+                          "s3Key",
+                          "url"
+                        ]
                       },
                       "author": {
                         "type": "object",
@@ -1484,10 +1677,20 @@
                             "type": "string"
                           }
                         },
-                        "required": ["id", "signInName"]
+                        "required": [
+                          "id",
+                          "signInName"
+                        ]
                       }
                     },
-                    "required": ["author", "createdTime", "done", "id", "image", "label"]
+                    "required": [
+                      "author",
+                      "createdTime",
+                      "done",
+                      "id",
+                      "image",
+                      "label"
+                    ]
                   }
                 }
               }
@@ -1539,7 +1742,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["s3Key", "url"]
+                        "required": [
+                          "s3Key",
+                          "url"
+                        ]
                       },
                       "author": {
                         "type": "object",
@@ -1551,10 +1757,20 @@
                             "type": "string"
                           }
                         },
-                        "required": ["id", "signInName"]
+                        "required": [
+                          "id",
+                          "signInName"
+                        ]
                       }
                     },
-                    "required": ["author", "createdTime", "done", "id", "image", "label"]
+                    "required": [
+                      "author",
+                      "createdTime",
+                      "done",
+                      "id",
+                      "image",
+                      "label"
+                    ]
                   }
                 }
               }
@@ -1576,7 +1792,9 @@
                     "$ref": "#/components/schemas/Blob"
                   }
                 },
-                "required": ["label"]
+                "required": [
+                  "label"
+                ]
               }
             }
           }
@@ -1610,7 +1828,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["s3Key", "url"]
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
                     },
                     "author": {
                       "type": "object",
@@ -1622,10 +1843,20 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     }
                   },
-                  "required": ["author", "createdTime", "done", "id", "image", "label"]
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
                 }
               }
             }
@@ -1653,7 +1884,10 @@
                     "type": "boolean"
                   }
                 },
-                "required": ["done", "taskId"]
+                "required": [
+                  "done",
+                  "taskId"
+                ]
               }
             }
           }
@@ -1687,7 +1921,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["s3Key", "url"]
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
                     },
                     "author": {
                       "type": "object",
@@ -1699,10 +1936,20 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     }
                   },
-                  "required": ["author", "createdTime", "done", "id", "image", "label"]
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
                 }
               }
             }
@@ -1727,7 +1974,9 @@
                     ]
                   }
                 },
-                "required": ["taskId"]
+                "required": [
+                  "taskId"
+                ]
               }
             }
           }
@@ -1761,7 +2010,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["s3Key", "url"]
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
                     },
                     "author": {
                       "type": "object",
@@ -1773,10 +2025,20 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "signInName"]
+                      "required": [
+                        "id",
+                        "signInName"
+                      ]
                     }
                   },
-                  "required": ["author", "createdTime", "done", "id", "image", "label"]
+                  "required": [
+                    "author",
+                    "createdTime",
+                    "done",
+                    "id",
+                    "image",
+                    "label"
+                  ]
                 }
               }
             }
@@ -1799,7 +2061,10 @@
                     "type": "string"
                   }
                 },
-                "required": ["accessToken", "idToken"]
+                "required": [
+                  "accessToken",
+                  "idToken"
+                ]
               }
             }
           }
@@ -1816,7 +2081,9 @@
                       "const": "success"
                     }
                   },
-                  "required": ["status"]
+                  "required": [
+                    "status"
+                  ]
                 }
               }
             }
@@ -1836,7 +2103,9 @@
                       "const": "success"
                     }
                   },
-                  "required": ["status"]
+                  "required": [
+                    "status"
+                  ]
                 }
               }
             }
@@ -1867,7 +2136,12 @@
             "const": "ok"
           }
         },
-        "required": ["cognito", "db", "s3", "server"]
+        "required": [
+          "cognito",
+          "db",
+          "s3",
+          "server"
+        ]
       },
       "Dto<\"user\">": {
         "allOf": [
@@ -1920,7 +2194,10 @@
             }
           }
         },
-        "required": ["arg", "id"]
+        "required": [
+          "arg",
+          "id"
+        ]
       },
       "FormData": {
         "type": "object"
@@ -1928,7 +2205,7 @@
       "QuestUpdateVal": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"indexInGroup\">"
+            "$ref": "#/components/schemas/StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"exampleAnswer\"|\"indexInGroup\">"
           },
           {
             "type": "object",
@@ -1945,13 +2222,19 @@
                     "$ref": "#/components/schemas/Dto<\"quest\">"
                   }
                 ]
+              },
+              "exampleAnswer": {
+                "type": "string"
               }
             },
-            "required": ["id"]
+            "required": [
+              "exampleAnswer",
+              "id"
+            ]
           }
         ]
       },
-      "StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"indexInGroup\">": {
+      "StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"exampleAnswer\"|\"indexInGroup\">": {
         "type": "object",
         "properties": {
           "name": {
@@ -1959,36 +2242,12 @@
           },
           "description": {
             "type": "string"
-          },
-          "exampleAnswer": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "script": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Block"
-                  }
-                },
-                "position": {
-                  "type": "object",
-                  "properties": {
-                    "x": {
-                      "type": "number"
-                    },
-                    "y": {
-                      "type": "number"
-                    }
-                  },
-                  "required": ["x", "y"]
-                }
-              },
-              "required": ["position", "script"]
-            }
           }
         },
-        "required": ["description", "exampleAnswer", "name"]
+        "required": [
+          "description",
+          "name"
+        ]
       },
       "Blob": {
         "type": "object",
@@ -2000,7 +2259,10 @@
             "type": "string"
           }
         },
-        "required": ["size", "type"]
+        "required": [
+          "size",
+          "type"
+        ]
       },
       "Branded<\"maybe\">": {
         "allOf": [
@@ -2043,7 +2305,9 @@
                 ]
               }
             },
-            "required": ["id"]
+            "required": [
+              "id"
+            ]
           }
         ]
       },
@@ -2057,12 +2321,15 @@
             "type": "string"
           }
         },
-        "required": ["description", "name"]
+        "required": [
+          "description",
+          "name"
+        ]
       },
       "QuestCreateVal": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\">"
+            "$ref": "#/components/schemas/StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"exampleAnswer\">"
           },
           {
             "type": "object",
@@ -2079,13 +2346,19 @@
                     "$ref": "#/components/schemas/Dto<\"questGroup\">"
                   }
                 ]
+              },
+              "exampleAnswer": {
+                "type": "string"
               }
             },
-            "required": ["questGroupId"]
+            "required": [
+              "exampleAnswer",
+              "questGroupId"
+            ]
           }
         ]
       },
-      "StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\">": {
+      "StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"exampleAnswer\">": {
         "type": "object",
         "properties": {
           "name": {
@@ -2094,38 +2367,15 @@
           "description": {
             "type": "string"
           },
-          "exampleAnswer": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "script": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Block"
-                  }
-                },
-                "position": {
-                  "type": "object",
-                  "properties": {
-                    "x": {
-                      "type": "number"
-                    },
-                    "y": {
-                      "type": "number"
-                    }
-                  },
-                  "required": ["x", "y"]
-                }
-              },
-              "required": ["position", "script"]
-            }
-          },
           "indexInGroup": {
             "type": "number"
           }
         },
-        "required": ["description", "exampleAnswer", "indexInGroup", "name"]
+        "required": [
+          "description",
+          "indexInGroup",
+          "name"
+        ]
       },
       "Dto<\"task\">": {
         "allOf": [

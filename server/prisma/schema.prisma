@@ -38,7 +38,7 @@ model QuestGroup {
 }
 
 model Quest {
-  id                 String      @id
+  id                 String        @id
   name               String
   description        String
   backgroundImageKey String?
@@ -47,10 +47,11 @@ model Quest {
   updatedAt          DateTime?
   indexInGroup       Int
   UserQuest          UserQuest[]
-  Author             User        @relation(fields: [authorId], references: [id])
+  Author             User          @relation(fields: [authorId], references: [id])
   authorId           String
-  QuestGroup         QuestGroup  @relation(fields: [questGroupId], references: [id])
+  QuestGroup         QuestGroup    @relation(fields: [questGroupId], references: [id])
   questGroupId       String
+  phraseGroup        PhraseGroup[]
 }
 
 model UserQuest {
@@ -70,6 +71,29 @@ model UserQuestResult {
   endAt       DateTime
   score       Int
   answer      Json
+}
+
+model PhraseGroup {
+  id               String         @id
+  Phrases          Phrase[]
+  category         KatetegoriEnum
+  backgroundImgKey String?
+  Quest            Quest?         @relation(fields: [questId], references: [id])
+  questId          String?
+}
+
+enum KatetegoriEnum {
+  BEFORE_QUEST
+  AFTER_QUEST_OK
+  AFTER_QUEST_FAIL
+}
+
+model Phrase {
+  id            String       @id
+  phrase        String
+  indexInGroup  Int
+  PhraseGroup   PhraseGroup? @relation(fields: [phraseGroupId], references: [id])
+  phraseGroupId String?
 }
 
 model Task {
