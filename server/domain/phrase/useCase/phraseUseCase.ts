@@ -28,4 +28,14 @@ export const phraseUseCase = {
       const dto = toPhraseDto(updated.phrase);
       return dto;
     }),
+  delete: async (phraseId: MaybeId['phrase']): Promise<PhraseDto> =>
+    transaction('RepeatableRead', async (tx) => {
+      const phrase = await phraseQuery.findById(tx, phraseId);
+
+      const deleted = await phraseMethod.delete(phrase);
+
+      await phraseCommand.delete(tx, deleted);
+
+      return toPhraseDto(deleted.phrase);
+    }),
 };

@@ -3,6 +3,7 @@ import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';
 import type {
   PhraseCreateServerVal,
+  PhraseDeleteVal,
   PhraseEntity,
   PhraseSaveVal,
 } from './phraseType';
@@ -19,5 +20,11 @@ export const phraseMethod = {
   },
   update: async (phrase: PhraseEntity, dto: PhraseUpdateDto): Promise<PhraseSaveVal> => {
     return { phrase: { ...phrase, ...dto } };
+  },
+  delete: (phrase: PhraseEntity): PhraseDeleteVal => {
+    return {
+      deletable: true,
+      phrase,
+    };
   },
 };

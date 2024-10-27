@@ -35,4 +35,23 @@ export const phraseCommand = {
       },
     });
   },
+  delete: async (tx: Prisma.TransactionClient, val: PhraseSaveVal): Promise<void> => {
+    await tx.phrase.delete({
+      where: { id: val.phrase.id },
+    });
+
+    await tx.phrase.updateMany({
+      where: {
+        phraseGroupId: val.phrase.phraseGroupId,
+        indexInGroup: {
+          gt: val.phrase.indexInGroup,
+        },
+      },
+      data: {
+        indexInGroup: {
+          decrement: 1,
+        },
+      },
+    });
+  },
 };
