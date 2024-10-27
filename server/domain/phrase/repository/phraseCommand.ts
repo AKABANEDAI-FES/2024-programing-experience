@@ -26,4 +26,13 @@ export const phraseCommand = {
       },
     });
   },
+  update: async (tx: Prisma.TransactionClient, val: PhraseSaveVal): Promise<void> => {
+    await tx.phrase.update({
+      where: { id: val.phrase.id },
+      data: {
+        phrase: val.phrase.phrase,
+        indexInGroup: val.phrase.indexInGroup,
+      },
+    });
+  },
 };

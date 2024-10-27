@@ -1,6 +1,11 @@
+import type { PhraseUpdateDto } from 'common/types/phrase';
 import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';
-import type { PhraseCreateServerVal, PhraseEntity, PhraseSaveVal } from './phraseType';
+import type {
+  PhraseCreateServerVal,
+  PhraseEntity,
+  PhraseSaveVal,
+} from './phraseType';
 
 export const phraseMethod = {
   create: async (val: PhraseCreateServerVal): Promise<PhraseSaveVal> => {
@@ -11,5 +16,8 @@ export const phraseMethod = {
       phraseGroupId: brandedId.phraseGroup.entity.parse(val.phraseGroupId),
     };
     return { phrase };
+  },
+  update: async (phrase: PhraseEntity, dto: PhraseUpdateDto): Promise<PhraseSaveVal> => {
+    return { phrase: { ...phrase, ...dto } };
   },
 };
