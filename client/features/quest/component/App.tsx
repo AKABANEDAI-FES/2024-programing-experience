@@ -29,6 +29,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({ conversations = [] 
   };
 
   return (
+    //eslint-disable-next-line complexity
     <div className={styles.container}>
       <Card className={styles.card}>
         <CardContent className={styles.cardContent}>
