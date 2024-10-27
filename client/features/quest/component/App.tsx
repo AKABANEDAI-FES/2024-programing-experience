@@ -7,7 +7,7 @@ import { Card, CardContent } from './Card';
 interface ConversationPageProps {
   conversations?: string[];
 }
-
+//eslint-disable-next-line complexity
 const ConversationPage: React.FC<ConversationPageProps> = ({ conversations = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAll, setShowAll] = useState(false);
@@ -29,7 +29,6 @@ const ConversationPage: React.FC<ConversationPageProps> = ({ conversations = [] 
   };
 
   return (
-    //eslint-disable-next-line complexity
     <div className={styles.container}>
       <Card className={styles.card}>
         <CardContent className={styles.cardContent}>
