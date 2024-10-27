@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import type { Dispatch, SetStateAction } from 'react';
 import { moves } from '../constants';
 import type { Block, blockArg, ScriptState, SpriteState } from '../types';
@@ -12,7 +11,6 @@ import {
   setStepDelay,
 } from './scriptStatesHandler';
 
-// eslint-disable-next-line complexity
 export const nestedStepMoveBase = (
   fn: (arg: blockArg) => void | string | undefined,
   scriptState: ScriptState,
