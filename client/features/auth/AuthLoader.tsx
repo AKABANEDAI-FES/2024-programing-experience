@@ -13,11 +13,13 @@ export const AuthLoader = () => {
   const { setLoading } = useLoading();
   const { setAlert } = useAlert();
   const updateCookie = useCallback(async () => {
-    const jwt = await fetchAuthSession().then((e) => e.tokens?.idToken?.toString());
+    const tokens = await fetchAuthSession().then((e) => e.tokens);
 
-    if (jwt !== undefined) {
-      await apiClient.session.$post({ body: { jwt } }).catch(catchApiErr);
-      await apiClient.private.me.$get().catch(catchApiErr).then(setUser);
+    if (tokens !== undefined && tokens.idToken !== undefined) {
+      await apiClient.session.$post({
+        body: { idToken: tokens.idToken.toString(), accessToken: tokens.accessToken.toString() },
+      });
+      await apiClient.private.me.$get().then(setUser);
     } else {
       setUser(null);
     }
@@ -30,6 +32,7 @@ export const AuthLoader = () => {
   }, [setUser, updateCookie]);
 
   useEffect(() => {
+    // eslint-disable-next-line complexity
     const useId = apiAxios.interceptors.response.use(undefined, async (err) => {
       if (user.data && isAxiosError(err) && err.response?.status === 401 && err.config) {
         const { config } = err;

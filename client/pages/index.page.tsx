@@ -1,7 +1,6 @@
-import { Playground } from 'features/playground/Playground';
+import { TaskList } from 'features/tasks/TaskList';
 import { Layout } from 'layouts/Layout';
 
-import ConversationPage from 'features/quest/component/App';
 import styles from './index.module.css';
 
 const Home = () => {
@@ -9,9 +8,8 @@ const Home = () => {
     <Layout
       render={(user) => (
         <div className={styles.container}>
-          <div className={styles.title}>Hello {user.signInName}!</div>
-          <Playground />
-          <ConversationPage />
+          <div className={styles.title}>Hello {user.displayName}!</div>
+          <TaskList />
         </div>
       )}
     />
