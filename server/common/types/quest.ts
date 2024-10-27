@@ -23,8 +23,9 @@ export type QuestCreateVal = StrictOmit<
     {
       backgroundImage?: Blob;
       exampleAnswer: string;
+      questGroupId: MaybeId['questGroup'];
     }
-  > & { questGroupId: MaybeId['questGroup'] };
+  >;
 
 export type QuestUpdateVal = StrictOmit<
   QuestDto,

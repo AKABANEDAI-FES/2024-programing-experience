@@ -49,6 +49,7 @@ export type QuestUpdateVal = {
 };
 
 export type QuestCreateEntityVal = StrictOmit<QuestCreateVal, 'questGroupId'>;
+
 export type QuestUpdateEntityVal = {
   quest: StrictOmit<QuestEntity, 'updatedAt'> & NonNullableObj<Pick<QuestEntity, 'updatedAt'>>;
   s3Params?: S3PutParams;
