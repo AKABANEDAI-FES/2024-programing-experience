@@ -8,7 +8,7 @@ export const phraseMethod = {
       id: brandedId.phrase.entity.parse(ulid()),
       phrase: val.phrase,
       indexInGroup: val.indexInGroup,
-      phraseGroupId: brandedId.phraseGroup.dto.parse(val.phraseGroupId),
+      phraseGroupId: brandedId.phraseGroup.entity.parse(val.phraseGroupId),
     };
     return { phrase };
   },

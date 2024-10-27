@@ -6,5 +6,5 @@ export const toPhraseDto = (entity: PhraseEntity): PhraseDto => ({
   id: brandedId.phrase.dto.parse(entity.id),
   phrase: entity.phrase,
   indexInGroup: entity.indexInGroup,
-  phraseGroupId: entity.phraseGroupId,
+  phraseGroupId: brandedId.phraseGroup.dto.parse(entity.phraseGroupId),
 });
