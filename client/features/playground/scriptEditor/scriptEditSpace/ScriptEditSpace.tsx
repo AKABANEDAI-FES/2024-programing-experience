@@ -27,6 +27,7 @@ type ScriptBlockProps = {
   resetParentIsDragOver?: () => void;
   dropOnPrevElement?: () => void;
   dropToParentElement?: (e: React.DragEvent<HTMLElement>) => void;
+  onDetach?: (scriptIndex: number, indexes: number[], position: { x: number; y: number }) => void;
 };
 
 const blockClassHandler = (isNotShadow: boolean) =>
@@ -47,6 +48,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     resetParentIsDragOver,
     dropOnPrevElement,
     dropToParentElement,
+    onDetach,
   } = props;
   const [isDragOver, setIsDragOver] = useState<'false' | 'upper' | 'lower'>('false');
   const ref = useRef<HTMLDivElement>(null);
@@ -71,11 +73,34 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     dropOnPrevElement?.();
   }, []);
 
-  const handleDragFinish = (e: React.DragEvent) => {
-    if (!ref.current?.contains(e.relatedTarget as Node)) {
-      setIsDragOver('false');
+  const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null);
+
+  const handleDragStart = (e: React.DragEvent<HTMLElement>) => {
+    e.stopPropagation();
+    if (isNotShadow && indexes.length > 0 && arg instanceof Object) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      setDragStartPos({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
     }
   };
+
+  const handleDragFinish = (e: React.DragEvent<HTMLElement>) => {
+    if (dragStartPos && isNotShadow && indexes.length > 0 && arg instanceof Object) {
+      const containerRect = document
+        .querySelector(`.${styles.scriptEditSpace}`)
+        ?.getBoundingClientRect();
+      if (containerRect) {
+        onDetach?.(scriptIndex, indexes, {
+          x: e.clientX - containerRect.left,
+          y: e.clientY - containerRect.top,
+        });
+      }
+      setDragStartPos(null);
+    }
+  };
+
   const handleDrop = (e: React.DragEvent<HTMLElement>) => {
     setIsDragOver('false');
     if (arg !== undefined) {
@@ -88,11 +113,14 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     }
     dropOnPrevElement?.();
   };
+
   const rectHandler = (rect: DOMRect | undefined) =>
     rect ? { x: rect.x, y: rect.y, h: rect.height } : { x: 0, y: 0, h: 0 };
   return (
     <div
       ref={ref}
+      draggable={isNotShadow && indexes.length > 0 && arg instanceof Object}
+      onDragStart={handleDragStart}
       onDragLeave={resetEvent('p-', (e) => handleDragFinish(e))}
       onDragEnd={resetEvent('p-', (e) => handleDragFinish(e))}
       onDrop={handleDrop}
@@ -220,12 +248,13 @@ export const ScriptEditSpace = ({
   targetPos,
   children,
 }: Props) => {
-  const { handleDrop, handleDragOver, handleOnChange, handleDropToInput } = useScripts({
-    scripts,
-    setScripts,
-    targetBlock,
-    targetPos,
-  });
+  const { handleDrop, handleDragOver, handleOnChange, handleDropToInput, handleDetachBlock } =
+    useScripts({
+      scripts,
+      setScripts,
+      targetBlock,
+      targetPos,
+    });
 
   return (
     <div
@@ -253,6 +282,7 @@ export const ScriptEditSpace = ({
             isNotShadow={true}
             handleOnChange={handleOnChange}
             handleDrop={handleDropToInput}
+            onDetach={handleDetachBlock}
           />
         </div>
       ))}

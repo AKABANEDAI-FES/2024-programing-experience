@@ -1,13 +1,14 @@
-import type { BLOCK, Block } from 'features/playground/types';
+import type { BLOCK, Block, blockArg } from 'features/playground/types';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import { updateScriptValue } from 'features/playground/utils/updateScriptValue';
 import type { Dispatch, SetStateAction } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 type ScriptState = {
   script: Block[];
   position: { x: number; y: number };
 };
+
 type UseScriptsProps = {
   targetBlock: BLOCK | null;
   targetPos: { x: number; y: number };
@@ -29,6 +30,11 @@ type UseScriptsReturn = {
     scriptIndex: number,
     indexes: number[],
   ) => void;
+  handleDetachBlock: (
+    scriptIndex: number,
+    indexes: number[],
+    position: { x: number; y: number },
+  ) => void;
 };
 
 export const useScripts = ({
@@ -37,9 +43,14 @@ export const useScripts = ({
   targetBlock,
   targetPos,
 }: UseScriptsProps): UseScriptsReturn => {
+  const [draggingBlockId, setDraggingBlockId] = useState<number | null>(null);
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
+      if (draggingBlockId !== null) {
+        setDraggingBlockId(null);
+        return;
+      }
       if (!targetBlock) return;
       const containerRect = event.currentTarget.getBoundingClientRect();
       const current_X = event.clientX - containerRect.left;
@@ -51,7 +62,7 @@ export const useScripts = ({
       } as ScriptState);
       setScripts(newScripts);
     },
-    [scripts, setScripts, targetBlock],
+    [scripts, setScripts, targetBlock, targetPos],
   );
 
   const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
@@ -69,6 +80,9 @@ export const useScripts = ({
 
   const handleDropToInput = useCallback(
     (e: React.DragEvent<HTMLElement>, scriptIndex: number, indexes: number[]) => {
+      if (draggingBlockId !== null) {
+        return;
+      }
       if (targetBlock === null) return;
 
       const newScripts = structuredClone(scripts);
@@ -81,11 +95,63 @@ export const useScripts = ({
     [scripts, setScripts, targetBlock],
   );
 
+  const handleDetachBlock = useCallback(
+    //eslint-disable-next-line complexity
+    (scriptIndex: number, indexes: number[], position: { x: number; y: number }) => {
+      const newScripts = structuredClone(scripts);
+      const targetScript = newScripts[scriptIndex];
+
+      let currentBlock: Block[] | Block = targetScript.script;
+      let parentBlock: Block[] | Block | null = null;
+      let lastIndex = -1;
+
+      for (let i = 0; i < indexes.length; i++) {
+        if (i === indexes.length - 1) {
+          parentBlock = currentBlock;
+          lastIndex = indexes[i];
+        }
+
+        if (Array.isArray(currentBlock)) {
+          currentBlock = currentBlock[indexes[i]];
+        } else if (typeof currentBlock === 'object' && currentBlock.arg) {
+          currentBlock = currentBlock.arg[indexes[i]] as Block;
+        }
+      }
+
+      let detachedBlock: Block | undefined;
+      if (Array.isArray(parentBlock)) {
+        detachedBlock = parentBlock[lastIndex];
+        parentBlock.splice(lastIndex, 1);
+      } else if (parentBlock && 'arg' in parentBlock) {
+        detachedBlock = parentBlock.arg[lastIndex] as Block;
+        parentBlock.arg[lastIndex] = '' as blockArg;
+      }
+
+      if (targetScript.script.length === 0) {
+        newScripts.splice(scriptIndex, 1);
+      }
+
+      if (detachedBlock && 'id' in detachedBlock && 'arg' in detachedBlock) {
+        newScripts.push({
+          script: [detachedBlock],
+          position: {
+            x: position.x,
+            y: position.y,
+          },
+        });
+      }
+
+      setScripts(newScripts);
+    },
+    [scripts, setScripts],
+  );
+
   return {
     scripts,
     handleDrop,
     handleDragOver,
     handleOnChange,
     handleDropToInput,
+    handleDetachBlock,
   };
 };
