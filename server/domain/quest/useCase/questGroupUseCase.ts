@@ -10,8 +10,11 @@ export const questGroupUseCase = {
   create: async (user: UserDto, val: QuestGroupCreateServerVal): Promise<QuestGroupDto> =>
     transaction('RepeatableRead', async (tx) => {
       const created = questGroupMethod.create(user, val);
+
       await questGroupCommand.create(tx, created);
+
       const dto = toQuestGroupDto(created);
+
       return dto;
     }),
 };
