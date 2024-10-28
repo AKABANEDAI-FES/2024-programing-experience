@@ -2349,9 +2349,6 @@
                     "$ref": "#/components/schemas/Dto<\"questGroup\">"
                   }
                 ]
-              },
-              "exampleAnswer": {
-                "type": "string"
               }
             },
             "required": [

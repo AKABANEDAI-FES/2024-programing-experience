@@ -6,7 +6,7 @@ import { defineController } from './$relay';
 export default defineController(() => ({
   get: async ({ params }) => {
     const group = await questQuery
-      .listQuestGroupById(prismaClient, params.groupId)
+      .listByQuestGroup(prismaClient, params.groupId)
       .then((q) => Promise.all(q.map(toQuestDto)));
 
     return {
