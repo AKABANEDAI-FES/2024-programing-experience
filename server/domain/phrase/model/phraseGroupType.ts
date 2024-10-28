@@ -1,17 +1,38 @@
 import type { MultipartFile } from '@fastify/multipart';
 import type { StrictOmit, SubKeyObj } from 'common/types';
+import type { MaybeId } from 'common/types/brandedId';
 import type { PhraseGroupDto } from 'common/types/phraseGroup';
 import type { EntityId } from 'service/brandedId';
+import type { S3PutParams } from 'service/s3Client';
 import type { PhraseEntity } from './phraseType';
 
-export type PhraseGroupEntity = StrictOmit<PhraseGroupDto, 'id' | 'Quest' | 'backgroundImage'> &
+export type PhraseGroupEntity = StrictOmit<PhraseGroupDto, 'id' | 'quest' | 'backgroundImage'> &
   SubKeyObj<
     PhraseGroupDto,
-    { id: EntityId['phraseGroup']; Phrases: PhraseEntity[]; backgroundImage?: Blob }
+    {
+      id: EntityId['phraseGroup'];
+      Phrases: PhraseEntity[];
+      backgroundImageKey: string | undefined;
+      quest: { id: EntityId['quest']; name: string };
+    }
   >;
-
 export type PhraseGroupCreateServerVal = StrictOmit<
   PhraseGroupDto,
-  'id' | 'Quest' | 'backgroundImage'
+  'id' | 'backgroundImage' | 'quest'
 > &
-  SubKeyObj<PhraseGroupDto, { backgroundImage?: MultipartFile }>;
+  SubKeyObj<
+    PhraseGroupDto,
+    {
+      backgroundImage?: MultipartFile;
+    }
+  >;
+
+export type PhraseGroupCreateVal = StrictOmit<PhraseGroupDto, 'id' | 'backgroundImage' | 'quest'> &
+  SubKeyObj<PhraseGroupDto, { backgroundImage?: MultipartFile }> & {
+    questId: MaybeId['quest'];
+  };
+
+export type PhraseGroupSaveVal = {
+  phraseGroup: PhraseGroupEntity;
+  s3Params?: S3PutParams;
+};
