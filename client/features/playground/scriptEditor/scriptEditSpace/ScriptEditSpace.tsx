@@ -106,8 +106,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
 
   const handleDrop = (e: React.DragEvent<HTMLElement>) => {
     setIsDragOver('false');
-    if (isDragging) {
-      // isDetachingは不要
+    if (isDragging || dragStartPos) {
       return;
     }
     if (arg !== undefined) {

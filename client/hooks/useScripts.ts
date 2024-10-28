@@ -44,6 +44,7 @@ export const useScripts = ({
   targetPos,
 }: UseScriptsProps): UseScriptsReturn => {
   const [draggingBlockId, setDraggingBlockId] = useState<number | null>(null);
+
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -97,7 +98,7 @@ export const useScripts = ({
 
   const handleDetachBlock = useCallback(
     //eslint-disable-next-line complexity
-    (scriptIndex: number, indexes: number[], position: { x: number; y: number }) => {
+    (scriptIndex: number, indexes: number[]) => {
       const newScripts = structuredClone(scripts);
       const targetScript = newScripts[scriptIndex];
 
@@ -105,7 +106,7 @@ export const useScripts = ({
       let parentBlock: Block[] | Block | null = null;
       let lastIndex = -1;
 
-      //ブロックを切り離す処理s
+      // ブロックを切り離す処理;
       for (let i = 0; i < indexes.length; i++) {
         if (i === indexes.length - 1) {
           parentBlock = currentBlock;
@@ -119,17 +120,14 @@ export const useScripts = ({
         }
       }
 
-      let detachedBlock: Block | undefined;
-
       //既存のブロックを消すための機能
       if (Array.isArray(parentBlock)) {
-        detachedBlock = structuredClone(parentBlock[lastIndex]);
         parentBlock.splice(lastIndex, 1);
       } else if (parentBlock && 'arg' in parentBlock) {
-        detachedBlock = structuredClone(parentBlock.arg[lastIndex] as Block);
         parentBlock.arg[lastIndex] = '' as blockArg;
       }
 
+      // 空になったスクリプトを削除
       if (targetScript.script.length === 0) {
         newScripts.splice(scriptIndex, 1);
       }
