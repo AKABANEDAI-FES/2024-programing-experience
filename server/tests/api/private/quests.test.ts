@@ -100,6 +100,33 @@ test(GET(noCookieClient.private.quests._questId('_questId')), async () => {
   expect(res.body.name).toBe('Detail Quest');
 });
 
+// クエストグループのクエスト一覧を取得
+test(GET(noCookieClient.private.quests.group._groupId('_groupId')), async () => {
+  const apiClient = await createCognitoUserClient();
+  const newQuestGroup: QuestGroupCreateVal = {
+    id: brandedId.questGroup.maybe.parse('dummy'),
+    name: 'Sample Quest Group',
+    description: 'This is a sample quest group',
+  };
+  const res0 = await apiClient.private.quests.group.post({ body: newQuestGroup });
+  const createdQuest = await apiClient.private.quests.post({
+    body: {
+      name: 'Quest in Group',
+      description: 'For group test',
+      backgroundImage: undefined,
+      exampleAnswer: JSON.stringify(sampleScripts),
+      indexInGroup: 0,
+      questGroupId: brandedId.questGroup.maybe.parse(res0.body.id),
+    },
+  });
+  const res = await apiClient.private.quests.group._groupId(res0.body.id).get();
+
+  expect(res.status).toEqual(200);
+  expect(res.body).toBeInstanceOf(Array);
+  expect(res.body[0].id).toBe(createdQuest.body.id);
+  expect(res.body[0].name).toBe('Quest in Group');
+});
+
 // クエストを更新
 test(POST(noCookieClient.private.quests._questId('_questId')), async () => {
   const apiClient = await createCognitoUserClient();
