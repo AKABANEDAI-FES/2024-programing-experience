@@ -105,6 +105,7 @@ export const useScripts = ({
       let parentBlock: Block[] | Block | null = null;
       let lastIndex = -1;
 
+      //ブロックを切り離す処理s
       for (let i = 0; i < indexes.length; i++) {
         if (i === indexes.length - 1) {
           parentBlock = currentBlock;
@@ -119,26 +120,18 @@ export const useScripts = ({
       }
 
       let detachedBlock: Block | undefined;
+
+      //既存のブロックを消すための機能
       if (Array.isArray(parentBlock)) {
-        detachedBlock = parentBlock[lastIndex];
+        detachedBlock = structuredClone(parentBlock[lastIndex]);
         parentBlock.splice(lastIndex, 1);
       } else if (parentBlock && 'arg' in parentBlock) {
-        detachedBlock = parentBlock.arg[lastIndex] as Block;
+        detachedBlock = structuredClone(parentBlock.arg[lastIndex] as Block);
         parentBlock.arg[lastIndex] = '' as blockArg;
       }
 
       if (targetScript.script.length === 0) {
         newScripts.splice(scriptIndex, 1);
-      }
-
-      if (detachedBlock && 'id' in detachedBlock && 'arg' in detachedBlock) {
-        newScripts.push({
-          script: [detachedBlock],
-          position: {
-            x: position.x,
-            y: position.y,
-          },
-        });
       }
 
       setScripts(newScripts);

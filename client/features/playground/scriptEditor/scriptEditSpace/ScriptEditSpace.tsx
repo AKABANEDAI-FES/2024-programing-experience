@@ -51,6 +51,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     onDetach,
   } = props;
   const [isDragOver, setIsDragOver] = useState<'false' | 'upper' | 'lower'>('false');
+  const [isDragging, setIsDragging] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const ref2 = useRef<HTMLDivElement>(null);
   const ref3 = useRef<HTMLDivElement>(null);
@@ -78,6 +79,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
   const handleDragStart = (e: React.DragEvent<HTMLElement>) => {
     e.stopPropagation();
     if (isNotShadow && indexes.length > 0 && arg instanceof Object) {
+      setIsDragging(true);
       const rect = e.currentTarget.getBoundingClientRect();
       setDragStartPos({
         x: e.clientX - rect.left,
@@ -99,10 +101,15 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       }
       setDragStartPos(null);
     }
+    setIsDragging(false);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLElement>) => {
     setIsDragOver('false');
+    if (isDragging) {
+      // isDetachingは不要
+      return;
+    }
     if (arg !== undefined) {
       updateWithDrop(e, scriptIndex, [
         ...indexes.slice(0, -1),
