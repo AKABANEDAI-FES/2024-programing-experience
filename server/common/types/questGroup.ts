@@ -14,5 +14,6 @@ export type QuestGroupCreateVal = StrictOmit<QuestGroupDto, 'id' | 'Quests' | 'A
     QuestGroupDto,
     {
       id: MaybeId['questGroup'];
+      Author: { id: DtoId['user']; signInName: string };
     }
   >;

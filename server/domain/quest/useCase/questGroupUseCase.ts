@@ -13,7 +13,7 @@ export const questGroupUseCase = {
 
       await questGroupCommand.create(tx, created);
 
-      const dto = toQuestGroupDto(created);
+      const dto = toQuestGroupDto(created.questGroup);
 
       return dto;
     }),

@@ -15,3 +15,4 @@ export type QuestGroupEntity = StrictOmit<QuestGroupDto, 'id' | 'Quests' | 'Auth
   >;
 
 export type QuestGroupCreateServerVal = StrictOmit<QuestGroupDto, 'id' | 'Quests' | 'Author'>;
+export type QuestGroupSaveVal = { questGroup: QuestGroupEntity };

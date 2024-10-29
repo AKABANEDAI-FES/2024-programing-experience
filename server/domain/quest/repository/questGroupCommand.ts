@@ -1,14 +1,14 @@
 import type { Prisma } from '@prisma/client';
-import type { QuestGroupCreateVal } from '../model/questGroupType';
+import type { QuestGroupSaveVal } from '../model/questGroupType';
 
 export const questGroupCommand = {
-  create: async (tx: Prisma.TransactionClient, val: QuestGroupCreateVal): Promise<void> => {
+  create: async (tx: Prisma.TransactionClient, val: QuestGroupSaveVal): Promise<void> => {
     await tx.questGroup.create({
       data: {
-        id: val.id,
-        name: val.name,
-        description: val.description,
-        authorId: val.Author.id,
+        id: val.questGroup.id,
+        name: val.questGroup.name,
+        description: val.questGroup.description,
+        authorId: val.questGroup.Author.id,
       },
     });
   },

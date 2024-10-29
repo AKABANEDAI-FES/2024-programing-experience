@@ -3,12 +3,12 @@ import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';
 import type {
   QuestGroupCreateServerVal,
-  QuestGroupCreateVal,
   QuestGroupEntity,
+  QuestGroupSaveVal,
 } from './questGroupType';
 
 export const questGroupMethod = {
-  create: (user: UserDto, val: QuestGroupCreateServerVal): QuestGroupCreateVal => {
+  create: (user: UserDto, val: QuestGroupCreateServerVal): QuestGroupSaveVal => {
     const questGroup: QuestGroupEntity = {
       id: brandedId.questGroup.entity.parse(ulid()),
       name: val.name,
@@ -16,6 +16,6 @@ export const questGroupMethod = {
       Author: { id: brandedId.user.entity.parse(user.id), signInName: user.signInName },
       Quests: [],
     };
-    return questGroup;
+    return { questGroup };
   },
 };

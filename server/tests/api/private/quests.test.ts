@@ -31,6 +31,7 @@ test(POST(noCookieClient.private.quests.group), async () => {
     id: brandedId.questGroup.maybe.parse('dummy'),
     name: 'Sample Quest Group',
     description: 'This is a sample quest group',
+    Author: { id: brandedId.user.dto.parse('dummy'), signInName: 'dummy' },
   };
   const res = await apiClient.private.quests.group.post({ body: newQuestGroup });
 
@@ -56,6 +57,7 @@ test(POST(noCookieClient.private.quests), async () => {
     id: brandedId.questGroup.maybe.parse('dummy'),
     name: 'Sample Quest Group',
     description: 'This is a sample quest group',
+    Author: { id: brandedId.user.dto.parse('dummy'), signInName: 'dummy' },
   };
   const res0 = await apiClient.private.quests.group.post({ body: newQuestGroup });
   const newQuest: QuestCreateVal = {
@@ -81,6 +83,7 @@ test(GET(noCookieClient.private.quests._questId('_questId')), async () => {
     id: brandedId.questGroup.maybe.parse('dummy'),
     name: 'Sample Quest Group',
     description: 'This is a sample quest group',
+    Author: { id: brandedId.user.dto.parse('dummy'), signInName: 'dummy' },
   };
   const res0 = await apiClient.private.quests.group.post({ body: newQuestGroup });
   const createdQuest = await apiClient.private.quests.post({
@@ -107,6 +110,7 @@ test(GET(noCookieClient.private.quests.group._groupId('_groupId')), async () => 
     id: brandedId.questGroup.maybe.parse('dummy'),
     name: 'Sample Quest Group',
     description: 'This is a sample quest group',
+    Author: { id: brandedId.user.dto.parse('dummy'), signInName: 'dummy' },
   };
   const res0 = await apiClient.private.quests.group.post({ body: newQuestGroup });
   const createdQuest = await apiClient.private.quests.post({
@@ -134,6 +138,7 @@ test(POST(noCookieClient.private.quests._questId('_questId')), async () => {
     id: brandedId.questGroup.maybe.parse('dummy'),
     name: 'Sample Quest Group',
     description: 'This is a sample quest group',
+    Author: { id: brandedId.user.dto.parse('dummy'), signInName: 'dummy' },
   };
   const res0 = await apiClient.private.quests.group.post({ body: newQuestGroup });
   const createdQuest = await apiClient.private.quests.post({
@@ -171,6 +176,7 @@ test(DELETE(noCookieClient.private.quests._questId('_questId')), async () => {
     id: brandedId.questGroup.maybe.parse('dummy'),
     name: 'Sample Quest Group',
     description: 'This is a sample quest group',
+    Author: { id: brandedId.user.dto.parse('dummy'), signInName: 'dummy' },
   };
   const res0 = await apiClient.private.quests.group.post({ body: newQuestGroup });
   const createdQuest = await apiClient.private.quests.post({
