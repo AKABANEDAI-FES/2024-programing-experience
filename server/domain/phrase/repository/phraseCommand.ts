@@ -25,6 +25,16 @@ export const phraseCommand = {
         },
       },
     });
+    await tx.phraseGroup.update({
+      where: { id: val.phrase.phraseGroupId },
+      data: {
+        Phrases: {
+          connect: {
+            id: val.phrase.id,
+          },
+        },
+      },
+    });
   },
   update: async (tx: Prisma.TransactionClient, val: PhraseSaveVal): Promise<void> => {
     await tx.phrase.update({
@@ -50,6 +60,17 @@ export const phraseCommand = {
       data: {
         indexInGroup: {
           decrement: 1,
+        },
+      },
+    });
+
+    await tx.phraseGroup.update({
+      where: { id: val.phrase.phraseGroupId },
+      data: {
+        Phrases: {
+          disconnect: {
+            id: val.phrase.id,
+          },
         },
       },
     });
