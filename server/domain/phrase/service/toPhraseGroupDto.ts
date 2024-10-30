@@ -1,9 +1,12 @@
+import type { StrictOmit, SubKeyObj } from 'common/types';
 import type { PhraseGroupDto } from 'common/types/phraseGroup';
 import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
 import type { PhraseGroupEntity } from '../model/phraseGroupType';
 
-export const toPhraseGroupDto = (entity: PhraseGroupEntity): PhraseGroupDto => ({
+export const toPhraseGroupDtoWithoutQuest = (
+  entity: StrictOmit<PhraseGroupEntity, 'quest'>,
+): StrictOmit<PhraseGroupDto, 'quest'> => ({
   id: brandedId.phraseGroup.dto.parse(entity.id),
   category: entity.category,
   backgroundImage: entity.backgroundImageKey
@@ -12,5 +15,17 @@ export const toPhraseGroupDto = (entity: PhraseGroupEntity): PhraseGroupDto => (
         url: s3.keyToUrl(entity.backgroundImageKey),
       }
     : undefined,
+});
+
+export const toPhraseGroupDto = (
+  entity: StrictOmit<PhraseGroupEntity, 'quest'> &
+    SubKeyObj<
+      PhraseGroupEntity,
+      {
+        quest: NonNullable<PhraseGroupEntity['quest']>;
+      }
+    >,
+): PhraseGroupDto => ({
+  ...toPhraseGroupDtoWithoutQuest(entity),
   quest: { id: brandedId.quest.dto.parse(entity.quest.id), name: entity.quest.name },
 });

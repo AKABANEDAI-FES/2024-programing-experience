@@ -2,6 +2,7 @@ import type { MultipartFile } from '@fastify/multipart';
 import type { NonNullableObj, StrictOmit, SubKeyObj } from 'common/types';
 import type { MaybeId } from 'common/types/brandedId';
 import type { QuestDto } from 'common/types/quest';
+import type { PhraseGroupEntity } from 'domain/phrase/model/phraseGroupType';
 import type { EntityId } from 'service/brandedId';
 import type { S3PutParams } from 'service/s3Client';
 
@@ -10,6 +11,10 @@ export type QuestEntity = StrictOmit<QuestDto, 'id' | 'backgroundImage' | 'Autho
   imageKey: string | undefined;
   Author: StrictOmit<QuestDto['Author'], 'id'> &
     SubKeyObj<QuestDto['Author'], { id: EntityId['user'] }>;
+};
+
+export type QuestEntityWithPhrases = QuestEntity & {
+  Phrases: StrictOmit<PhraseGroupEntity, 'quest'>[];
 };
 
 export type QuestCreateServerVal = StrictOmit<

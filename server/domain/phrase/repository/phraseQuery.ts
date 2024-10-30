@@ -1,22 +1,30 @@
 import type { Phrase, PhraseGroup, Prisma, Quest } from '@prisma/client';
+import type { StrictOmit } from 'common/types';
 import type { MaybeId } from 'common/types/brandedId';
 import { brandedId } from 'service/brandedId';
 import { depend } from 'velona';
 import type { PhraseGroupEntity } from '../model/phraseGroupType';
 import type { PhraseEntity } from '../model/phraseType';
 
-export const toPhraseEntity = (prismaPhrase: Phrase): PhraseEntity => ({
+export const toEntity = (prismaPhrase: Phrase): PhraseEntity => ({
   id: brandedId.phrase.entity.parse(prismaPhrase.id),
   phrase: prismaPhrase.phrase,
   indexInGroup: prismaPhrase.indexInGroup,
   phraseGroupId: brandedId.phraseGroup.entity.parse(prismaPhrase.phraseGroupId),
 });
 
-const toPhraseGroupEntity = async (
-  prismaPhraseGroup: PhraseGroup & { Phrases: Phrase[]; Quest: Quest | null },
-): Promise<PhraseGroupEntity> => ({
+export const toGroupEntityWithoutQuest = async (
+  prismaPhraseGroup: PhraseGroup & { Phrases: Phrase[] },
+): Promise<StrictOmit<PhraseGroupEntity, 'quest'>> => ({
   id: brandedId.phraseGroup.entity.parse(prismaPhraseGroup.id),
   backgroundImageKey: prismaPhraseGroup.backgroundImgKey ?? undefined,
+  category: prismaPhraseGroup.category,
+  Phrases: prismaPhraseGroup.Phrases.map(toEntity),
+});
+export const toGroupEntity = async (
+  prismaPhraseGroup: PhraseGroup & { Phrases: Phrase[]; Quest: Quest | null },
+): Promise<PhraseGroupEntity> => ({
+  ...(await toGroupEntityWithoutQuest(prismaPhraseGroup)),
   quest:
     prismaPhraseGroup.Quest === null
       ? null
@@ -24,8 +32,6 @@ const toPhraseGroupEntity = async (
           id: brandedId.quest.entity.parse(prismaPhraseGroup.questId),
           name: prismaPhraseGroup.Quest.name,
         },
-  category: prismaPhraseGroup.category,
-  Phrases: await Promise.all(prismaPhraseGroup.Phrases.map(toPhraseEntity)),
 });
 
 const listByGroupId = async (
@@ -36,7 +42,7 @@ const listByGroupId = async (
     where: { phraseGroupId },
     orderBy: { indexInGroup: 'asc' },
   });
-  return phrases.map(toPhraseEntity);
+  return phrases.map(toEntity);
 };
 
 export const phraseQuery = {
@@ -45,7 +51,7 @@ export const phraseQuery = {
     const phrase = await tx.phrase.findUniqueOrThrow({
       where: { id: phraseId },
     });
-    return toPhraseEntity(phrase);
+    return toEntity(phrase);
   },
   findByGroupId: async (
     tx: Prisma.TransactionClient,
@@ -53,7 +59,7 @@ export const phraseQuery = {
   ): Promise<PhraseGroupEntity> =>
     tx.phraseGroup
       .findUniqueOrThrow({ where: { id: questGroupId }, include: { Phrases: true, Quest: true } })
-      .then(toPhraseGroupEntity),
+      .then(toGroupEntity),
 
   listByGroupIdWithDI: depend(
     { listByGroupId },

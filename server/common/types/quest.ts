@@ -1,5 +1,6 @@
 import type { DtoId, MaybeId } from './brandedId';
 import type { StrictOmit, SubKeyObj } from './index';
+import type { PhraseGroupDto } from './phraseGroup';
 import type { Scripts } from './playground';
 
 export type QuestDto = {
@@ -13,6 +14,8 @@ export type QuestDto = {
   indexInGroup: number;
   Author: { id: DtoId['user']; signInName: string };
 };
+
+export type QuestDtoWithPhrases = QuestDto & { Phrases: StrictOmit<PhraseGroupDto, 'quest'>[] };
 
 export type QuestCreateVal = StrictOmit<
   QuestDto,

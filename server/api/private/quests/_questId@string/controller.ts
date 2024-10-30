@@ -1,5 +1,5 @@
 import { questQuery } from 'domain/quest/repository/questQuery';
-import { toQuestDto } from 'domain/quest/service/toQuestDto';
+import { toQuestDtoWithPhrases } from 'domain/quest/service/toQuestDto';
 import { questUseCase } from 'domain/quest/useCase/questUseCase';
 import { brandedId } from 'service/brandedId';
 import { prismaClient } from 'service/prismaClient';
@@ -10,7 +10,7 @@ export default defineController(() => ({
     const quest = await questQuery.findById(prismaClient, params.questId);
     return {
       status: 200,
-      body: await toQuestDto(quest),
+      body: await toQuestDtoWithPhrases(quest),
     };
   },
   post: async ({ user, body }) => ({

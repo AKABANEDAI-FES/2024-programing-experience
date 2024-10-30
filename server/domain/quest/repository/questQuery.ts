@@ -1,8 +1,9 @@
-import type { Prisma, Quest, QuestGroup, User } from '@prisma/client';
+import type { Phrase, PhraseGroup, Prisma, Quest, QuestGroup, User } from '@prisma/client';
+import { toGroupEntityWithoutQuest } from 'domain/phrase/repository/phraseQuery';
 import { brandedId } from 'service/brandedId';
 import { depend } from 'velona';
 import type { QuestGroupEntity } from '../model/questGroupType';
-import type { QuestEntity } from '../model/questType';
+import type { QuestEntity, QuestEntityWithPhrases } from '../model/questType';
 import { scriptsValidator } from '../service/questValidator';
 
 const toEntity = (prismaQuest: Quest & { Author: User }): QuestEntity => ({
@@ -18,6 +19,15 @@ const toEntity = (prismaQuest: Quest & { Author: User }): QuestEntity => ({
     id: brandedId.user.entity.parse(prismaQuest.authorId),
     signInName: prismaQuest.Author.signInName,
   },
+});
+
+const toEntityWithPhrases = async (
+  prismaQuest: Quest & { Author: User } & {
+    PhraseGroup: (PhraseGroup & { Phrases: Phrase[] })[];
+  },
+): Promise<QuestEntityWithPhrases> => ({
+  ...toEntity(prismaQuest),
+  Phrases: await Promise.all(prismaQuest.PhraseGroup.map(toGroupEntityWithoutQuest)),
 });
 
 const toQuestGroupEntity = (
@@ -139,10 +149,25 @@ export const questQuery = {
     (deps, tx: Prisma.TransactionClient, limit?: number): Promise<QuestGroupEntity[]> =>
       deps.listQuestGroupOrderByUpdatedAt(tx, limit),
   ),
-  findById: async (tx: Prisma.TransactionClient, questId: string): Promise<QuestEntity> =>
+  findById: async (
+    tx: Prisma.TransactionClient,
+    questId: string,
+  ): Promise<QuestEntityWithPhrases> =>
     tx.quest
-      .findUniqueOrThrow({ where: { id: questId }, include: { Author: true } })
-      .then(toEntity),
+      .findUniqueOrThrow({
+        where: { id: questId },
+        include: {
+          Author: true,
+          PhraseGroup: {
+            include: {
+              Phrases: {
+                orderBy: { indexInGroup: 'asc' },
+              },
+            },
+          },
+        },
+      })
+      .then(toEntityWithPhrases),
   findQuestGroupById: async (
     tx: Prisma.TransactionClient,
     questGroupId: string,
