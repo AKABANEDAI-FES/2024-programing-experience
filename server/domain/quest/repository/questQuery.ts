@@ -1,9 +1,18 @@
-import type { Phrase, PhraseGroup, Prisma, Quest, QuestGroup, User } from '@prisma/client';
+import type {
+  Character,
+  Phrase,
+  PhraseGroup,
+  Prisma,
+  Quest,
+  QuestGroup,
+  User,
+} from '@prisma/client';
+import { toCharacterEntity } from 'domain/character/repository/characterQuery';
 import { toGroupEntityWithoutQuest } from 'domain/phrase/repository/phraseQuery';
 import { brandedId } from 'service/brandedId';
 import { depend } from 'velona';
 import type { QuestGroupEntity } from '../model/questGroupType';
-import type { QuestEntity, QuestEntityWithPhrases } from '../model/questType';
+import type { QuestBigEntity, QuestEntity } from '../model/questType';
 import { scriptsValidator } from '../service/questValidator';
 
 const toEntity = (prismaQuest: Quest & { Author: User }): QuestEntity => ({
@@ -21,13 +30,15 @@ const toEntity = (prismaQuest: Quest & { Author: User }): QuestEntity => ({
   },
 });
 
-const toEntityWithPhrases = async (
+const toBigEntity = async (
   prismaQuest: Quest & { Author: User } & {
     phraseGroups: (PhraseGroup & { phrases: Phrase[] })[];
+    characters: Character[];
   },
-): Promise<QuestEntityWithPhrases> => ({
+): Promise<QuestBigEntity> => ({
   ...toEntity(prismaQuest),
-  Phrases: await Promise.all(prismaQuest.phraseGroups.map(toGroupEntityWithoutQuest)),
+  phraseGroups: await Promise.all(prismaQuest.phraseGroups.map(toGroupEntityWithoutQuest)),
+  characters: await Promise.all(prismaQuest.characters.map(toCharacterEntity)),
 });
 
 const toQuestGroupEntity = (
@@ -149,10 +160,7 @@ export const questQuery = {
     (deps, tx: Prisma.TransactionClient, limit?: number): Promise<QuestGroupEntity[]> =>
       deps.listQuestGroupOrderByUpdatedAt(tx, limit),
   ),
-  findById: async (
-    tx: Prisma.TransactionClient,
-    questId: string,
-  ): Promise<QuestEntityWithPhrases> =>
+  findById: async (tx: Prisma.TransactionClient, questId: string): Promise<QuestBigEntity> =>
     tx.quest
       .findUniqueOrThrow({
         where: { id: questId },
@@ -165,9 +173,10 @@ export const questQuery = {
               },
             },
           },
+          characters: true,
         },
       })
-      .then(toEntityWithPhrases),
+      .then(toBigEntity),
   findQuestGroupById: async (
     tx: Prisma.TransactionClient,
     questGroupId: string,

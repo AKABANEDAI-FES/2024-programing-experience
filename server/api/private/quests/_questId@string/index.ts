@@ -1,9 +1,9 @@
 import type { DefineMethods } from 'aspida';
-import type { QuestDto, QuestDtoWithPhrases, QuestUpdateVal } from 'common/types/quest';
+import type { QuestBigDto, QuestDto, QuestUpdateVal } from 'common/types/quest';
 
 export type Methods = DefineMethods<{
   get: {
-    resBody: QuestDtoWithPhrases;
+    resBody: QuestBigDto;
   };
 
   post: {

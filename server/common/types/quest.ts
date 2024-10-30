@@ -1,4 +1,5 @@
 import type { DtoId, MaybeId } from './brandedId';
+import type { CharacterDto } from './character';
 import type { StrictOmit, SubKeyObj } from './index';
 import type { PhraseGroupDto } from './phraseGroup';
 import type { Scripts } from './playground';
@@ -15,8 +16,9 @@ export type QuestDto = {
   Author: { id: DtoId['user']; signInName: string };
 };
 
-export type QuestDtoWithPhrases = QuestDto & {
+export type QuestBigDto = QuestDto & {
   phraseGroups: StrictOmit<PhraseGroupDto, 'Quest'>[];
+  characters: CharacterDto[];
 };
 
 export type QuestCreateVal = StrictOmit<

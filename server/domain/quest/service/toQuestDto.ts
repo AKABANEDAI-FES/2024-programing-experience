@@ -1,8 +1,9 @@
-import type { QuestDto, QuestDtoWithPhrases } from 'common/types/quest';
+import type { QuestBigDto, QuestDto } from 'common/types/quest';
+import { toCharacterDto } from 'domain/character/service/toCharacterDto';
 import { toPhraseGroupDtoWithoutQuest } from 'domain/phrase/service/toPhraseGroupDto';
 import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
-import type { QuestEntity, QuestEntityWithPhrases } from '../model/questType';
+import type { QuestBigEntity, QuestEntity } from '../model/questType';
 
 export const toQuestDto = async (quest: QuestEntity): Promise<QuestDto> => ({
   ...quest,
@@ -13,12 +14,11 @@ export const toQuestDto = async (quest: QuestEntity): Promise<QuestDto> => ({
   Author: { ...quest.Author, id: brandedId.user.dto.parse(quest.Author.id) },
 });
 
-export const toQuestDtoWithPhrases = async (
-  quest: QuestEntityWithPhrases,
-): Promise<QuestDtoWithPhrases> => {
-  const { Phrases, ...rest } = quest;
+export const toQuestDtoWithPhrases = async (quest: QuestBigEntity): Promise<QuestBigDto> => {
+  const { phraseGroups, characters, ...rest } = quest;
   return {
     ...(await toQuestDto(rest)),
-    phraseGroups: Phrases.map(toPhraseGroupDtoWithoutQuest),
+    phraseGroups: phraseGroups.map(toPhraseGroupDtoWithoutQuest),
+    characters: characters.map(toCharacterDto),
   };
 };
