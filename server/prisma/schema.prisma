@@ -51,7 +51,8 @@ model Quest {
   authorId           String
   QuestGroup         QuestGroup    @relation(fields: [questGroupId], references: [id])
   questGroupId       String
-  phraseGroups         PhraseGroup[]
+  phraseGroups       PhraseGroup[]
+  Character          Character[]
 }
 
 model UserQuest {
@@ -94,6 +95,15 @@ model Phrase {
   indexInGroup  Int
   PhraseGroup   PhraseGroup @relation(fields: [phraseGroupId], references: [id])
   phraseGroupId String
+}
+
+model Character {
+  id          String  @id
+  name        String
+  description String
+  imageKey    String?
+  Quest       Quest   @relation(fields: [questId], references: [id])
+  questId     String
 }
 
 model Task {

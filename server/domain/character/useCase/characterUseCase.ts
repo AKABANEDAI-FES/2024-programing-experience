@@ -1,0 +1,20 @@
+import type { CharacterDto } from 'common/types/character';
+import { questQuery } from 'domain/quest/repository/questQuery';
+import { transaction } from 'service/prismaClient';
+import { characterMethod } from '../model/characterMethod';
+import type { CharacterCreateServerVal, CharacterSaveVal } from '../model/characterType';
+import { characterCommand } from '../repository/characterCommand';
+import { toCharacterDto } from '../service/toCharacterDto';
+
+export const characterUseCase = {
+  create: async (val: CharacterCreateServerVal): Promise<CharacterDto> =>
+    transaction('RepeatableRead', async (tx) => {
+      const quest = await questQuery.findById(tx, val.questId);
+
+      const created: CharacterSaveVal = characterMethod.create(quest, val);
+
+      await characterCommand.save(tx, created);
+
+      return toCharacterDto(created.character);
+    }),
+};
