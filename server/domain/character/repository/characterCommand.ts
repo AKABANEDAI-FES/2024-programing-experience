@@ -21,5 +21,16 @@ export const characterCommand = {
     });
 
     if (val.s3Params !== undefined) await s3.put(val.s3Params);
+
+    await tx.quest.update({
+      where: { id: val.character.questId },
+      data: {
+        Character: {
+          connect: {
+            id: val.character.id,
+          },
+        },
+      },
+    });
   },
 };
