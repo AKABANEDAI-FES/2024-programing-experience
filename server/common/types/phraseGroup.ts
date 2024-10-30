@@ -9,5 +9,8 @@ export type PhraseGroupDto = {
   quest: { id: DtoId['quest']; name: string };
 };
 
+export type PhraseGroupCreateDto = StrictOmit<PhraseGroupDto, 'id' | 'backgroundImage' | 'quest'> &
+  SubKeyObj<PhraseGroupDto, { backgroundImage?: Blob }> & { questId: DtoId['quest'] };
+
 export type PhraseGroupUpdateDto = StrictOmit<PhraseGroupDto, 'id' | 'quest' | 'backgroundImage'> &
   SubKeyObj<PhraseGroupDto, { backgroundImage?: Blob }>;
