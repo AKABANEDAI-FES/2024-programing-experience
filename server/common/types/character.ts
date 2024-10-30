@@ -9,7 +9,7 @@ export type CharacterDto = {
   questId: DtoId['quest'];
 };
 
-export type CharacterCreateVal = StrictOmit<CharacterDto, 'id' | 'image'> &
+export type CharacterCreateVal = StrictOmit<CharacterDto, 'id' | 'image' | 'questId'> &
   SubKeyObj<
     CharacterDto,
     {
@@ -17,5 +17,5 @@ export type CharacterCreateVal = StrictOmit<CharacterDto, 'id' | 'image'> &
     }
   >;
 
-export type CharacterUpdateVal = StrictOmit<CharacterDto, 'image'> &
+export type CharacterUpdateVal = StrictOmit<CharacterDto, 'id' | 'image' | 'questId'> &
   SubKeyObj<CharacterDto, { image?: Blob }>;

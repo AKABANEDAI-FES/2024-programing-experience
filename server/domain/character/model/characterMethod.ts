@@ -1,7 +1,12 @@
 import type { QuestEntity } from 'domain/quest/model/questType';
 import { brandedId } from 'service/brandedId';
 import { ulid } from 'ulid';
-import type { CharacterCreateServerVal, CharacterEntity, CharacterSaveVal } from './characterType';
+import type {
+  CharacterCreateServerVal,
+  CharacterEntity,
+  CharacterSaveVal,
+  CharacterUpdateServerVal,
+} from './characterType';
 
 export const characterMethod = {
   create: (quest: QuestEntity, val: CharacterCreateServerVal): CharacterSaveVal => {
@@ -22,7 +27,7 @@ export const characterMethod = {
       s3Params: { key: imageKey, data: val.image },
     };
   },
-  update: (character: CharacterEntity, val: CharacterCreateServerVal): CharacterSaveVal => {
+  update: (character: CharacterEntity, val: CharacterUpdateServerVal): CharacterSaveVal => {
     const updated: CharacterEntity = {
       ...character,
       name: val.name,

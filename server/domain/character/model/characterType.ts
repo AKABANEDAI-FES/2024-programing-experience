@@ -22,7 +22,7 @@ export type CharacterCreateServerVal = StrictOmit<CharacterDto, 'id' | 'image'> 
     }
   >;
 
-export type CharacterUpdateServerVal = StrictOmit<CharacterDto, 'image'> &
+export type CharacterUpdateServerVal = StrictOmit<CharacterDto, 'image' | 'questId'> &
   SubKeyObj<
     CharacterDto,
     {
