@@ -111,6 +111,293 @@
         }
       }
     },
+    "/private/phrases/{phraseId}": {
+      "post": {
+        "parameters": [
+          {
+            "name": "phraseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PhraseUpdateVal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"phrase\">"
+                    },
+                    "phrase": {
+                      "type": "string"
+                    },
+                    "indexInGroup": {
+                      "type": "number"
+                    },
+                    "phraseGroupId": {
+                      "$ref": "#/components/schemas/Dto<\"phraseGroup\">"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "indexInGroup",
+                    "phrase",
+                    "phraseGroupId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "parameters": [
+          {
+            "name": "phraseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"phrase\">"
+                    },
+                    "phrase": {
+                      "type": "string"
+                    },
+                    "indexInGroup": {
+                      "type": "number"
+                    },
+                    "phraseGroupId": {
+                      "$ref": "#/components/schemas/Dto<\"phraseGroup\">"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "indexInGroup",
+                    "phrase",
+                    "phraseGroupId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/phrases/group/{groupId}": {
+      "patch": {
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PhraseGroupUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"phraseGroup\">"
+                    },
+                    "category": {
+                      "$ref": "#/components/schemas/Category"
+                    },
+                    "backgroundImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "quest": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"quest\">"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "backgroundImage",
+                    "category",
+                    "id",
+                    "quest"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/phrases/group": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PhraseGroupCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"phraseGroup\">"
+                    },
+                    "category": {
+                      "$ref": "#/components/schemas/Category"
+                    },
+                    "backgroundImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "quest": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "#/components/schemas/Dto<\"quest\">"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "backgroundImage",
+                    "category",
+                    "id",
+                    "quest"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/phrases": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PhraseCreateVal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"phrase\">"
+                    },
+                    "phrase": {
+                      "type": "string"
+                    },
+                    "indexInGroup": {
+                      "type": "number"
+                    },
+                    "phraseGroupId": {
+                      "$ref": "#/components/schemas/Dto<\"phraseGroup\">"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "indexInGroup",
+                    "phrase",
+                    "phraseGroupId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/private/quests/{questId}": {
       "get": {
         "parameters": [
@@ -2154,6 +2441,95 @@
           }
         ]
       },
+      "FormData": {
+        "type": "object"
+      },
+      "PhraseUpdateVal": {
+        "type": "object",
+        "properties": {
+          "phrase": {
+            "type": "string"
+          },
+          "indexInGroup": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "indexInGroup",
+          "phrase"
+        ]
+      },
+      "Dto<\"phrase\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "Dto<\"phraseGroup\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "PhraseGroupUpdateDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StrictOmit<PhraseGroupDto,\"id\"|\"backgroundImage\"|\"quest\">"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "backgroundImage": {
+                "$ref": "#/components/schemas/Blob"
+              }
+            }
+          }
+        ]
+      },
+      "StrictOmit<PhraseGroupDto,\"id\"|\"backgroundImage\"|\"quest\">": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          }
+        },
+        "required": [
+          "category"
+        ]
+      },
+      "Category": {
+        "enum": [
+          "AFTER_QUEST_FAIL",
+          "AFTER_QUEST_OK",
+          "BEFORE_QUEST"
+        ],
+        "type": "string"
+      },
+      "Blob": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "size",
+          "type"
+        ]
+      },
       "Dto<\"quest\">": {
         "allOf": [
           {
@@ -2163,6 +2539,51 @@
           {
             "type": "string"
           }
+        ]
+      },
+      "PhraseGroupCreateDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StrictOmit<PhraseGroupDto,\"id\"|\"backgroundImage\"|\"quest\">"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "backgroundImage": {
+                "$ref": "#/components/schemas/Blob"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "questId": {
+                "$ref": "#/components/schemas/Dto<\"quest\">"
+              }
+            },
+            "required": [
+              "questId"
+            ]
+          }
+        ]
+      },
+      "PhraseCreateVal": {
+        "type": "object",
+        "properties": {
+          "phrase": {
+            "type": "string"
+          },
+          "indexInGroup": {
+            "type": "number"
+          },
+          "phraseGroupId": {
+            "$ref": "#/components/schemas/Dto<\"phraseGroup\">"
+          }
+        },
+        "required": [
+          "indexInGroup",
+          "phrase",
+          "phraseGroupId"
         ]
       },
       "blockArg": {
@@ -2199,13 +2620,10 @@
           "id"
         ]
       },
-      "FormData": {
-        "type": "object"
-      },
       "QuestUpdateVal": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"exampleAnswer\"|\"indexInGroup\">"
+            "$ref": "#/components/schemas/StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"indexInGroup\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"exampleAnswer\">"
           },
           {
             "type": "object",
@@ -2234,7 +2652,7 @@
           }
         ]
       },
-      "StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"exampleAnswer\"|\"indexInGroup\">": {
+      "StrictOmit<QuestDto,\"id\"|\"backgroundImage\"|\"indexInGroup\"|\"Author\"|\"createdAt\"|\"updatedAt\"|\"exampleAnswer\">": {
         "type": "object",
         "properties": {
           "name": {
@@ -2247,21 +2665,6 @@
         "required": [
           "description",
           "name"
-        ]
-      },
-      "Blob": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "number"
-          },
-          "type": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "size",
-          "type"
         ]
       },
       "Branded<\"maybe\">": {
@@ -2303,9 +2706,25 @@
                     "$ref": "#/components/schemas/Dto<\"questGroup\">"
                   }
                 ]
+              },
+              "Author": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/Dto<\"user\">"
+                  },
+                  "signInName": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "signInName"
+                ]
               }
             },
             "required": [
+              "Author",
               "id"
             ]
           }
