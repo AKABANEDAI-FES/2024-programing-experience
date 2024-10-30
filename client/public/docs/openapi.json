@@ -40,6 +40,146 @@
         }
       }
     },
+    "/private/character/{questId}": {
+      "post": {
+        "parameters": [
+          {
+            "name": "questId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CharacterUpdateVal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"character\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "questId": {
+                      "$ref": "#/components/schemas/Dto<\"quest\">"
+                    }
+                  },
+                  "required": [
+                    "description",
+                    "id",
+                    "image",
+                    "name",
+                    "questId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/character/character/{characterId}": {
+      "patch": {
+        "parameters": [
+          {
+            "name": "characterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CharacterCreateVal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"character\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "questId": {
+                      "$ref": "#/components/schemas/Dto<\"quest\">"
+                    }
+                  },
+                  "required": [
+                    "description",
+                    "id",
+                    "image",
+                    "name",
+                    "questId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/private": {
       "get": {
         "responses": {
@@ -257,7 +397,7 @@
                         "url"
                       ]
                     },
-                    "quest": {
+                    "Quest": {
                       "type": "object",
                       "properties": {
                         "id": {
@@ -274,10 +414,10 @@
                     }
                   },
                   "required": [
+                    "Quest",
                     "backgroundImage",
                     "category",
-                    "id",
-                    "quest"
+                    "id"
                   ]
                 }
               }
@@ -325,7 +465,7 @@
                         "url"
                       ]
                     },
-                    "quest": {
+                    "Quest": {
                       "type": "object",
                       "properties": {
                         "id": {
@@ -342,10 +482,10 @@
                     }
                   },
                   "required": [
+                    "Quest",
                     "backgroundImage",
                     "category",
-                    "id",
-                    "quest"
+                    "id"
                   ]
                 }
               }
@@ -701,7 +841,7 @@
                           "signInName"
                         ]
                       },
-                      "Quests": {
+                      "quests": {
                         "type": "array",
                         "items": {
                           "type": "object",
@@ -804,10 +944,10 @@
                     },
                     "required": [
                       "Author",
-                      "Quests",
                       "description",
                       "id",
-                      "name"
+                      "name",
+                      "quests"
                     ]
                   }
                 }
@@ -1110,7 +1250,7 @@
                         "signInName"
                       ]
                     },
-                    "Quests": {
+                    "quests": {
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -1213,10 +1353,10 @@
                   },
                   "required": [
                     "Author",
-                    "Quests",
                     "description",
                     "id",
-                    "name"
+                    "name",
+                    "quests"
                   ]
                 }
               }
@@ -1260,7 +1400,7 @@
                           "signInName"
                         ]
                       },
-                      "Quests": {
+                      "quests": {
                         "type": "array",
                         "items": {
                           "type": "object",
@@ -1363,10 +1503,10 @@
                     },
                     "required": [
                       "Author",
-                      "Quests",
                       "description",
                       "id",
-                      "name"
+                      "name",
+                      "quests"
                     ]
                   }
                 }
@@ -1421,7 +1561,7 @@
                           "signInName"
                         ]
                       },
-                      "Quests": {
+                      "quests": {
                         "type": "array",
                         "items": {
                           "type": "object",
@@ -1524,10 +1664,10 @@
                     },
                     "required": [
                       "Author",
-                      "Quests",
                       "description",
                       "id",
-                      "name"
+                      "name",
+                      "quests"
                     ]
                   }
                 }
@@ -2336,7 +2476,55 @@
           "server"
         ]
       },
-      "Dto<\"user\">": {
+      "FormData": {
+        "type": "object"
+      },
+      "CharacterUpdateVal": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StrictOmit<CharacterDto,\"id\"|\"image\"|\"questId\">"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "image": {
+                "$ref": "#/components/schemas/Blob"
+              }
+            }
+          }
+        ]
+      },
+      "StrictOmit<CharacterDto,\"id\"|\"image\"|\"questId\">": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "name"
+        ]
+      },
+      "Blob": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "size",
+          "type"
+        ]
+      },
+      "Dto<\"character\">": {
         "allOf": [
           {
             "type": "object",
@@ -2347,8 +2535,42 @@
           }
         ]
       },
-      "FormData": {
-        "type": "object"
+      "Dto<\"quest\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "CharacterCreateVal": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StrictOmit<CharacterDto,\"id\"|\"image\"|\"questId\">"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "image": {
+                "$ref": "#/components/schemas/Blob"
+              }
+            }
+          }
+        ]
+      },
+      "Dto<\"user\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
       },
       "PhraseUpdateVal": {
         "type": "object",
@@ -2390,7 +2612,7 @@
       "PhraseGroupUpdateDto": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/StrictOmit<PhraseGroupDto,\"id\"|\"backgroundImage\"|\"quest\">"
+            "$ref": "#/components/schemas/StrictOmit<PhraseGroupDto,\"id\"|\"backgroundImage\"|\"Quest\">"
           },
           {
             "type": "object",
@@ -2402,7 +2624,7 @@
           }
         ]
       },
-      "StrictOmit<PhraseGroupDto,\"id\"|\"backgroundImage\"|\"quest\">": {
+      "StrictOmit<PhraseGroupDto,\"id\"|\"backgroundImage\"|\"Quest\">": {
         "type": "object",
         "properties": {
           "category": {
@@ -2421,36 +2643,10 @@
         ],
         "type": "string"
       },
-      "Blob": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "number"
-          },
-          "type": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "size",
-          "type"
-        ]
-      },
-      "Dto<\"quest\">": {
-        "allOf": [
-          {
-            "type": "object",
-            "properties": {}
-          },
-          {
-            "type": "string"
-          }
-        ]
-      },
       "PhraseGroupCreateDto": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/StrictOmit<PhraseGroupDto,\"id\"|\"backgroundImage\"|\"quest\">"
+            "$ref": "#/components/schemas/StrictOmit<PhraseGroupDto,\"id\"|\"backgroundImage\"|\"Quest\">"
           },
           {
             "type": "object",
@@ -2594,15 +2790,15 @@
           {
             "type": "object",
             "properties": {
-              "Phrases": {
+              "phraseGroups": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/StrictOmit<PhraseGroupDto,\"quest\">"
+                  "$ref": "#/components/schemas/StrictOmit<PhraseGroupDto,\"Quest\">"
                 }
               }
             },
             "required": [
-              "Phrases"
+              "phraseGroups"
             ]
           }
         ]
@@ -2641,7 +2837,7 @@
           "id"
         ]
       },
-      "StrictOmit<PhraseGroupDto,\"quest\">": {
+      "StrictOmit<PhraseGroupDto,\"Quest\">": {
         "type": "object",
         "properties": {
           "id": {
@@ -2743,7 +2939,7 @@
       "QuestGroupCreateVal": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/StrictOmit<QuestGroupDto,\"id\"|\"Author\"|\"Quests\">"
+            "$ref": "#/components/schemas/StrictOmit<QuestGroupDto,\"id\"|\"Author\"|\"quests\">"
           },
           {
             "type": "object",
@@ -2781,7 +2977,7 @@
           }
         ]
       },
-      "StrictOmit<QuestGroupDto,\"id\"|\"Author\"|\"Quests\">": {
+      "StrictOmit<QuestGroupDto,\"id\"|\"Author\"|\"quests\">": {
         "type": "object",
         "properties": {
           "name": {
