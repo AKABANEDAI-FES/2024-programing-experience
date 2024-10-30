@@ -25,7 +25,7 @@ export const characterCommand = {
     await tx.quest.update({
       where: { id: val.character.questId },
       data: {
-        Character: {
+        characters: {
           connect: {
             id: val.character.id,
           },

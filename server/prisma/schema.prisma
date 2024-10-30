@@ -52,7 +52,7 @@ model Quest {
   QuestGroup         QuestGroup    @relation(fields: [questGroupId], references: [id])
   questGroupId       String
   phraseGroups       PhraseGroup[]
-  Character          Character[]
+  characters         Character[]
 }
 
 model UserQuest {
