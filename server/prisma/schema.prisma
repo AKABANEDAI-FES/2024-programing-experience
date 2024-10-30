@@ -78,8 +78,8 @@ model PhraseGroup {
   phrases          Phrase[]
   category         KatetegoriEnum
   backgroundImgKey String?
-  Quest            Quest?         @relation(fields: [questId], references: [id])
-  questId          String?
+  Quest            Quest          @relation(fields: [questId], references: [id])
+  questId          String
 }
 
 enum KatetegoriEnum {
@@ -89,11 +89,11 @@ enum KatetegoriEnum {
 }
 
 model Phrase {
-  id            String       @id
+  id            String      @id
   phrase        String
   indexInGroup  Int
-  PhraseGroup   PhraseGroup? @relation(fields: [phraseGroupId], references: [id])
-  phraseGroupId String?
+  PhraseGroup   PhraseGroup @relation(fields: [phraseGroupId], references: [id])
+  phraseGroupId String
 }
 
 model Task {

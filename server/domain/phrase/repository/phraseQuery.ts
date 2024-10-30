@@ -22,16 +22,13 @@ export const toGroupEntityWithoutQuest = async (
   Phrases: prismaPhraseGroup.phrases.map(toEntity),
 });
 export const toGroupEntity = async (
-  prismaPhraseGroup: PhraseGroup & { phrases: Phrase[]; Quest: Quest | null },
+  prismaPhraseGroup: PhraseGroup & { phrases: Phrase[]; Quest: Quest },
 ): Promise<PhraseGroupEntity> => ({
   ...(await toGroupEntityWithoutQuest(prismaPhraseGroup)),
-  quest:
-    prismaPhraseGroup.Quest === null
-      ? null
-      : {
-          id: brandedId.quest.entity.parse(prismaPhraseGroup.questId),
-          name: prismaPhraseGroup.Quest.name,
-        },
+  quest: {
+    id: brandedId.quest.entity.parse(prismaPhraseGroup.questId),
+    name: prismaPhraseGroup.Quest.name,
+  },
 });
 
 const listByGroupId = async (
