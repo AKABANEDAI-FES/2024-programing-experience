@@ -23,15 +23,15 @@ const toEntity = (prismaQuest: Quest & { Author: User }): QuestEntity => ({
 
 const toEntityWithPhrases = async (
   prismaQuest: Quest & { Author: User } & {
-    PhraseGroup: (PhraseGroup & { Phrases: Phrase[] })[];
+    phraseGroups: (PhraseGroup & { phrases: Phrase[] })[];
   },
 ): Promise<QuestEntityWithPhrases> => ({
   ...toEntity(prismaQuest),
-  Phrases: await Promise.all(prismaQuest.PhraseGroup.map(toGroupEntityWithoutQuest)),
+  Phrases: await Promise.all(prismaQuest.phraseGroups.map(toGroupEntityWithoutQuest)),
 });
 
 const toQuestGroupEntity = (
-  prismaQuestGroup: QuestGroup & { Quest: (Quest & { Author: User })[] } & { Author: User },
+  prismaQuestGroup: QuestGroup & { quests: (Quest & { Author: User })[] } & { Author: User },
 ): QuestGroupEntity => ({
   id: brandedId.questGroup.entity.parse(prismaQuestGroup.id),
   name: prismaQuestGroup.name,
@@ -40,14 +40,14 @@ const toQuestGroupEntity = (
     id: brandedId.user.entity.parse(prismaQuestGroup.authorId),
     signInName: prismaQuestGroup.Author.signInName,
   },
-  Quests: prismaQuestGroup.Quest.map(toEntity),
+  quests: prismaQuestGroup.quests.map(toEntity),
 });
 
 const listByQuestGroup = async (
   tx: Prisma.TransactionClient,
   questGroupId: string,
 ): Promise<QuestEntity[]> => {
-  const prismaQuests = await tx.questGroup.findUnique({ where: { id: questGroupId } }).Quest({
+  const prismaQuests = await tx.questGroup.findUnique({ where: { id: questGroupId } }).quests({
     orderBy: { indexInGroup: 'asc' },
     include: { Author: true },
   });
@@ -61,7 +61,7 @@ const listQuestGroupByAuthorId = async (
   const prismaQuestGroups = await tx.questGroup.findMany({
     where: { authorId },
     include: {
-      Quest: {
+      quests: {
         include: { Author: true },
       },
       Author: true,
@@ -77,14 +77,14 @@ const listQuestGroupById = async (
   const prismaQuests = await tx.questGroup
     .findFirst({
       where: {
-        Quest: {
+        quests: {
           some: {
             id: questId,
           },
         },
       },
     })
-    .Quest({
+    .quests({
       orderBy: { indexInGroup: 'asc' },
       include: { Author: true },
     });
@@ -97,7 +97,7 @@ const listQuestGroupOrderByUpdatedAt = async (
 ): Promise<QuestGroupEntity[]> => {
   const prismaQuestGroups = await tx.questGroup.findMany({
     include: {
-      Quest: {
+      quests: {
         include: { Author: true },
       },
       Author: true,
@@ -106,8 +106,8 @@ const listQuestGroupOrderByUpdatedAt = async (
   return prismaQuestGroups
     .sort(
       (a, b) =>
-        Math.min(...b.Quest.map((v) => v.updatedAt?.getTime() ?? v.createdAt.getTime())) -
-        Math.min(...a.Quest.map((v) => v.updatedAt?.getTime() ?? v.createdAt.getTime())),
+        Math.min(...b.quests.map((v) => v.updatedAt?.getTime() ?? v.createdAt.getTime())) -
+        Math.min(...a.quests.map((v) => v.updatedAt?.getTime() ?? v.createdAt.getTime())),
     )
     .slice(0, limit)
     .map(toQuestGroupEntity);
@@ -119,14 +119,14 @@ const findQuestGroupByQuestId = async (
 ): Promise<QuestGroupEntity | null> => {
   const prismaQuestGroup = await tx.questGroup.findFirst({
     where: {
-      Quest: {
+      quests: {
         some: {
           id: questId,
         },
       },
     },
     include: {
-      Quest: {
+      quests: {
         include: { Author: true },
       },
       Author: true,
@@ -158,9 +158,9 @@ export const questQuery = {
         where: { id: questId },
         include: {
           Author: true,
-          PhraseGroup: {
+          phraseGroups: {
             include: {
-              Phrases: {
+              phrases: {
                 orderBy: { indexInGroup: 'asc' },
               },
             },
@@ -176,7 +176,7 @@ export const questQuery = {
       .findUniqueOrThrow({
         where: { id: questGroupId },
         include: {
-          Quest: {
+          quests: {
             include: { Author: true },
           },
           Author: true,

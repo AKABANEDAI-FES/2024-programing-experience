@@ -19,6 +19,6 @@ export const toQuestDtoWithPhrases = async (
   const { Phrases, ...rest } = quest;
   return {
     ...(await toQuestDto(rest)),
-    Phrases: Phrases.map(toPhraseGroupDtoWithoutQuest),
+    phraseGroups: Phrases.map(toPhraseGroupDtoWithoutQuest),
   };
 };

@@ -107,7 +107,7 @@ test(POST(noCookieClient.private.phrases.group), async () => {
   expect(res.status).toEqual(201);
   expect(res.body).toHaveProperty('id');
   expect(res.body).toHaveProperty('category', 'BEFORE_QUEST');
-  expect(res1.body.Phrases).toHaveLength(1);
+  expect(res1.body.phraseGroups).toHaveLength(1);
 });
 
 // Test PATCH /private/phrases/group/{groupId}

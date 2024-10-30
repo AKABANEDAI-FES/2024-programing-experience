@@ -6,6 +6,6 @@ import { toQuestDto } from './toQuestDto';
 export const toQuestGroupDto = async (questGroup: QuestGroupEntity): Promise<QuestGroupDto> => ({
   ...questGroup,
   id: brandedId.questGroup.dto.parse(questGroup.id),
-  Quests: await Promise.all(questGroup.Quests.map(toQuestDto)),
+  quests: await Promise.all(questGroup.quests.map(toQuestDto)),
   Author: { ...questGroup.Author, id: brandedId.user.dto.parse(questGroup.Author.id) },
 });

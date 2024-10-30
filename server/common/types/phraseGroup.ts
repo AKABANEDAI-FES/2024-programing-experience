@@ -6,11 +6,11 @@ export type PhraseGroupDto = {
   id: DtoId['phraseGroup'];
   category: Category;
   backgroundImage: { url: string; s3Key: string } | undefined;
-  quest: { id: DtoId['quest']; name: string };
+  Quest: { id: DtoId['quest']; name: string };
 };
 
-export type PhraseGroupCreateDto = StrictOmit<PhraseGroupDto, 'id' | 'backgroundImage' | 'quest'> &
+export type PhraseGroupCreateDto = StrictOmit<PhraseGroupDto, 'id' | 'backgroundImage' | 'Quest'> &
   SubKeyObj<PhraseGroupDto, { backgroundImage?: Blob }> & { questId: DtoId['quest'] };
 
-export type PhraseGroupUpdateDto = StrictOmit<PhraseGroupDto, 'id' | 'quest' | 'backgroundImage'> &
+export type PhraseGroupUpdateDto = StrictOmit<PhraseGroupDto, 'id' | 'Quest' | 'backgroundImage'> &
   SubKeyObj<PhraseGroupDto, { backgroundImage?: Blob }>;

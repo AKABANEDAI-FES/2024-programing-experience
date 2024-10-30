@@ -14,15 +14,15 @@ export const toEntity = (prismaPhrase: Phrase): PhraseEntity => ({
 });
 
 export const toGroupEntityWithoutQuest = async (
-  prismaPhraseGroup: PhraseGroup & { Phrases: Phrase[] },
+  prismaPhraseGroup: PhraseGroup & { phrases: Phrase[] },
 ): Promise<StrictOmit<PhraseGroupEntity, 'quest'>> => ({
   id: brandedId.phraseGroup.entity.parse(prismaPhraseGroup.id),
   backgroundImageKey: prismaPhraseGroup.backgroundImgKey ?? undefined,
   category: prismaPhraseGroup.category,
-  Phrases: prismaPhraseGroup.Phrases.map(toEntity),
+  Phrases: prismaPhraseGroup.phrases.map(toEntity),
 });
 export const toGroupEntity = async (
-  prismaPhraseGroup: PhraseGroup & { Phrases: Phrase[]; Quest: Quest | null },
+  prismaPhraseGroup: PhraseGroup & { phrases: Phrase[]; Quest: Quest | null },
 ): Promise<PhraseGroupEntity> => ({
   ...(await toGroupEntityWithoutQuest(prismaPhraseGroup)),
   quest:
@@ -58,7 +58,7 @@ export const phraseQuery = {
     questGroupId: MaybeId['phraseGroup'],
   ): Promise<PhraseGroupEntity> =>
     tx.phraseGroup
-      .findUniqueOrThrow({ where: { id: questGroupId }, include: { Phrases: true, Quest: true } })
+      .findUniqueOrThrow({ where: { id: questGroupId }, include: { phrases: true, Quest: true } })
       .then(toGroupEntity),
 
   listByGroupIdWithDI: depend(

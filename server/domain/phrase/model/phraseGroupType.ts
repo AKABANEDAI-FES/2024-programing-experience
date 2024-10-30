@@ -6,7 +6,7 @@ import type { EntityId } from 'service/brandedId';
 import type { S3PutParams } from 'service/s3Client';
 import type { PhraseEntity } from './phraseType';
 
-export type PhraseGroupEntity = StrictOmit<PhraseGroupDto, 'id' | 'quest' | 'backgroundImage'> &
+export type PhraseGroupEntity = StrictOmit<PhraseGroupDto, 'id' | 'Quest' | 'backgroundImage'> &
   SubKeyObj<
     PhraseGroupDto,
     {
@@ -18,7 +18,7 @@ export type PhraseGroupEntity = StrictOmit<PhraseGroupDto, 'id' | 'quest' | 'bac
   >;
 export type PhraseGroupCreateServerVal = StrictOmit<
   PhraseGroupDto,
-  'id' | 'backgroundImage' | 'quest'
+  'id' | 'backgroundImage' | 'Quest'
 > &
   SubKeyObj<
     PhraseGroupDto,
@@ -27,11 +27,11 @@ export type PhraseGroupCreateServerVal = StrictOmit<
     }
   >;
 
-export type PhraseGroupCreateVal = StrictOmit<PhraseGroupDto, 'id' | 'backgroundImage' | 'quest'> &
+export type PhraseGroupCreateVal = StrictOmit<PhraseGroupDto, 'id' | 'backgroundImage' | 'Quest'> &
   SubKeyObj<PhraseGroupDto, { backgroundImage?: MultipartFile }> & {
     questId: MaybeId['quest'];
   };
-export type PhraseGroupUpdateVal = StrictOmit<PhraseGroupDto, 'id' | 'backgroundImage' | 'quest'> &
+export type PhraseGroupUpdateVal = StrictOmit<PhraseGroupDto, 'id' | 'backgroundImage' | 'Quest'> &
   SubKeyObj<PhraseGroupDto, { id: MaybeId['phraseGroup']; backgroundImage?: MultipartFile }>;
 
 export type PhraseGroupSaveVal = {

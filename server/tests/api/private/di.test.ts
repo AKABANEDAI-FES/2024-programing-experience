@@ -82,7 +82,7 @@ test('Dependency Injection', async () => {
       name: 'foo',
       description: 'bar',
       Author: { id: brandedId.user.entity.parse(ulid()), signInName: 'dummy-user' },
-      Quests: [],
+      quests: [],
     },
   ];
 

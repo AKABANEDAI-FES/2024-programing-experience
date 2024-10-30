@@ -15,7 +15,9 @@ export type QuestDto = {
   Author: { id: DtoId['user']; signInName: string };
 };
 
-export type QuestDtoWithPhrases = QuestDto & { Phrases: StrictOmit<PhraseGroupDto, 'quest'>[] };
+export type QuestDtoWithPhrases = QuestDto & {
+  phraseGroups: StrictOmit<PhraseGroupDto, 'Quest'>[];
+};
 
 export type QuestCreateVal = StrictOmit<
   QuestDto,

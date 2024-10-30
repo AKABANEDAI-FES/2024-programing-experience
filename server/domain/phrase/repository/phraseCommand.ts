@@ -28,7 +28,7 @@ export const phraseCommand = {
     await tx.phraseGroup.update({
       where: { id: val.phrase.phraseGroupId },
       data: {
-        Phrases: {
+        phrases: {
           connect: {
             id: val.phrase.id,
           },
@@ -67,7 +67,7 @@ export const phraseCommand = {
     await tx.phraseGroup.update({
       where: { id: val.phrase.phraseGroupId },
       data: {
-        Phrases: {
+        phrases: {
           disconnect: {
             id: val.phrase.id,
           },

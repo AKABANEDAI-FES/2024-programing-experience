@@ -18,8 +18,8 @@ model User {
   language    LanguageEnum @default(KANJI)
   tasks       Task[]
   UserQuest   UserQuest[]
-  QuestGroup  QuestGroup[]
-  Quest       Quest[]
+  questGroups QuestGroup[]
+  quests      Quest[]
 }
 
 enum LanguageEnum {
@@ -32,7 +32,7 @@ model QuestGroup {
   id          String  @id
   name        String
   description String
-  Quest       Quest[]
+  quests      Quest[]
   Author      User    @relation(fields: [authorId], references: [id])
   authorId    String
 }
@@ -46,21 +46,21 @@ model Quest {
   createdAt          DateTime
   updatedAt          DateTime?
   indexInGroup       Int
-  UserQuest          UserQuest[]
+  userQuests         UserQuest[]
   Author             User          @relation(fields: [authorId], references: [id])
   authorId           String
   QuestGroup         QuestGroup    @relation(fields: [questGroupId], references: [id])
   questGroupId       String
-  PhraseGroup        PhraseGroup[]
+  phraseGroups         PhraseGroup[]
 }
 
 model UserQuest {
-  id              String            @id
-  UserQuestResult UserQuestResult[]
-  user            User              @relation(fields: [userId], references: [id])
-  userId          String
-  quest           Quest             @relation(fields: [questId], references: [id])
-  questId         String
+  id               String            @id
+  userQuestResults UserQuestResult[]
+  user             User              @relation(fields: [userId], references: [id])
+  userId           String
+  quest            Quest             @relation(fields: [questId], references: [id])
+  questId          String
 }
 
 model UserQuestResult {
@@ -75,7 +75,7 @@ model UserQuestResult {
 
 model PhraseGroup {
   id               String         @id
-  Phrases          Phrase[]
+  phrases          Phrase[]
   category         KatetegoriEnum
   backgroundImgKey String?
   Quest            Quest?         @relation(fields: [questId], references: [id])

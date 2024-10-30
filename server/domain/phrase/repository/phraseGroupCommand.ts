@@ -16,7 +16,7 @@ export const phraseGroupCommand = {
     await tx.quest.update({
       where: { id: val.phraseGroup.quest.id },
       data: {
-        PhraseGroup: {
+        phraseGroups: {
           connect: {
             id: val.phraseGroup.id,
           },

@@ -7,9 +7,9 @@ export type QuestGroupDto = {
   name: string;
   description: string;
   Author: { id: DtoId['user']; signInName: string };
-  Quests: QuestDto[];
+  quests: QuestDto[];
 };
-export type QuestGroupCreateVal = StrictOmit<QuestGroupDto, 'id' | 'Quests' | 'Author'> &
+export type QuestGroupCreateVal = StrictOmit<QuestGroupDto, 'id' | 'quests' | 'Author'> &
   SubKeyObj<
     QuestGroupDto,
     {

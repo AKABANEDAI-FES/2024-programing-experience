@@ -23,7 +23,7 @@ export const questCommand = {
     await tx.questGroup.update({
       where: { id: val.questGroupId },
       data: {
-        Quest: {
+        quests: {
           connect: {
             id: val.quest.id,
           },

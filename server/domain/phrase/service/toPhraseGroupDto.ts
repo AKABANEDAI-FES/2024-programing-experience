@@ -6,7 +6,7 @@ import type { PhraseGroupEntity } from '../model/phraseGroupType';
 
 export const toPhraseGroupDtoWithoutQuest = (
   entity: StrictOmit<PhraseGroupEntity, 'quest'>,
-): StrictOmit<PhraseGroupDto, 'quest'> => ({
+): StrictOmit<PhraseGroupDto, 'Quest'> => ({
   id: brandedId.phraseGroup.dto.parse(entity.id),
   category: entity.category,
   backgroundImage: entity.backgroundImageKey
@@ -27,5 +27,5 @@ export const toPhraseGroupDto = (
     >,
 ): PhraseGroupDto => ({
   ...toPhraseGroupDtoWithoutQuest(entity),
-  quest: { id: brandedId.quest.dto.parse(entity.quest.id), name: entity.quest.name },
+  Quest: { id: brandedId.quest.dto.parse(entity.quest.id), name: entity.quest.name },
 });

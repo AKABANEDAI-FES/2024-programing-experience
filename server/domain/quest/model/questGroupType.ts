@@ -3,16 +3,16 @@ import type { QuestGroupDto } from 'common/types/questGroup';
 import type { EntityId } from 'service/brandedId';
 import type { QuestEntity } from './questType';
 
-export type QuestGroupEntity = StrictOmit<QuestGroupDto, 'id' | 'Quests' | 'Author'> &
+export type QuestGroupEntity = StrictOmit<QuestGroupDto, 'id' | 'quests' | 'Author'> &
   SubKeyObj<
     QuestGroupDto,
     {
       id: EntityId['questGroup'];
-      Quests: QuestEntity[];
+      quests: QuestEntity[];
       Author: StrictOmit<QuestGroupDto['Author'], 'id'> &
         SubKeyObj<QuestGroupDto['Author'], { id: EntityId['user'] }>;
     }
   >;
 
-export type QuestGroupCreateServerVal = StrictOmit<QuestGroupDto, 'id' | 'Quests' | 'Author'>;
+export type QuestGroupCreateServerVal = StrictOmit<QuestGroupDto, 'id' | 'quests' | 'Author'>;
 export type QuestGroupSaveVal = { questGroup: QuestGroupEntity };
