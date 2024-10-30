@@ -415,101 +415,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "$ref": "#/components/schemas/Dto<\"quest\">"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "backgroundImage": {
-                      "type": "object",
-                      "properties": {
-                        "url": {
-                          "type": "string"
-                        },
-                        "s3Key": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "s3Key",
-                        "url"
-                      ]
-                    },
-                    "exampleAnswer": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "script": {
-                            "type": "array",
-                            "items": {
-                              "$ref": "#/components/schemas/Block"
-                            }
-                          },
-                          "position": {
-                            "type": "object",
-                            "properties": {
-                              "x": {
-                                "type": "number"
-                              },
-                              "y": {
-                                "type": "number"
-                              }
-                            },
-                            "required": [
-                              "x",
-                              "y"
-                            ]
-                          }
-                        },
-                        "required": [
-                          "position",
-                          "script"
-                        ]
-                      }
-                    },
-                    "createdAt": {
-                      "type": "number"
-                    },
-                    "updatedAt": {
-                      "type": "number"
-                    },
-                    "indexInGroup": {
-                      "type": "number"
-                    },
-                    "Author": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "$ref": "#/components/schemas/Dto<\"user\">"
-                        },
-                        "signInName": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "signInName"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "Author",
-                    "backgroundImage",
-                    "createdAt",
-                    "description",
-                    "exampleAnswer",
-                    "id",
-                    "indexInGroup",
-                    "name",
-                    "updatedAt"
-                  ]
+                  "$ref": "#/components/schemas/QuestDtoWithPhrases"
                 }
               }
             }
@@ -2586,6 +2492,121 @@
           "phraseGroupId"
         ]
       },
+      "QuestDtoWithPhrases": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/Dto<\"quest\">"
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "backgroundImage": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "s3Key": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "s3Key",
+                  "url"
+                ]
+              },
+              "exampleAnswer": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "script": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Block"
+                      }
+                    },
+                    "position": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "position",
+                    "script"
+                  ]
+                }
+              },
+              "createdAt": {
+                "type": "number"
+              },
+              "updatedAt": {
+                "type": "number"
+              },
+              "indexInGroup": {
+                "type": "number"
+              },
+              "Author": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/Dto<\"user\">"
+                  },
+                  "signInName": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "signInName"
+                ]
+              }
+            },
+            "required": [
+              "Author",
+              "backgroundImage",
+              "createdAt",
+              "description",
+              "exampleAnswer",
+              "id",
+              "indexInGroup",
+              "name",
+              "updatedAt"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Phrases": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/StrictOmit<PhraseGroupDto,\"quest\">"
+                }
+              }
+            },
+            "required": [
+              "Phrases"
+            ]
+          }
+        ]
+      },
       "blockArg": {
         "anyOf": [
           {
@@ -2617,6 +2638,36 @@
         },
         "required": [
           "arg",
+          "id"
+        ]
+      },
+      "StrictOmit<PhraseGroupDto,\"quest\">": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Dto<\"phraseGroup\">"
+          },
+          "backgroundImage": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "s3Key": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "s3Key",
+              "url"
+            ]
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          }
+        },
+        "required": [
+          "category",
           "id"
         ]
       },
