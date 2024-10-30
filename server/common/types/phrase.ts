@@ -10,6 +10,8 @@ export type PhraseDto = {
 
 export type PhraseCreateVal = StrictOmit<PhraseDto, 'id'>;
 
+export type PhraseUpdateVal = StrictOmit<PhraseDto, 'id' | 'phraseGroupId'>;
+
 export type PhraseUpdateOrderVal = { phraseId: MaybeId['phrase']; order: number };
 
 export type PhraseUpdateDto = StrictOmit<PhraseDto, 'id' | 'phraseGroupId'> & {

@@ -13,7 +13,7 @@ export type PhraseGroupEntity = StrictOmit<PhraseGroupDto, 'id' | 'quest' | 'bac
       id: EntityId['phraseGroup'];
       Phrases: PhraseEntity[];
       backgroundImageKey: string | undefined;
-      quest: { id: EntityId['quest']; name: string };
+      quest: { id: EntityId['quest']; name: string } | null;
     }
   >;
 export type PhraseGroupCreateServerVal = StrictOmit<
@@ -31,6 +31,8 @@ export type PhraseGroupCreateVal = StrictOmit<PhraseGroupDto, 'id' | 'background
   SubKeyObj<PhraseGroupDto, { backgroundImage?: MultipartFile }> & {
     questId: MaybeId['quest'];
   };
+export type PhraseGroupUpdateVal = StrictOmit<PhraseGroupDto, 'id' | 'backgroundImage' | 'quest'> &
+  SubKeyObj<PhraseGroupDto, { id: MaybeId['phraseGroup']; backgroundImage?: MultipartFile }>;
 
 export type PhraseGroupSaveVal = {
   phraseGroup: PhraseGroupEntity;

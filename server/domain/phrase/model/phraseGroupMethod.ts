@@ -27,4 +27,15 @@ export const phraseGroupMethod = {
       s3Params: { key: backgroundImageKey, data: val.backgroundImage },
     };
   },
+  update: (phraseGroup: PhraseGroupEntity, val: PhraseGroupCreateServerVal): PhraseGroupSaveVal => {
+    if (val.backgroundImage === undefined)
+      return { phraseGroup: { ...phraseGroup, ...val, id: phraseGroup.id } };
+
+    const backgroundImageKey = `phraseGroups/backgroundImages/${ulid()}.${val.backgroundImage.filename.split('.').at(-1)}`;
+
+    return {
+      phraseGroup: { ...phraseGroup },
+      s3Params: { key: backgroundImageKey, data: val.backgroundImage },
+    };
+  },
 };

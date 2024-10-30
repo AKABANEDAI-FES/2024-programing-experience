@@ -13,4 +13,14 @@ export const phraseGroupCommand = {
     });
     if (val.s3Params !== undefined) await s3.put(val.s3Params);
   },
+  update: async (tx: Prisma.TransactionClient, val: PhraseGroupSaveVal): Promise<void> => {
+    await tx.phraseGroup.update({
+      where: { id: val.phraseGroup.id },
+      data: {
+        category: val.phraseGroup.category,
+        backgroundImgKey: val.phraseGroup.backgroundImageKey,
+      },
+    });
+    if (val.s3Params !== undefined) await s3.put(val.s3Params);
+  },
 };
