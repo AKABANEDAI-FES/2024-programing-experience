@@ -51,7 +51,7 @@ model Quest {
   authorId           String
   QuestGroup         QuestGroup    @relation(fields: [questGroupId], references: [id])
   questGroupId       String
-  phraseGroup        PhraseGroup[]
+  PhraseGroup        PhraseGroup[]
 }
 
 model UserQuest {
