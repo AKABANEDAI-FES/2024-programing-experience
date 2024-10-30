@@ -11,7 +11,6 @@ export const phraseGroupUseCase = {
   create: async (val: PhraseGroupCreateVal): Promise<PhraseGroupDto> =>
     transaction('RepeatableRead', async (tx) => {
       const quest = await questQuery.findById(tx, val.questId);
-
       const created = phraseGroupMethod.create(quest, val);
 
       await phraseGroupCommand.create(tx, created);
