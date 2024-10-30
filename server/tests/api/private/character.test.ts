@@ -37,8 +37,11 @@ test(POST(noCookieClient.private.character._questId('_questId')), async () => {
       description: 'testDescription',
     },
   });
-
+  const res1 = await apiClient.private.quests._questId(questId).get();
   expect(res.status).toEqual(200);
+  expect(res.body).toHaveProperty('id');
+  expect(res1.body.characters).toBeInstanceOf(Array);
+  expect(res1.body.characters).toHaveLength(1);
 });
 
 // Test PATCH /private/character/character/{characterId}
