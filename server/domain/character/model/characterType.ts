@@ -22,4 +22,12 @@ export type CharacterCreateServerVal = StrictOmit<CharacterDto, 'id' | 'image'> 
     }
   >;
 
+export type CharacterUpdateServerVal = StrictOmit<CharacterDto, 'image'> &
+  SubKeyObj<
+    CharacterDto,
+    {
+      image?: MultipartFile;
+    }
+  >;
+
 export type CharacterSaveVal = { character: CharacterEntity; s3Params?: S3PutParams };

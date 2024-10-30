@@ -17,6 +17,25 @@ export const characterMethod = {
 
     const imageKey = `tasks/images/${ulid()}.${val.image.filename.split('.').at(-1)}`;
 
-    return { character };
+    return {
+      character: { ...character, imageKey },
+      s3Params: { key: imageKey, data: val.image },
+    };
+  },
+  update: (character: CharacterEntity, val: CharacterCreateServerVal): CharacterSaveVal => {
+    const updated: CharacterEntity = {
+      ...character,
+      name: val.name,
+      description: val.description,
+    };
+
+    if (val.image === undefined) return { character: updated };
+
+    const imageKey = `tasks/images/${ulid()}.${val.image.filename.split('.').at(-1)}`;
+
+    return {
+      character: { ...updated, imageKey },
+      s3Params: { key: imageKey, data: val.image },
+    };
   },
 };
