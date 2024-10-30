@@ -16,3 +16,6 @@ export type CharacterCreateVal = StrictOmit<CharacterDto, 'id' | 'image'> &
       image?: Blob;
     }
   >;
+
+export type CharacterUpdateVal = StrictOmit<CharacterDto, 'image'> &
+  SubKeyObj<CharacterDto, { image?: Blob }>;
