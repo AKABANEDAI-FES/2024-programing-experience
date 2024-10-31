@@ -1,0 +1,7 @@
+.obstacle {
+  position: absolute;
+  pointer-events: all;
+  user-select: none;
+  background-color: gray;
+  border: 1px solid black;
+}

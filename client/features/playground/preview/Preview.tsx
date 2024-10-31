@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 import { moves } from '../constants';
 import type { Block, blockArg, Scripts, ScriptState, SpriteState } from '../types';
 import styles from './Preview.module.css';
+import { Controls } from './components/Controls/Controls';
+import { Goal } from './components/Goal/Goal';
+import { Obstacle } from './components/Obstacle/Obstacle';
+import { Sprite } from './components/Sprite/Sprite';
 
 type Props = {
   scripts: Scripts;
@@ -20,6 +24,12 @@ const defaultScriptState = (script: Block[]) => ({
 export const Preview = (props: Props) => {
   const { scripts } = props;
   const [stepSpeed, setStepSpeed] = useState(1);
+  const [hasReachedGoal, setHasReachedGoal] = useState(false);
+  const [collisions, setCollisions] = useState<boolean>(false);
+  const [obstacles] = useState([
+    { x: 100, y: 100, width: 50, height: 50 },
+    { x: 200, y: 200, width: 50, height: 50 },
+  ]);
 
   const [scriptStates, setScriptStates] = useState<ScriptState[]>(
     scripts?.map(({ script }) => defaultScriptState(script)),
@@ -29,6 +39,13 @@ export const Preview = (props: Props) => {
     y: 0,
     direction: 0,
   });
+
+  const goal = {
+    x: 590,
+    y: 480,
+    width: 50,
+    height: 50,
+  };
 
   const updateScriptState = (updateFn: (newScriptStates: ScriptState[]) => void) => {
     const newScriptStates = structuredClone(scriptStates);
@@ -81,35 +98,72 @@ export const Preview = (props: Props) => {
         .map((scriptState) => ({ ...scriptState, active: !scriptState.active, stepDelay: 0 })),
     );
   };
+
+  useEffect(() => {
+    const spriteSize = 30;
+    //eslint-disable-next-line complexity
+    const checkCollisionAndGoal = () => {
+      const spriteRect = {
+        left: state.x,
+        right: state.x + spriteSize,
+        top: state.y,
+        bottom: state.y + spriteSize,
+      };
+
+      const hasCollision = obstacles.some(
+        (obstacle) =>
+          !(
+            spriteRect.left > obstacle.x + obstacle.width ||
+            spriteRect.right < obstacle.x ||
+            spriteRect.top > obstacle.y + obstacle.height ||
+            spriteRect.bottom < obstacle.y
+          ),
+      );
+
+      const reachedGoal = !(
+        spriteRect.left > goal.x + goal.width ||
+        spriteRect.right < goal.x ||
+        spriteRect.top > goal.y + goal.height ||
+        spriteRect.bottom < goal.y
+      );
+
+      if (hasCollision) {
+        setCollisions(true);
+        setState({ x: 0, y: 0, direction: 0 });
+        setScriptStates((prevStates) => prevStates.map((state) => ({ ...state, active: false })));
+      } else {
+        setCollisions(false);
+      }
+
+      if (reachedGoal) {
+        setHasReachedGoal(true);
+        setScriptStates((prevStates) => prevStates.map((state) => ({ ...state, active: false })));
+      }
+    };
+
+    const checkInterval = setInterval(checkCollisionAndGoal, 100);
+    return () => clearInterval(checkInterval);
+  }, [state, obstacles]);
+
   return (
     <div className={styles.main}>
       <AlignBox x={'|..'}>
-        <button
-          className={
-            scriptStates.some(({ active }) => active) ? styles.stopButton : styles.startButton
-          }
-          onClick={handleStartButtonClick}
-        />
-        <input
-          type="range"
-          min={1}
-          defaultValue={10}
-          max={20}
-          onChange={(e) => {
-            setStepSpeed(2 - Number(e.target.value) / 10);
-          }}
+        <Controls
+          isActive={scriptStates.some(({ active }) => active)}
+          onStartButtonClick={handleStartButtonClick}
+          onSpeedChange={(speed) => setStepSpeed(speed)}
+          statusMessage={hasReachedGoal ? '🎉 ゴール!' : collisions ? '💥 衝突!' : '🎮 プレイ中'}
         />
       </AlignBox>
       <div className={styles.preview}>
-        <div
-          className={styles.sprite}
-          style={{
-            top: state.y,
-            left: state.x,
-            transform: `rotate(${state.direction}deg)`,
-            transitionDuration: `${stepSpeed}s`,
-          }}
+        <Sprite
+          state={state}
+          stepSpeed={stepSpeed}
+          hasReachedGoal={hasReachedGoal}
+          collisions={collisions}
         />
+        <Obstacle />
+        <Goal />
       </div>
     </div>
   );
