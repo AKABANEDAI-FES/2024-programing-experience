@@ -1,5 +1,6 @@
 import type { QuestBigDto, QuestDto } from 'common/types/quest';
 import { toCharacterDto } from 'domain/character/service/toCharacterDto';
+import { toObstacleDto } from 'domain/obstacle/service/toObstacleDto';
 import { toPhraseGroupDtoWithoutQuest } from 'domain/phrase/service/toPhraseGroupDto';
 import { brandedId } from 'service/brandedId';
 import { s3 } from 'service/s3Client';
@@ -15,10 +16,11 @@ export const toQuestDto = async (quest: QuestEntity): Promise<QuestDto> => ({
 });
 
 export const toQuestDtoWithPhrases = async (quest: QuestBigEntity): Promise<QuestBigDto> => {
-  const { phraseGroups, characters, ...rest } = quest;
+  const { phraseGroups, characters, obstacles, ...rest } = quest;
   return {
     ...(await toQuestDto(rest)),
     phraseGroups: phraseGroups.map(toPhraseGroupDtoWithoutQuest),
     characters: characters.map(toCharacterDto),
+    obstacle: obstacles.map(toObstacleDto),
   };
 };

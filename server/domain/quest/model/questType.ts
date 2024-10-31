@@ -3,6 +3,7 @@ import type { NonNullableObj, StrictOmit, SubKeyObj } from 'common/types';
 import type { MaybeId } from 'common/types/brandedId';
 import type { QuestDto } from 'common/types/quest';
 import type { CharacterEntity } from 'domain/character/model/characterType';
+import type { ObstacleEntity } from 'domain/obstacle/model/obstacleType';
 import type { PhraseGroupEntity } from 'domain/phrase/model/phraseGroupType';
 import type { EntityId } from 'service/brandedId';
 import type { S3PutParams } from 'service/s3Client';
@@ -17,6 +18,7 @@ export type QuestEntity = StrictOmit<QuestDto, 'id' | 'backgroundImage' | 'Autho
 export type QuestBigEntity = QuestEntity & {
   phraseGroups: StrictOmit<PhraseGroupEntity, 'quest'>[];
   characters: CharacterEntity[];
+  obstacles: ObstacleEntity[];
 };
 
 export type QuestCreateServerVal = StrictOmit<

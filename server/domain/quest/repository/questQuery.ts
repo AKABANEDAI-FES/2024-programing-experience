@@ -1,5 +1,7 @@
+/* eslint-disable max-lines */
 import type {
   Character,
+  Obstacle,
   Phrase,
   PhraseGroup,
   Prisma,
@@ -8,6 +10,7 @@ import type {
   User,
 } from '@prisma/client';
 import { toCharacterEntity } from 'domain/character/repository/characterQuery';
+import { toObstacleEntity } from 'domain/obstacle/repository/obstacleQuery';
 import { toGroupEntityWithoutQuest } from 'domain/phrase/repository/phraseQuery';
 import { brandedId } from 'service/brandedId';
 import { depend } from 'velona';
@@ -34,11 +37,13 @@ const toBigEntity = async (
   prismaQuest: Quest & { Author: User } & {
     phraseGroups: (PhraseGroup & { phrases: Phrase[] })[];
     characters: Character[];
+    obstacles: Obstacle[];
   },
 ): Promise<QuestBigEntity> => ({
   ...toEntity(prismaQuest),
   phraseGroups: await Promise.all(prismaQuest.phraseGroups.map(toGroupEntityWithoutQuest)),
   characters: await Promise.all(prismaQuest.characters.map(toCharacterEntity)),
+  obstacles: await Promise.all(prismaQuest.obstacles.map(toObstacleEntity)),
 });
 
 const toQuestGroupEntity = (
@@ -174,6 +179,7 @@ export const questQuery = {
             },
           },
           characters: true,
+          obstacles: true,
         },
       })
       .then(toBigEntity),

@@ -1,6 +1,7 @@
 import type { DtoId, MaybeId } from './brandedId';
 import type { CharacterDto } from './character';
 import type { StrictOmit, SubKeyObj } from './index';
+import type { ObstacleDto } from './obstacle';
 import type { PhraseGroupDto } from './phraseGroup';
 import type { Scripts } from './playground';
 
@@ -19,6 +20,7 @@ export type QuestDto = {
 export type QuestBigDto = QuestDto & {
   phraseGroups: StrictOmit<PhraseGroupDto, 'Quest'>[];
   characters: CharacterDto[];
+  obstacle: ObstacleDto[];
 };
 
 export type QuestCreateVal = StrictOmit<
