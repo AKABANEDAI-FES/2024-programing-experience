@@ -21,6 +21,6 @@ export const toQuestDtoWithPhrases = async (quest: QuestBigEntity): Promise<Ques
     ...(await toQuestDto(rest)),
     phraseGroups: phraseGroups.map(toPhraseGroupDtoWithoutQuest),
     characters: characters.map(toCharacterDto),
-    obstacle: obstacles.map(toObstacleDto),
+    obstacles: obstacles.map(toObstacleDto),
   };
 };

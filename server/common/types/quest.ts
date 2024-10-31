@@ -20,7 +20,7 @@ export type QuestDto = {
 export type QuestBigDto = QuestDto & {
   phraseGroups: StrictOmit<PhraseGroupDto, 'Quest'>[];
   characters: CharacterDto[];
-  obstacle: ObstacleDto[];
+  obstacles: ObstacleDto[];
 };
 
 export type QuestCreateVal = StrictOmit<
