@@ -67,6 +67,8 @@ export const createGoogleUserClient = async (): Promise<typeof noCookieClient> =
       provider: 'Google',
       name: 'user1',
       email: `${ulid()}@example.com`,
+      isAdmin: false,
+      language: 'KANJI',
       photoUrl: 'https://example.com/user.png',
       codeChallenge: createHash('sha256').update(codeVerifier).digest('base64url'),
       userPoolClientId: COGNITO_USER_POOL_CLIENT_ID,

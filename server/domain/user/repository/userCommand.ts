@@ -15,6 +15,8 @@ export const userCommand = {
         id: user.id,
         email: user.email,
         signInName: user.signInName,
+        isAdmin: user.isAdmin,
+        language: user.language,
         displayName: user.displayName,
         photoUrl: user.photoUrl,
         createdAt: new Date(user.createdTime),

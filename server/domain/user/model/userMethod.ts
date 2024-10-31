@@ -16,6 +16,8 @@ export const userMethod = {
       signInName: jwtUser['cognito:username'],
       displayName:
         attributes.find((attr) => attr.Name === 'name')?.Value ?? jwtUser['cognito:username'],
+      isAdmin: false,
+      language: 'KANJI',
       photoUrl: attributes.find((attr) => attr.Name === 'picture')?.Value,
       createdTime: Date.now(),
     };
