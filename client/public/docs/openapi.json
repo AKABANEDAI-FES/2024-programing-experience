@@ -180,6 +180,21 @@
         }
       }
     },
+    "/private/character/character": {
+      "get": {
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/private": {
       "get": {
         "responses": {
@@ -305,6 +320,21 @@
                     "questId",
                     "type"
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/obstacle": {
+      "get": {
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -3010,7 +3040,7 @@
                   ]
                 }
               },
-              "obstacle": {
+              "obstacles": {
                 "type": "array",
                 "items": {
                   "type": "object",
@@ -3055,7 +3085,7 @@
             },
             "required": [
               "characters",
-              "obstacle",
+              "obstacles",
               "phraseGroups"
             ]
           }

@@ -34,7 +34,6 @@ const blockClassHandler = (isNotShadow: boolean) =>
 const blockDirectionHandler = (isArray: boolean) =>
   isArray ? styles1.blockColumn : styles1.blockRow;
 
-// eslint-disable-next-line complexity
 const ScriptBlock = (props: ScriptBlockProps) => {
   const {
     arg,
@@ -97,7 +96,6 @@ const ScriptBlock = (props: ScriptBlockProps) => {
       onDragLeave={resetEvent('p-', (e) => handleDragFinish(e))}
       onDragEnd={resetEvent('p-', (e) => handleDragFinish(e))}
       onDrop={handleDrop}
-      // eslint-disable-next-line complexity
       onDragOver={resetEvent('ps', (e) => {
         resetParentIsDragOver?.();
         if (!(arg instanceof Array)) {
