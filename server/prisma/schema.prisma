@@ -53,6 +53,7 @@ model Quest {
   questGroupId       String
   phraseGroups       PhraseGroup[]
   characters         Character[]
+  obstacles          Obstacle[]
 }
 
 model UserQuest {
@@ -104,6 +105,15 @@ model Character {
   imageKey    String?
   Quest       Quest   @relation(fields: [questId], references: [id])
   questId     String
+}
+
+model Obstacle {
+  id       String  @id
+  name     String
+  type     Int
+  imageKey String?
+  Quest    Quest   @relation(fields: [questId], references: [id])
+  questId  String
 }
 
 model Task {
