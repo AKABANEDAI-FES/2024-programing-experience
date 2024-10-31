@@ -75,7 +75,7 @@ test('Dependency Injection', async () => {
 
   const mockedFindManyQuestGroup = async (
     _: Prisma.TransactionClient,
-    limit?: number,
+    _limit?: number,
   ): Promise<QuestGroupEntity[]> => [
     {
       id: brandedId.questGroup.entity.parse(ulid()),

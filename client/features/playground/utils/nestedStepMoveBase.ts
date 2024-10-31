@@ -11,6 +11,7 @@ import {
   setStepDelay,
 } from './scriptStatesHandler';
 
+// eslint-disable-next-line complexity
 export const nestedStepMoveBase = (
   fn: (arg: blockArg) => void | string | undefined,
   scriptState: ScriptState,
