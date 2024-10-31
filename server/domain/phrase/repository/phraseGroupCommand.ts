@@ -9,6 +9,7 @@ export const phraseGroupCommand = {
         id: val.phraseGroup.id,
         category: val.phraseGroup.category,
         backgroundImgKey: val.phraseGroup.backgroundImageKey,
+        questId: val.phraseGroup.quest.id,
       },
     });
     if (val.s3Params !== undefined) await s3.put(val.s3Params);
