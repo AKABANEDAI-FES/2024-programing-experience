@@ -1,6 +1,7 @@
-import { Input } from 'features/playground/component/Input/Input';
+import { Block } from 'features/playground/component/Block/Block';
 import { BLOCKS } from 'features/playground/constants';
 import type { BLOCK } from 'features/playground/types';
+import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import type { Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
 import { resetEvent } from 'utils/resetEvent';

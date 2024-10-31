@@ -1,8 +1,9 @@
 import type { blockArg } from 'common/types/playground';
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import type { BLOCK } from 'features/playground/types';
+import { calcUpdateIndex } from 'features/playground/utils/calcUpdateIndex';
 import { rectHandler } from 'features/playground/utils/rectHandler';
-import { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { resetEvent } from 'utils/resetEvent';
 import { Block } from '../Block/Block';
 import BlockGhost from '../Block/BlockGhost';
@@ -21,8 +22,10 @@ export type Props = {
   resetParentIsDragOver?: () => void;
   dropOnPrevElement?: () => void;
   dropToParentElement?: (e: React.DragEvent<HTMLElement>) => void;
+  outTB?: BLOCK | null;
 };
 
+// eslint-disable-next-line complexity
 export const ScriptRoot = (props: Props) => {
   const {
     arg,
@@ -36,6 +39,7 @@ export const ScriptRoot = (props: Props) => {
     resetParentIsDragOver,
     dropOnPrevElement,
     dropToParentElement,
+    outTB,
   } = props;
 
   const [isDragOver, setIsDragOver] = useState<'false' | 'upper' | 'lower'>('false');
@@ -70,13 +74,11 @@ export const ScriptRoot = (props: Props) => {
 
   const handleDrop = (e: React.DragEvent<HTMLElement>) => {
     setIsDragOver('false');
-    if (arg !== undefined) {
-      updateWithDrop(e, scriptIndex, [
-        ...indexes.slice(0, -1),
-        indexes[indexes.length - 1] - +((parentIsDragOver ?? isDragOver) === 'upper'),
-      ]);
-    } else {
+    if ([typeof arg === 'string' && !isNotShadow].every(Boolean)) {
       dropToParentElement?.(e);
+      return;
+    } else {
+      updateWithDrop(e, scriptIndex, calcUpdateIndex(indexes, parentIsDragOver, isDragOver));
     }
     dropOnPrevElement?.();
   };
@@ -107,6 +109,7 @@ export const ScriptRoot = (props: Props) => {
         }
       })}
       className={styles.blockWrapper}
+      key={`${outTB?.id}`}
     >
       <BlockGhost
         isRendering={[isDragOver === 'upper', isNotShadow].every(Boolean)}

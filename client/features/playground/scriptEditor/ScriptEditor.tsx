@@ -19,6 +19,7 @@ export const ScriptEditor = (props: Props) => {
         scripts={scripts}
         setScripts={setScripts}
         targetBlock={targetBlock}
+        setTargetBlock={setTargetBlock}
         targetPos={targetPos}
       >
         <ScriptPalette setTargetBlock={setTargetBlock} setTargetPos={setTargetPos} />

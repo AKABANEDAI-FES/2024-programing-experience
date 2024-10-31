@@ -9,6 +9,7 @@ type Props = {
   scripts: Scripts;
   setScripts: Dispatch<SetStateAction<Scripts>>;
   targetBlock: BLOCK | null;
+  setTargetBlock: Dispatch<SetStateAction<BLOCK | null>>;
   targetPos: { x: number; y: number };
   children: React.ReactNode;
 };
@@ -17,16 +18,23 @@ export const ScriptEditSpace = ({
   scripts,
   setScripts,
   targetBlock,
+  setTargetBlock,
   targetPos,
   children,
 }: Props) => {
-  const { handleDrop, handleDragOver, handleOnChange, handleDropToInput } = useScripts({
+  const {
+    handleDrop,
+    handleDragOver,
+    handleOnChange,
+    handleDropToInput,
+    targetBlock: outTB,
+  } = useScripts({
     scripts,
     setScripts,
     targetBlock,
+    setTargetBlock,
     targetPos,
   });
-
   return (
     <div
       className={styles.scriptEditSpace}
@@ -53,6 +61,7 @@ export const ScriptEditSpace = ({
             isNotShadow={true}
             handleOnChange={handleOnChange}
             handleDrop={handleDropToInput}
+            outTB={outTB}
           />
         </div>
       ))}

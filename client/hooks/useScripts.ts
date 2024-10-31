@@ -13,6 +13,7 @@ type UseScriptsProps = {
   targetPos: { x: number; y: number };
   scripts: ScriptState[];
   setScripts: Dispatch<SetStateAction<ScriptState[]>>;
+  setTargetBlock: Dispatch<SetStateAction<BLOCK | null>>;
 };
 
 type UseScriptsReturn = {
@@ -29,12 +30,14 @@ type UseScriptsReturn = {
     scriptIndex: number,
     indexes: number[],
   ) => void;
+  targetBlock: BLOCK | null;
 };
 
 export const useScripts = ({
   scripts,
   setScripts,
   targetBlock,
+  setTargetBlock,
   targetPos,
 }: UseScriptsProps): UseScriptsReturn => {
   const handleDrop = useCallback(
@@ -77,6 +80,7 @@ export const useScripts = ({
 
       e.preventDefault();
       e.stopPropagation();
+      setTargetBlock(null);
     },
     [scripts, setScripts, targetBlock],
   );
@@ -87,5 +91,6 @@ export const useScripts = ({
     handleDragOver,
     handleOnChange,
     handleDropToInput,
+    targetBlock,
   };
 };
