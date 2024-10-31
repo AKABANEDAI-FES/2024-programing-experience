@@ -63,16 +63,5 @@ export const phraseCommand = {
         },
       },
     });
-
-    await tx.phraseGroup.update({
-      where: { id: val.phrase.phraseGroupId },
-      data: {
-        phrases: {
-          disconnect: {
-            id: val.phrase.id,
-          },
-        },
-      },
-    });
   },
 };

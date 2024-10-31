@@ -37,15 +37,5 @@ export const obstacleCommand = {
     await tx.obstacle.delete({
       where: { id: val.obstacle.id },
     });
-    await tx.quest.update({
-      where: { id: val.obstacle.questId },
-      data: {
-        obstacles: {
-          disconnect: {
-            id: val.obstacle.id,
-          },
-        },
-      },
-    });
   },
 };

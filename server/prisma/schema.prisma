@@ -80,7 +80,7 @@ model PhraseGroup {
   phrases          Phrase[]
   category         KatetegoriEnum
   backgroundImgKey String?
-  Quest            Quest          @relation(fields: [questId], references: [id])
+  Quest            Quest          @relation(fields: [questId], references: [id], onDelete: Cascade)
   questId          String
 }
 
@@ -112,7 +112,7 @@ model Obstacle {
   name     String
   type     Int
   imageKey String?
-  Quest    Quest   @relation(fields: [questId], references: [id])
+  Quest    Quest   @relation(fields: [questId], references: [id], onDelete: Cascade)
   questId  String
 }
 
