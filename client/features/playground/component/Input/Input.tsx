@@ -11,7 +11,6 @@ export const Input = (props: Props) => {
   const [inputValue, setInputValue] = useState(defaultValue);
   const [width, setWidth] = useState(0);
   const ref = useRef<HTMLInputElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -40,7 +39,6 @@ export const Input = (props: Props) => {
             type="text"
             defaultValue={defaultValue}
             onChange={handleChange}
-            ref={inputRef}
           />
           <span style={{ position: 'absolute', padding: '0 0.5rem', color: '#0000' }} ref={ref}>
             {inputValue}
