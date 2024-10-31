@@ -28,7 +28,6 @@ export const ScriptPalette = (props: Props) => {
       {blocks.map((block, n) => (
         <div className={styles.scriptPaletteBlockWrapper} key={block.id}>
           <div
-            className={styles.block}
             draggable
             onDragStart={(e) => {
               setTargetBlock(block);
@@ -38,19 +37,21 @@ export const ScriptPalette = (props: Props) => {
               });
             }}
           >
-            {block.contents.map((content, i) =>
-              content instanceof Array ? (
-                <Input key={i} defaultValue={''} onChange={(e) => handleOnChange(e, n, i)} />
-              ) : content.startsWith('$') ? (
-                <Input
-                  key={i}
-                  defaultValue={content.replace('$', '')}
-                  onChange={(e) => handleOnChange(e, n, i)}
-                />
-              ) : (
-                <div key={i}>{content}</div>
-              ),
-            )}
+            <Block
+              arg={defaultBlock(block)}
+              indexes={[]}
+              isNotShadow={true}
+              dragOverChildElement={() => {}}
+              props={{
+                arg: undefined,
+                indexes: [],
+                isNotShadow: true,
+                scriptIndex: 0,
+                targetBlock: null,
+                handleOnChange: () => {},
+                handleDrop: () => {},
+              }}
+            />
           </div>
         </div>
       ))}
