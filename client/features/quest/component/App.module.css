@@ -47,3 +47,9 @@
   cursor: not-allowed;
   background-color: #9ca3af;
 }
+
+.conversation {
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
