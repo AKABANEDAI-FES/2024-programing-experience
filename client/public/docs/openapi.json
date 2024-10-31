@@ -195,6 +195,21 @@
         }
       }
     },
+    "/private/character": {
+      "get": {
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/private": {
       "get": {
         "responses": {
@@ -405,6 +420,21 @@
                     "questId",
                     "type"
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/obstacle/quest": {
+      "get": {
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
