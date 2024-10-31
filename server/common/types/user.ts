@@ -5,6 +5,8 @@ export type UserDto = {
   signInName: string;
   displayName: string;
   email: string;
+  isAdmin: boolean;
+  language: 'KANJI' | 'HIRAGANA' | 'ENGLISH';
   createdTime: number;
   photoUrl: string | undefined;
 };
