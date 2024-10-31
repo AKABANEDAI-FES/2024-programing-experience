@@ -1,11 +1,6 @@
-export const Goal = () => {
-  const goal = {
-    x: 590,
-    y: 510,
-    width: 50,
-    height: 50,
-  };
+import { goal } from '../../constants';
 
+export const Goal = () => {
   return (
     <div
       style={{
