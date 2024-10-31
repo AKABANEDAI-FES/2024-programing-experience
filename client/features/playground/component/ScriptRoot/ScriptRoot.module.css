@@ -1,0 +1,111 @@
+.main {
+  display: flex;
+  height: 100vh;
+}
+
+.scriptPalette {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 30%;
+  height: 100%;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.scriptPaletteBlockWrapper {
+  z-index: 9999;
+  width: 100%;
+  max-width: fit-content;
+  overflow: hidden;
+
+  &:hover {
+    width: fit-content;
+    overflow: visible;
+    box-shadow: 0 0 10px 5px #fff;
+  }
+}
+
+.blockWrapper {
+  width: fit-content;
+}
+
+.blockWrapper:empty {
+  width: 100%;
+  height: 100%;
+}
+
+.block {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  padding: 0.5rem;
+  color: white;
+  white-space: nowrap;
+  cursor: grab;
+  background-color: #4caf50;
+  border: #fff4 solid 0.25rem;
+}
+
+.blockWrapper > .blockWrapper:first-child > .block {
+  margin-top: 0;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.blockWrapper > .blockWrapper:last-child > .block {
+  margin-bottom: 0;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.blockWrapper > .blockWrapper:first-child:last-child > .block {
+  border-radius: 0.5rem;
+}
+
+.blockColumn,
+.blockRow {
+  display: flex;
+}
+
+.blockRow {
+  flex-direction: row;
+  padding: 0;
+}
+
+.blockRow:last-child input {
+  margin-left: 0.5rem;
+}
+
+.blockColumn {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.blockColumn > div:last-child {
+  box-sizing: border-box;
+  width: calc(100% - 1.25rem);
+  min-height: 1.5rem;
+  margin: 0 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 2rem;
+  background-color: #f0f0f0;
+  border-left: #3d8b40;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.blockColumn > div:last-child > input {
+  user-select: none;
+}
+
+.blockShadow {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  padding: 0.5rem;
+  color: white;
+  white-space: nowrap;
+  cursor: grab;
+  background-color: #3d8b40;
+  border: #fff4 solid 0.25rem;
+  border-radius: 0.5rem;
+}

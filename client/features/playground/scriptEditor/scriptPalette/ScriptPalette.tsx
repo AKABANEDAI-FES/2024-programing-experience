@@ -1,4 +1,4 @@
-import { Input } from 'features/playground/compornent/Input';
+import { Input } from 'features/playground/component/Input/Input';
 import { BLOCKS } from 'features/playground/constants';
 import type { BLOCK } from 'features/playground/types';
 import type { Dispatch, SetStateAction } from 'react';
@@ -16,7 +16,7 @@ export const ScriptPalette = (props: Props) => {
   // @ts-expect-error TS2322
   const [blocks, setBLOCKS_useState] = useState<BLOCK[]>(BLOCKS);
 
-  const _handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, i: number) => {
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, i: number) => {
     const newBLOCKS = structuredClone(blocks);
     newBLOCKS[n].contents[i] = `$${e.target.value}`;
 
@@ -24,7 +24,7 @@ export const ScriptPalette = (props: Props) => {
   };
   return (
     <div className={styles.scriptPalette} onDrop={resetEvent('-s')}>
-      {blocks.map((block) => (
+      {blocks.map((block, n) => (
         <div className={styles.scriptPaletteBlockWrapper} key={block.id}>
           <div
             className={styles.block}
@@ -39,9 +39,13 @@ export const ScriptPalette = (props: Props) => {
           >
             {block.contents.map((content, i) =>
               content instanceof Array ? (
-                <Input key={i} defaultValue={''} />
+                <Input key={i} defaultValue={''} onChange={(e) => handleOnChange(e, n, i)} />
               ) : content.startsWith('$') ? (
-                <Input key={i} defaultValue={content.replace('$', '')} />
+                <Input
+                  key={i}
+                  defaultValue={content.replace('$', '')}
+                  onChange={(e) => handleOnChange(e, n, i)}
+                />
               ) : (
                 <div key={i}>{content}</div>
               ),
