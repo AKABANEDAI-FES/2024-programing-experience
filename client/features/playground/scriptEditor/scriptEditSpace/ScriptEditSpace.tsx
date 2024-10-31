@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /* eslint-disable max-lines */
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import { DefinedWrapper } from 'components/DefinedWrapper';
@@ -20,6 +21,7 @@ type ScriptBlockProps = {
   indexes: number[];
   targetBlock: BLOCK | null;
   isNotShadow: boolean;
+  isDragOver?: 'false' | 'upper' | 'lower';
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>, n: number, is: number[]) => void;
   handleDrop: (e: React.DragEvent<HTMLElement>, n: number, is: number[]) => void;
   resetParentIsDragOver?: () => void;
@@ -40,6 +42,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     indexes,
     targetBlock,
     isNotShadow,
+    isDragOver: parentIsDragOver,
     handleOnChange,
     handleDrop: updateWithDrop,
     resetParentIsDragOver,
@@ -79,7 +82,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
     if (arg !== undefined) {
       updateWithDrop(e, scriptIndex, [
         ...indexes.slice(0, -1),
-        indexes[indexes.length - 1] - +(isDragOver === 'upper'),
+        indexes[indexes.length - 1] - +((parentIsDragOver ?? isDragOver) === 'upper'),
       ]);
     } else {
       dropToParentElement?.(e);
@@ -119,6 +122,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                 isNotShadow={false}
                 dropOnPrevElement={dropOnNextElement}
                 dropToParentElement={dropOnChildElement}
+                isDragOver={isDragOver}
               />
             </div>
           )}
@@ -193,6 +197,7 @@ const ScriptBlock = (props: ScriptBlockProps) => {
                 isNotShadow={false}
                 dropOnPrevElement={dropOnNextElement}
                 dropToParentElement={dropOnChildElement}
+                isDragOver={isDragOver}
               />
             </div>
           )}
