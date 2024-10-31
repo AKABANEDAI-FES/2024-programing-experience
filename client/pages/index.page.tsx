@@ -1,15 +1,18 @@
 import { Playground } from 'features/playground/Playground';
-import ConversationPage from 'features/quest/component/App';
+import { Layout } from 'layouts/Layout';
 import styles from './index.module.css';
 
 const Home = () => {
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>Hello</div>
+    <Layout
+      render={(user) => (
+        <div className={styles.container}>
+          <div className={styles.title}>Hello {user.displayName}!</div>
 
-      <Playground />
-      <ConversationPage />
-    </div>
+          <Playground />
+        </div>
+      )}
+    />
   );
 };
 

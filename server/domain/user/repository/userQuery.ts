@@ -7,6 +7,8 @@ const toUserEntity = (prismaUser: User): UserEntity => ({
   email: prismaUser.email,
   signInName: prismaUser.signInName,
   displayName: prismaUser.displayName,
+  isAdmin: prismaUser.isAdmin,
+  language: prismaUser.language,
   photoUrl: prismaUser.photoUrl ?? undefined,
   createdTime: prismaUser.createdAt.getTime(),
 });

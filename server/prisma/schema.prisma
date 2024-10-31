@@ -8,13 +8,112 @@ generator client {
 }
 
 model User {
-  id          String   @id
+  id          String       @id
   email       String
   signInName  String
   displayName String
   photoUrl    String?
   createdAt   DateTime
+  isAdmin     Boolean      @default(false)
+  language    LanguageEnum @default(KANJI)
   tasks       Task[]
+  UserQuest   UserQuest[]
+  questGroups QuestGroup[]
+  quests      Quest[]
+}
+
+enum LanguageEnum {
+  KANJI
+  HIRAGANA
+  ENGLISH
+}
+
+model QuestGroup {
+  id          String  @id
+  name        String
+  description String
+  quests      Quest[]
+  Author      User    @relation(fields: [authorId], references: [id])
+  authorId    String
+}
+
+model Quest {
+  id                 String        @id
+  name               String
+  description        String
+  backgroundImageKey String?
+  exampleAnswer      Json
+  createdAt          DateTime
+  updatedAt          DateTime?
+  indexInGroup       Int
+  userQuests         UserQuest[]
+  Author             User          @relation(fields: [authorId], references: [id])
+  authorId           String
+  QuestGroup         QuestGroup    @relation(fields: [questGroupId], references: [id])
+  questGroupId       String
+  phraseGroups       PhraseGroup[]
+  characters         Character[]
+  obstacles          Obstacle[]
+}
+
+model UserQuest {
+  id               String            @id
+  userQuestResults UserQuestResult[]
+  user             User              @relation(fields: [userId], references: [id])
+  userId           String
+  quest            Quest             @relation(fields: [questId], references: [id])
+  questId          String
+}
+
+model UserQuestResult {
+  id          String    @id
+  userQuest   UserQuest @relation(fields: [userQuestId], references: [id])
+  userQuestId String
+  startAt     DateTime
+  endAt       DateTime
+  score       Int
+  answer      Json
+}
+
+model PhraseGroup {
+  id               String         @id
+  phrases          Phrase[]
+  category         KatetegoriEnum
+  backgroundImgKey String?
+  Quest            Quest          @relation(fields: [questId], references: [id], onDelete: Cascade)
+  questId          String
+}
+
+enum KatetegoriEnum {
+  BEFORE_QUEST
+  AFTER_QUEST_OK
+  AFTER_QUEST_FAIL
+}
+
+model Phrase {
+  id            String      @id
+  phrase        String
+  indexInGroup  Int
+  PhraseGroup   PhraseGroup @relation(fields: [phraseGroupId], references: [id])
+  phraseGroupId String
+}
+
+model Character {
+  id          String  @id
+  name        String
+  description String
+  imageKey    String?
+  Quest       Quest   @relation(fields: [questId], references: [id])
+  questId     String
+}
+
+model Obstacle {
+  id       String  @id
+  name     String
+  type     Int
+  imageKey String?
+  Quest    Quest   @relation(fields: [questId], references: [id], onDelete: Cascade)
+  questId  String
 }
 
 model Task {
