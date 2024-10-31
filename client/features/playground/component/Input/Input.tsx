@@ -25,7 +25,7 @@ export const Input = (props: Props) => {
     if (ref.current) {
       setWidth(ref.current.offsetWidth);
     }
-  }, [inputValue]);
+  }, []);
 
   return (
     <>
