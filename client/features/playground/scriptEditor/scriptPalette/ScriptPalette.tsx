@@ -1,4 +1,4 @@
-import { Input } from 'features/playground/compornent/Input';
+import { Input } from 'features/playground/component/Input';
 import { BLOCKS } from 'features/playground/constants';
 import type { BLOCK } from 'features/playground/types';
 import type { Dispatch, SetStateAction } from 'react';
