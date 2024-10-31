@@ -251,6 +251,137 @@
         }
       }
     },
+    "/private/obstacle/{obstacleId}": {
+      "delete": {
+        "parameters": [
+          {
+            "name": "obstacleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"obstacle\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "questId": {
+                      "$ref": "#/components/schemas/Dto<\"quest\">"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "image",
+                    "name",
+                    "questId",
+                    "type"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/private/obstacle/quest/{questId}": {
+      "post": {
+        "parameters": [
+          {
+            "name": "questId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ObstacleCreateVal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "2XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"obstacle\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "questId": {
+                      "$ref": "#/components/schemas/Dto<\"quest\">"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "image",
+                    "name",
+                    "questId",
+                    "type"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/private/phrases/{phraseId}": {
       "post": {
         "parameters": [
@@ -2572,6 +2703,47 @@
           }
         ]
       },
+      "Dto<\"obstacle\">": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {}
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "ObstacleCreateVal": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StrictOmit<ObstacleDto,\"id\"|\"image\"|\"questId\">"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "image": {
+                "$ref": "#/components/schemas/Blob"
+              }
+            }
+          }
+        ]
+      },
+      "StrictOmit<ObstacleDto,\"id\"|\"image\"|\"questId\">": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ]
+      },
       "PhraseUpdateVal": {
         "type": "object",
         "properties": {
@@ -2837,10 +3009,53 @@
                     "questId"
                   ]
                 }
+              },
+              "obstacle": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/components/schemas/Dto<\"obstacle\">"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "number"
+                    },
+                    "image": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "s3Key": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "s3Key",
+                        "url"
+                      ]
+                    },
+                    "questId": {
+                      "$ref": "#/components/schemas/Dto<\"quest\">"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "image",
+                    "name",
+                    "questId",
+                    "type"
+                  ]
+                }
               }
             },
             "required": [
               "characters",
+              "obstacle",
               "phraseGroups"
             ]
           }
