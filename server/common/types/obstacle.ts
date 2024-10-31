@@ -16,5 +16,3 @@ export type ObstacleCreateVal = StrictOmit<ObstacleDto, 'id' | 'image' | 'questI
       image?: Blob;
     }
   >;
-
-  

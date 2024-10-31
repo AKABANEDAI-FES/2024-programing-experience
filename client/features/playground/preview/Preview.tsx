@@ -89,7 +89,7 @@ export const Preview = (props: Props) => {
             scriptStates.some(({ active }) => active) ? styles.stopButton : styles.startButton
           }
           onClick={handleStartButtonClick}
-         />
+        />
         <input
           type="range"
           min={1}
@@ -98,7 +98,7 @@ export const Preview = (props: Props) => {
           onChange={(e) => {
             setStepSpeed(2 - Number(e.target.value) / 10);
           }}
-         />
+        />
       </AlignBox>
       <div className={styles.preview}>
         <div
@@ -109,7 +109,7 @@ export const Preview = (props: Props) => {
             transform: `rotate(${state.direction}deg)`,
             transitionDuration: `${stepSpeed}s`,
           }}
-         />
+        />
       </div>
     </div>
   );
