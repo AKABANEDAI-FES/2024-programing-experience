@@ -1,19 +1,18 @@
-import type { BLOCK, Block } from 'features/playground/types';
-import { defaultBlock } from 'features/playground/utils/defaultBlock';
+import type { BlockT } from 'features/playground/types';
 import { updateScriptValue } from 'features/playground/utils/updateScriptValue';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback } from 'react';
 
 type ScriptState = {
-  script: Block[];
+  script: BlockT[];
   position: { x: number; y: number };
 };
 type UseScriptsProps = {
-  targetBlock: BLOCK | null;
+  targetBlock: BlockT[] | null;
   targetPos: { x: number; y: number };
   scripts: ScriptState[];
   setScripts: Dispatch<SetStateAction<ScriptState[]>>;
-  setTargetBlock: Dispatch<SetStateAction<BLOCK | null>>;
+  setTargetBlock: Dispatch<SetStateAction<BlockT[] | null>>;
 };
 
 type UseScriptsReturn = {
@@ -30,7 +29,7 @@ type UseScriptsReturn = {
     scriptIndex: number,
     indexes: number[],
   ) => void;
-  targetBlock: BLOCK | null;
+  targetBlock: BlockT[] | null;
 };
 
 export const useScripts = ({
@@ -49,7 +48,7 @@ export const useScripts = ({
       const current_Y = event.clientY - containerRect.top;
       const newScripts = structuredClone(scripts);
       newScripts.push({
-        script: [{ ...defaultBlock(targetBlock) }],
+        script: targetBlock,
         position: { x: current_X + targetPos.x, y: current_Y + targetPos.y },
       } as ScriptState);
       setScripts(newScripts);
@@ -75,7 +74,7 @@ export const useScripts = ({
       if (targetBlock === null) return;
 
       const newScripts = structuredClone(scripts);
-      updateScriptValue(defaultBlock(targetBlock), newScripts[scriptIndex].script, indexes);
+      updateScriptValue(targetBlock, newScripts[scriptIndex].script, indexes);
       setScripts(newScripts);
 
       e.preventDefault();
