@@ -1,6 +1,6 @@
 import type { blockArg } from 'common/types/playground';
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
-import type { BLOCK } from 'features/playground/types';
+import type { BlockT } from 'features/playground/types';
 import { calcUpdateIndex } from 'features/playground/utils/calcUpdateIndex';
 import { rectHandler } from 'features/playground/utils/rectHandler';
 import React, { useCallback, useRef, useState } from 'react';
@@ -14,7 +14,7 @@ export type Props = {
   arg: blockArg | undefined;
   scriptIndex: number;
   indexes: number[];
-  targetBlock: BLOCK | null;
+  targetBlock: BlockT[] | null;
   isNotShadow: boolean;
   isDragOver?: 'false' | 'upper' | 'lower';
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>, n: number, is: number[]) => void;
@@ -22,7 +22,7 @@ export type Props = {
   resetParentIsDragOver?: () => void;
   dropOnPrevElement?: () => void;
   dropToParentElement?: (e: React.DragEvent<HTMLElement>) => void;
-  outTB?: BLOCK | null;
+  outTB?: BlockT[] | null;
 };
 
 // eslint-disable-next-line complexity
@@ -78,7 +78,11 @@ export const ScriptRoot = (props: Props) => {
       dropToParentElement?.(e);
       return;
     } else {
-      updateWithDrop(e, scriptIndex, calcUpdateIndex(indexes, parentIsDragOver, isDragOver));
+      updateWithDrop(
+        e,
+        scriptIndex,
+        calcUpdateIndex(indexes, parentIsDragOver, isDragOver, isNotShadow),
+      );
     }
     dropOnPrevElement?.();
   };
@@ -109,7 +113,7 @@ export const ScriptRoot = (props: Props) => {
         }
       })}
       className={styles.blockWrapper}
-      key={`${outTB?.id}`}
+      key={`${outTB?.map((e) => `${e.id}`).reduce((a, b) => `${a}-${b}`)}`}
     >
       <BlockGhost
         isRendering={[isDragOver === 'upper', isNotShadow].every(Boolean)}

@@ -1,14 +1,14 @@
 import { AlignBox } from 'components/AlignBox';
 import { useEffect, useState } from 'react';
 import { moves } from '../constants';
-import type { Block, blockArg, Scripts, ScriptState, SpriteState } from '../types';
+import type { blockArg, BlockT, Scripts, ScriptState, SpriteState } from '../types';
 import styles from './Preview.module.css';
 
 type Props = {
   scripts: Scripts;
 };
 
-const defaultScriptState = (script: Block[]) => ({
+const defaultScriptState = (script: BlockT[]) => ({
   script,
   active: false,
   stepDelay: 0,
@@ -36,7 +36,7 @@ export const Preview = (props: Props) => {
     setScriptStates([...newScriptStates]);
   };
 
-  const interval = (i: number, script: Block[], stepCount: number[]) => {
+  const interval = (i: number, script: BlockT[], stepCount: number[]) => {
     if (stepCount[0] >= script.length) {
       updateScriptState((scriptStates) => {
         scriptStates[i] = defaultScriptState(scriptStates[i].script);

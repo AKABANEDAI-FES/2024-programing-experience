@@ -1,6 +1,6 @@
 import { Block } from 'features/playground/component/Block/Block';
 import { BLOCKS } from 'features/playground/constants';
-import type { BLOCK } from 'features/playground/types';
+import type { BLOCK, BlockT } from 'features/playground/types';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import type { Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
@@ -8,7 +8,7 @@ import { resetEvent } from 'utils/resetEvent';
 import styles from '../ScriptEditor.module.css';
 
 type Props = {
-  setTargetBlock: Dispatch<SetStateAction<BLOCK | null>>;
+  setTargetBlock: Dispatch<SetStateAction<BlockT[] | null>>;
   setTargetPos: Dispatch<SetStateAction<{ x: number; y: number }>>;
 };
 
@@ -30,7 +30,7 @@ export const ScriptPalette = (props: Props) => {
           <div
             draggable
             onDragStart={(e) => {
-              setTargetBlock(block);
+              setTargetBlock([defaultBlock(block)]);
               setTargetPos({
                 x: (e.target as HTMLDivElement).getBoundingClientRect().left - e.clientX,
                 y: (e.target as HTMLDivElement).getBoundingClientRect().top - e.clientY,

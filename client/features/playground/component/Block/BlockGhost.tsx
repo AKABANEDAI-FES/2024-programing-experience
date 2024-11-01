@@ -1,15 +1,14 @@
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import { DefinedWrapper } from 'components/DefinedWrapper';
 import type { Props as RootProps } from 'features/playground/component/ScriptRoot/ScriptRoot';
-import type { BLOCK } from 'features/playground/types';
-import { defaultBlock } from 'features/playground/utils/defaultBlock';
+import type { BlockT } from 'features/playground/types';
 import React, { forwardRef } from 'react';
 import { resetEvent } from 'utils/resetEvent';
 import { ScriptRoot } from '../ScriptRoot/ScriptRoot';
 
 type Props = {
   isRendering: boolean;
-  targetBlock: BLOCK | null;
+  targetBlock: BlockT[] | null;
   isDragOver: 'false' | 'upper' | 'lower';
   props: RootProps;
   dropOnNextElement: () => void;
@@ -24,7 +23,7 @@ const BlockGhost = forwardRef<HTMLDivElement, Props>((props, ref) => (
         <div ref={ref} onDragOver={resetEvent('-s')}>
           <ScriptRoot
             {...props.props}
-            arg={defaultBlock(targetBlock)}
+            arg={targetBlock}
             isNotShadow={false}
             dropOnPrevElement={props.dropOnNextElement}
             dropToParentElement={props.dropOnChildElement}

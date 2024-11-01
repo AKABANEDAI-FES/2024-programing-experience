@@ -1,8 +1,8 @@
-import type { Block, blockArg } from '../types';
+import type { BlockT, blockArg } from '../types';
 
 // eslint-disable-next-line complexity
 export const updateScriptValue = (
-  arg: Exclude<blockArg, Block[]>,
+  arg: Exclude<blockArg, BlockT>,
   script: Exclude<blockArg, string>,
   indexes: number[],
 ) => {
@@ -19,9 +19,9 @@ export const updateScriptValue = (
       }
       // eslint-disable-next-line max-depth
       if (index === -1) {
-        script.unshift(arg);
+        script.unshift(...arg);
       } else {
-        script.push(arg);
+        script.push(...arg);
       }
       return;
     }
@@ -30,7 +30,7 @@ export const updateScriptValue = (
       if (typeof arg === 'string') {
         throw new Error('Invalid arg');
       }
-      script.splice(index + 1, 0, arg);
+      script.splice(index + 1, 0, ...arg);
       return;
     }
     updateScriptValue(arg, script[index], newIndexes);

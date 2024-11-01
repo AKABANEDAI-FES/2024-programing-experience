@@ -1,5 +1,6 @@
+import type { Block } from 'common/types/playground';
 import { ScriptRoot } from 'features/playground/component/ScriptRoot/ScriptRoot';
-import type { BLOCK, Scripts } from 'features/playground/types';
+import type { Scripts } from 'features/playground/types';
 import { useScripts } from 'hooks/useScripts';
 import type { Dispatch, SetStateAction } from 'react';
 import React from 'react';
@@ -8,8 +9,8 @@ import styles from './ScriptEditSpace.module.css';
 type Props = {
   scripts: Scripts;
   setScripts: Dispatch<SetStateAction<Scripts>>;
-  targetBlock: BLOCK | null;
-  setTargetBlock: Dispatch<SetStateAction<BLOCK | null>>;
+  targetBlock: Block[] | null;
+  setTargetBlock: Dispatch<SetStateAction<Block[] | null>>;
   targetPos: { x: number; y: number };
   children: React.ReactNode;
 };

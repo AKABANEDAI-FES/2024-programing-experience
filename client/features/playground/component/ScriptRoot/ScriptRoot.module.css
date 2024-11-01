@@ -69,6 +69,7 @@
 
 .blockRow {
   flex-direction: row;
+  align-items: center;
   padding: 0;
 }
 
