@@ -4,6 +4,7 @@ import type { BlockT } from 'features/playground/types';
 import { calcUpdateIndex } from 'features/playground/utils/calcUpdateIndex';
 import { rectHandler } from 'features/playground/utils/rectHandler';
 import React, { useCallback, useRef, useState } from 'react';
+import { lambda } from 'utils/lambda';
 import { resetEvent } from 'utils/resetEvent';
 import { Block } from '../Block/Block';
 import BlockGhost from '../Block/BlockGhost';
@@ -116,9 +117,9 @@ export const ScriptRoot = (props: Props) => {
       key={`${outTB?.map((e) => `${e.id}`).reduce((a, b) => `${a}-${b}`)}`}
     >
       <BlockGhost
-        isRendering={[isDragOver === 'upper', isNotShadow].every(Boolean)}
+        isRendering={[isDragOver === 'lower', isNotShadow].every(Boolean)}
         {...ghostProps}
-        ref={ref2}
+        ref={ref3}
       />
       {arg instanceof Array ? (
         <>
@@ -130,9 +131,30 @@ export const ScriptRoot = (props: Props) => {
               dropToParentElement={dropOnChildElement}
             />
           </ConditionalWrapper>
-          {arg.map((scriptBlock, j) => (
-            <ScriptRoot key={j} {...props} arg={scriptBlock} indexes={[...indexes, j]} />
-          ))}
+          {lambda(
+            {
+              scripts: arg
+                .map((scriptBlock, j) => (
+                  <ScriptRoot key={j} {...props} arg={scriptBlock} indexes={[...indexes, j]} />
+                ))
+                .toReversed(),
+            },
+            ({ scripts }) =>
+              scripts.reduce(
+                (acc, content, i) =>
+                  i === 0 ? (
+                    <div draggable className={styles.blockWrapper}>
+                      {content}
+                    </div>
+                  ) : (
+                    <div key={i} className={styles.blockWrapper} draggable>
+                      {acc}
+                      {content}
+                    </div>
+                  ),
+                <></>,
+              ),
+          )}
         </>
       ) : arg instanceof Object ? (
         <Block
@@ -155,9 +177,9 @@ export const ScriptRoot = (props: Props) => {
         <Input defaultValue={arg} isNotInput />
       )}
       <BlockGhost
-        isRendering={[isDragOver === 'lower', isNotShadow].every(Boolean)}
+        isRendering={[isDragOver === 'upper', isNotShadow].every(Boolean)}
         {...ghostProps}
-        ref={ref3}
+        ref={ref2}
       />
     </div>
   );

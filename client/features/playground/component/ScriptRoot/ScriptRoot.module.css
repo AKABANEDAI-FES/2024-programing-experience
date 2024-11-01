@@ -28,6 +28,8 @@
 }
 
 .blockWrapper {
+  display: flex;
+  flex-direction: column-reverse;
   width: fit-content;
 }
 
@@ -46,20 +48,19 @@
   cursor: grab;
   background-color: #4caf50;
   border: #fff4 solid 0.25rem;
+  border-radius: 0.5rem;
 }
 
-.blockWrapper > .blockWrapper:first-child > .block {
-  margin-top: 0;
+.blockWrapper > .blockWrapper > .block {
   border-radius: 0.5rem 0.5rem 0 0;
 }
 
-.blockWrapper > .blockWrapper:last-child > .block {
-  margin-bottom: 0;
-  border-radius: 0 0 0.5rem 0.5rem;
+.blockWrapper > .blockWrapper:has(:not(:only-child)) > .block {
+  border-radius: 0;
 }
 
-.blockWrapper > .blockWrapper:first-child:last-child > .block {
-  border-radius: 0.5rem;
+.blockWrapper > .blockWrapper:only-child > .block {
+  border-radius: 0 0 0.5rem 0.5rem;
 }
 
 .blockColumn,
