@@ -69,12 +69,13 @@
 
 .blockRow {
   flex-direction: row;
+  gap: 0.5rem;
   align-items: center;
   padding: 0;
 }
 
 .blockRow:last-child input {
-  margin-left: 0.5rem;
+  margin-right: 0;
 }
 
 .blockColumn {
