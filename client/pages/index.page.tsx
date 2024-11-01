@@ -8,6 +8,7 @@ const Home = () => {
       render={(user) => (
         <div className={styles.container}>
           <div className={styles.title}>Hello {user.displayName}!</div>
+
           <Playground />
         </div>
       )}
