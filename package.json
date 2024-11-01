@@ -51,9 +51,6 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "class-variance-authority": "^0.7.0",
-    "clean": "^4.0.2",
-    "clsx": "^2.1.1",
     "react-markdown": "^9.0.1"
   }
 }
