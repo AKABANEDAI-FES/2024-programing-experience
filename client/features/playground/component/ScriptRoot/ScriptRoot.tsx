@@ -18,8 +18,8 @@ export type Props = {
   targetBlock: BlockT[] | null;
   isNotShadow: boolean;
   isDragOver?: 'false' | 'upper' | 'lower';
-  handleOnChange: (e: React.ChangeEvent<HTMLInputElement>, n: number, is: number[]) => void;
-  handleDrop: (e: React.DragEvent<HTMLElement>, n: number, is: number[]) => void;
+  handleOnChange: (inputValue: string, n: number, is: number[]) => void;
+  handleDrop: (n: number, is: number[]) => void;
   resetParentIsDragOver?: () => void;
   dropOnPrevElement?: () => void;
   dropToParentElement?: (e: React.DragEvent<HTMLElement>) => void;
@@ -59,7 +59,7 @@ export const ScriptRoot = (props: Props) => {
   const dropOnChildElement = useCallback((e: React.DragEvent<HTMLElement>) => {
     setIsDragOver('false');
 
-    updateWithDrop(e, scriptIndex, [
+    updateWithDrop(scriptIndex, [
       ...indexes.slice(0, -1),
       indexes[indexes.length - 1] - +(isDragOver === 'upper'),
     ]);
@@ -80,7 +80,6 @@ export const ScriptRoot = (props: Props) => {
       return;
     } else {
       updateWithDrop(
-        e,
         scriptIndex,
         calcUpdateIndex(indexes, parentIsDragOver, isDragOver, isNotShadow),
       );
@@ -101,7 +100,7 @@ export const ScriptRoot = (props: Props) => {
       ref={ref}
       onDragLeave={resetEvent('p-', (e) => handleDragFinish(e))}
       onDragEnd={resetEvent('p-', (e) => handleDragFinish(e))}
-      onDrop={handleDrop}
+      onDrop={resetEvent('ps', handleDrop)}
       onDragOver={resetEvent('ps', (e) => {
         resetParentIsDragOver?.();
         if (!(arg instanceof Array)) {
@@ -169,7 +168,7 @@ export const ScriptRoot = (props: Props) => {
           <Input
             defaultValue={arg}
             onChange={(e) => {
-              handleOnChange(e, scriptIndex, indexes);
+              handleOnChange(e.target.value, scriptIndex, indexes);
             }}
           />
         </ConditionalWrapper>

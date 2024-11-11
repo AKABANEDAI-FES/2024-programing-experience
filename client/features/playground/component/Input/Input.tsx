@@ -40,7 +40,10 @@ export const Input = (props: Props) => {
             defaultValue={defaultValue}
             onChange={handleChange}
           />
-          <span style={{ position: 'absolute', padding: '0 0.5rem', color: '#0000' }} ref={ref}>
+          <span
+            style={{ position: 'absolute', padding: '0 0.5rem', color: '#0000', zIndex: -1 }}
+            ref={ref}
+          >
             {inputValue}
           </span>
         </>

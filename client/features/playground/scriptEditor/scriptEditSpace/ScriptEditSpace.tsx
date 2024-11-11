@@ -4,6 +4,8 @@ import type { Scripts } from 'features/playground/types';
 import { useScripts } from 'hooks/useScripts';
 import type { Dispatch, SetStateAction } from 'react';
 import React from 'react';
+import type { Pos } from 'types';
+import { resetEvent } from 'utils/resetEvent';
 import styles from './ScriptEditSpace.module.css';
 
 type Props = {
@@ -36,11 +38,18 @@ export const ScriptEditSpace = ({
     setTargetBlock,
     targetPos,
   });
+  const calcHandleDropArg = (e: React.DragEvent): [Pos, Pos] => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    return [
+      { x: e.clientX, y: e.clientY },
+      { x: rect.left, y: rect.top },
+    ];
+  };
   return (
     <div
       className={styles.scriptEditSpace}
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
+      onDrop={resetEvent('p-', (e) => handleDrop(...calcHandleDropArg(e)))}
+      onDragOver={resetEvent('ps', handleDragOver)}
       style={{ position: 'relative' }}
     >
       {children}
