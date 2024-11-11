@@ -26,17 +26,17 @@ export const ScriptPalette = (props: Props) => {
   };
   return (
     <div className={styles.scriptPalette} onDrop={resetEvent('-s')}>
-      {blocks.map((block, n) => (
+      {blocks.map((block) => (
         <div className={styles.scriptPaletteBlockWrapper} key={block.id}>
           <div
             draggable
-            onDragStart={(e) => {
+            onDragStart={resetEvent('-s', (e) => {
               setTargetBlock([defaultBlock(block)]);
               setTargetPos({
                 x: (e.target as HTMLDivElement).getBoundingClientRect().left - e.clientX,
                 y: (e.target as HTMLDivElement).getBoundingClientRect().top - e.clientY,
               });
-            }}
+            })}
           >
             <Block
               arg={defaultBlock(block)}
@@ -51,6 +51,8 @@ export const ScriptPalette = (props: Props) => {
                 targetBlock: null,
                 handleOnChange: () => {},
                 handleDrop: () => {},
+                handleDragStart: () => {},
+                setTargetPos: () => {},
               }}
             />
           </div>

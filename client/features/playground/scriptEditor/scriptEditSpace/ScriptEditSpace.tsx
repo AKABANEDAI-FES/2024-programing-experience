@@ -13,6 +13,7 @@ type Props = {
   targetBlock: TargetBlockType;
   setTargetBlock: SetTargetBlockType;
   targetPos: { x: number; y: number };
+  setTargetPos: Dispatch<SetStateAction<{ x: number; y: number }>>;
   children: React.ReactNode;
 };
 
@@ -22,6 +23,7 @@ export const ScriptEditSpace = ({
   targetBlock,
   setTargetBlock,
   targetPos,
+  setTargetPos,
   children,
 }: Props) => {
   const {
@@ -29,6 +31,7 @@ export const ScriptEditSpace = ({
     handleDragOver,
     handleOnChange,
     handleDropToInput,
+    handleDragStart,
     targetBlock: outTB,
   } = useScripts({
     scripts,
@@ -70,6 +73,8 @@ export const ScriptEditSpace = ({
             isNotShadow={true}
             handleOnChange={handleOnChange}
             handleDrop={handleDropToInput}
+            handleDragStart={handleDragStart}
+            setTargetPos={setTargetPos}
             outTB={outTB}
           />
         </div>

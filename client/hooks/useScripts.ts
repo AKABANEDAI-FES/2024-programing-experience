@@ -23,6 +23,7 @@ type UseScriptsReturn = {
   handleDragOver: () => void;
   handleOnChange: (inputValue: string, scriptIndex: number, indexes: number[]) => void;
   handleDropToInput: (scriptIndex: number, indexes: number[]) => void;
+  handleDragStart: (scriptIndex: number, indexes: number[]) => void;
   targetBlock: TargetBlockType;
 };
 
@@ -73,12 +74,28 @@ export const useScripts = ({
     [scripts, setScripts, targetBlock],
   );
 
+  const handleDragStart = useCallback(
+    (scriptIndex: number, indexes: number[]) => {
+      const [newScripts, newTarget] = deleteScript(scripts[scriptIndex].script, indexes);
+      setTimeout(() => {
+        setScripts(
+          scripts.map((s, i) =>
+            i === scriptIndex ? { ...scripts[scriptIndex], script: newScripts } : s,
+          ),
+        );
+        setTargetBlock(newTarget);
+      });
+    },
+    [scripts, setScripts, setTargetBlock],
+  );
+
   return {
     scripts,
     handleDrop,
     handleDragOver,
     handleOnChange,
     handleDropToInput,
+    handleDragStart,
     targetBlock,
   };
 };

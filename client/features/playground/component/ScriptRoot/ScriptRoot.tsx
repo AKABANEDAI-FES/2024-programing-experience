@@ -2,6 +2,7 @@ import type { blockArg } from 'common/types/playground';
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import { calcUpdateIndex } from 'features/playground/utils/calcUpdateIndex';
 import { rectHandler } from 'features/playground/utils/rectHandler';
+import type { Dispatch } from 'react';
 import React, { useCallback, useRef, useState } from 'react';
 import type { TargetBlockType } from 'types';
 import { lambda } from 'utils/lambda';
@@ -23,6 +24,8 @@ export type Props = {
   resetParentIsDragOver?: () => void;
   dropOnPrevElement?: () => void;
   dropToParentElement?: (e: React.DragEvent<HTMLElement>) => void;
+  handleDragStart: (n: number, is: number[]) => void;
+  setTargetPos: Dispatch<React.SetStateAction<{ x: number; y: number }>>;
   outTB?: TargetBlockType;
 };
 
@@ -40,6 +43,8 @@ export const ScriptRoot = (props: Props) => {
     resetParentIsDragOver,
     dropOnPrevElement,
     dropToParentElement,
+    handleDragStart,
+    setTargetPos,
     outTB,
   } = props;
 
@@ -67,7 +72,7 @@ export const ScriptRoot = (props: Props) => {
     dropOnPrevElement?.();
   }, []);
 
-  const handleDragFinish = (e: React.DragEvent) => {
+  const handleNotOnDrag = (e: React.DragEvent) => {
     if (!ref.current?.contains(e.relatedTarget as Node)) {
       setIsDragOver('false');
     }
@@ -98,8 +103,8 @@ export const ScriptRoot = (props: Props) => {
   return (
     <div
       ref={ref}
-      onDragLeave={resetEvent('p-', (e) => handleDragFinish(e))}
-      onDragEnd={resetEvent('p-', (e) => handleDragFinish(e))}
+      onDragLeave={resetEvent('p-', (e) => handleNotOnDrag(e))}
+      onDragEnd={resetEvent('p-', (e) => handleNotOnDrag(e))}
       onDrop={resetEvent('ps', handleDrop)}
       onDragOver={resetEvent('ps', (e) => {
         resetParentIsDragOver?.();
@@ -149,6 +154,10 @@ export const ScriptRoot = (props: Props) => {
                       draggable
                       className={styles.blockWrapper}
                       onDragStart={resetEvent('-s', (e) => {
+                        handleDragStart(scriptIndex, [...indexes, i - 1]);
+                        setTargetPos({
+                          x: (e.target as HTMLDivElement).getBoundingClientRect().left - e.clientX,
+                          y: (e.target as HTMLDivElement).getBoundingClientRect().top - e.clientY,
                         });
                       })}
                     >
