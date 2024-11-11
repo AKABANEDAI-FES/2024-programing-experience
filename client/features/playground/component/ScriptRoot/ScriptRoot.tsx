@@ -139,14 +139,19 @@ export const ScriptRoot = (props: Props) => {
                 .toReversed(),
             },
             ({ scripts }) =>
-              scripts.reduce(
+              [<></>, ...scripts].reduce(
                 (acc, content, i) =>
                   i === 0 ? (
-                    <div draggable className={styles.blockWrapper}>
-                      {content}
-                    </div>
+                    content
                   ) : (
-                    <div key={i} className={styles.blockWrapper} draggable>
+                    <div
+                      key={`w${i}`}
+                      draggable
+                      className={styles.blockWrapper}
+                      onDragStart={resetEvent('-s', (e) => {
+                        });
+                      })}
+                    >
                       {acc}
                       {content}
                     </div>

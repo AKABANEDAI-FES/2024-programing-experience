@@ -63,6 +63,10 @@
   border-radius: 0 0 0.5rem 0.5rem;
 }
 
+.blockWrapper:last-child > .blockWrapper:first-child > .block {
+  border-radius: 0.5rem;
+}
+
 .blockColumn,
 .blockRow {
   display: flex;
