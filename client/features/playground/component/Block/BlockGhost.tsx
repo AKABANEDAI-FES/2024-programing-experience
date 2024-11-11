@@ -1,14 +1,14 @@
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
 import { DefinedWrapper } from 'components/DefinedWrapper';
 import type { Props as RootProps } from 'features/playground/component/ScriptRoot/ScriptRoot';
-import type { BlockT } from 'features/playground/types';
 import React, { forwardRef } from 'react';
+import type { TargetBlockType } from 'types';
 import { resetEvent } from 'utils/resetEvent';
 import { ScriptRoot } from '../ScriptRoot/ScriptRoot';
 
 type Props = {
   isRendering: boolean;
-  targetBlock: BlockT[] | null;
+  targetBlock: TargetBlockType;
   isDragOver: 'false' | 'upper' | 'lower';
   props: RootProps;
   dropOnNextElement: () => void;

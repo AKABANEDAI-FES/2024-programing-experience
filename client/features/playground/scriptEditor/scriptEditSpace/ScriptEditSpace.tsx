@@ -1,18 +1,17 @@
-import type { Block } from 'common/types/playground';
 import { ScriptRoot } from 'features/playground/component/ScriptRoot/ScriptRoot';
 import type { Scripts } from 'features/playground/types';
 import { useScripts } from 'hooks/useScripts';
 import type { Dispatch, SetStateAction } from 'react';
 import React from 'react';
-import type { Pos } from 'types';
+import type { Pos, SetTargetBlockType, TargetBlockType } from 'types';
 import { resetEvent } from 'utils/resetEvent';
 import styles from './ScriptEditSpace.module.css';
 
 type Props = {
   scripts: Scripts;
   setScripts: Dispatch<SetStateAction<Scripts>>;
-  targetBlock: Block[] | null;
-  setTargetBlock: Dispatch<SetStateAction<Block[] | null>>;
+  targetBlock: TargetBlockType;
+  setTargetBlock: SetTargetBlockType;
   targetPos: { x: number; y: number };
   children: React.ReactNode;
 };

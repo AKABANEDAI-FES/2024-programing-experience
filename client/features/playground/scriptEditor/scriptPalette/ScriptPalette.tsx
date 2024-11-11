@@ -1,14 +1,15 @@
 import { Block } from 'features/playground/component/Block/Block';
 import { BLOCKS } from 'features/playground/constants';
-import type { BLOCK, BlockT } from 'features/playground/types';
+import type { BLOCK } from 'features/playground/types';
 import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import type { Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
+import type { SetTargetBlockType } from 'types';
 import { resetEvent } from 'utils/resetEvent';
 import styles from '../ScriptEditor.module.css';
 
 type Props = {
-  setTargetBlock: Dispatch<SetStateAction<BlockT[] | null>>;
+  setTargetBlock: SetTargetBlockType;
   setTargetPos: Dispatch<SetStateAction<{ x: number; y: number }>>;
 };
 

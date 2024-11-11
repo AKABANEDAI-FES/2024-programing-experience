@@ -1,9 +1,9 @@
 import type { blockArg } from 'common/types/playground';
 import { ConditionalWrapper } from 'components/ConditionalWrapper';
-import type { BlockT } from 'features/playground/types';
 import { calcUpdateIndex } from 'features/playground/utils/calcUpdateIndex';
 import { rectHandler } from 'features/playground/utils/rectHandler';
 import React, { useCallback, useRef, useState } from 'react';
+import type { TargetBlockType } from 'types';
 import { lambda } from 'utils/lambda';
 import { resetEvent } from 'utils/resetEvent';
 import { Block } from '../Block/Block';
@@ -15,7 +15,7 @@ export type Props = {
   arg: blockArg | undefined;
   scriptIndex: number;
   indexes: number[];
-  targetBlock: BlockT[] | null;
+  targetBlock: TargetBlockType;
   isNotShadow: boolean;
   isDragOver?: 'false' | 'upper' | 'lower';
   handleOnChange: (inputValue: string, n: number, is: number[]) => void;
@@ -23,7 +23,7 @@ export type Props = {
   resetParentIsDragOver?: () => void;
   dropOnPrevElement?: () => void;
   dropToParentElement?: (e: React.DragEvent<HTMLElement>) => void;
-  outTB?: BlockT[] | null;
+  outTB?: TargetBlockType;
 };
 
 // eslint-disable-next-line complexity
@@ -113,7 +113,7 @@ export const ScriptRoot = (props: Props) => {
         }
       })}
       className={styles.blockWrapper}
-      key={`${outTB?.map((e) => `${e.id}`).reduce((a, b) => `${a}-${b}`)}`}
+      key={`${outTB instanceof Array ? outTB?.map((e) => `${e.id}`).reduce((a, b) => `${a}-${b}`, '') : outTB?.id}`}
     >
       <BlockGhost
         isRendering={[isDragOver === 'lower', isNotShadow].every(Boolean)}

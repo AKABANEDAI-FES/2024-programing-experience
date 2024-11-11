@@ -1,19 +1,20 @@
 import type { BlockT } from 'features/playground/types';
+import { deleteScript } from 'features/playground/utils/deleteScriptValue';
 import { updateScriptValue } from 'features/playground/utils/updateScriptValue';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback } from 'react';
-import type { Pos } from 'types';
+import type { Pos, SetTargetBlockType, TargetBlockType } from 'types';
 
 type ScriptState = {
   script: BlockT[];
   position: { x: number; y: number };
 };
 type UseScriptsProps = {
-  targetBlock: BlockT[] | null;
+  targetBlock: TargetBlockType;
   targetPos: { x: number; y: number };
   scripts: ScriptState[];
   setScripts: Dispatch<SetStateAction<ScriptState[]>>;
-  setTargetBlock: Dispatch<SetStateAction<BlockT[] | null>>;
+  setTargetBlock: SetTargetBlockType;
 };
 
 type UseScriptsReturn = {
@@ -22,7 +23,7 @@ type UseScriptsReturn = {
   handleDragOver: () => void;
   handleOnChange: (inputValue: string, scriptIndex: number, indexes: number[]) => void;
   handleDropToInput: (scriptIndex: number, indexes: number[]) => void;
-  targetBlock: BlockT[] | null;
+  targetBlock: TargetBlockType;
 };
 
 export const useScripts = ({
