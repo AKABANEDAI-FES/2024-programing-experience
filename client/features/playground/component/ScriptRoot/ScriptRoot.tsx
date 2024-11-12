@@ -141,7 +141,8 @@ export const ScriptRoot = (props: Props) => {
                 .map((scriptBlock, j) => (
                   <ScriptRoot key={j} {...props} arg={scriptBlock} indexes={[...indexes, j]} />
                 ))
-                .toReversed(),
+                .slice()
+                .reverse(),
             },
             ({ scripts }) =>
               [<></>, ...scripts].reduce(
