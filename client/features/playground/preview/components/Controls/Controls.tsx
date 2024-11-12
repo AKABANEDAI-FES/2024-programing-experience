@@ -18,7 +18,7 @@ export const Controls = ({
       className={isActive ? styles.stopButton : styles.startButton}
       onClick={onStartButtonClick}
     >
-      {isActive ? 'Stop' : 'Start'}
+      {/* {isActive ? 'Stop' : 'Start'} */}
     </button>
     <input
       type="range"
