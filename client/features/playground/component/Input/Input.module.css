@@ -1,0 +1,15 @@
+.input {
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  margin: 0 0.5rem;
+  font-size: 1rem;
+  color: #000;
+  text-align: center;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 0.5rem;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}

@@ -1,13 +1,15 @@
-import { Input } from 'features/playground/component/Input';
+import { Block } from 'features/playground/component/Block/Block';
 import { BLOCKS } from 'features/playground/constants';
 import type { BLOCK } from 'features/playground/types';
+import { defaultBlock } from 'features/playground/utils/defaultBlock';
 import type { Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
+import type { SetTargetBlockType } from 'types';
 import { resetEvent } from 'utils/resetEvent';
 import styles from '../ScriptEditor.module.css';
 
 type Props = {
-  setTargetBlock: Dispatch<SetStateAction<BLOCK | null>>;
+  setTargetBlock: SetTargetBlockType;
   setTargetPos: Dispatch<SetStateAction<{ x: number; y: number }>>;
 };
 
@@ -16,7 +18,7 @@ export const ScriptPalette = (props: Props) => {
   // @ts-expect-error TS2322
   const [blocks, setBLOCKS_useState] = useState<BLOCK[]>(BLOCKS);
 
-  const _handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, i: number) => {
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, n: number, i: number) => {
     const newBLOCKS = structuredClone(blocks);
     newBLOCKS[n].contents[i] = `$${e.target.value}`;
 
@@ -27,25 +29,32 @@ export const ScriptPalette = (props: Props) => {
       {blocks.map((block) => (
         <div className={styles.scriptPaletteBlockWrapper} key={block.id}>
           <div
-            className={styles.block}
             draggable
-            onDragStart={(e) => {
-              setTargetBlock(block);
+            onDragStart={resetEvent('-s', (e) => {
+              setTargetBlock([defaultBlock(block)]);
               setTargetPos({
                 x: (e.target as HTMLDivElement).getBoundingClientRect().left - e.clientX,
                 y: (e.target as HTMLDivElement).getBoundingClientRect().top - e.clientY,
               });
-            }}
+            })}
           >
-            {block.contents.map((content, i) =>
-              content instanceof Array ? (
-                <Input key={i} defaultValue={''} />
-              ) : content.startsWith('$') ? (
-                <Input key={i} defaultValue={content.replace('$', '')} />
-              ) : (
-                <div key={i}>{content}</div>
-              ),
-            )}
+            <Block
+              arg={defaultBlock(block)}
+              indexes={[]}
+              isNotShadow={true}
+              dragOverChildElement={() => {}}
+              props={{
+                arg: undefined,
+                indexes: [],
+                isNotShadow: true,
+                scriptIndex: 0,
+                targetBlock: null,
+                handleOnChange: () => {},
+                handleDrop: () => {},
+                handleDragStart: () => {},
+                setTargetPos: () => {},
+              }}
+            />
           </div>
         </div>
       ))}

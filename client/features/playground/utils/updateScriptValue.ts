@@ -1,8 +1,8 @@
-import type { Block, blockArg } from '../types';
+import type { blockArg } from '../types';
 
 // eslint-disable-next-line complexity
 export const updateScriptValue = (
-  arg: Exclude<blockArg, Block[]>,
+  arg: blockArg,
   script: Exclude<blockArg, string>,
   indexes: number[],
 ) => {
@@ -12,26 +12,23 @@ export const updateScriptValue = (
     throw new Error('Invalid index');
   }
   if (script instanceof Array) {
-    if (script[index] === undefined) {
+    if (typeof arg !== 'string') {
+      const wrappedArg = [arg].flat(1);
       // eslint-disable-next-line max-depth
-      if (typeof arg === 'string') {
-        throw new Error('Invalid arg');
+      if (script[index] === undefined) {
+        // eslint-disable-next-line max-depth
+        if (index === -1) {
+          script.unshift(...wrappedArg);
+        } else {
+          script.push(...wrappedArg);
+        }
+        return;
       }
       // eslint-disable-next-line max-depth
-      if (index === -1) {
-        script.unshift(arg);
-      } else {
-        script.push(arg);
+      if (newIndexes.length <= 0) {
+        script.splice(index + 1, 0, ...wrappedArg);
+        return;
       }
-      return;
-    }
-    if (newIndexes.length <= 0) {
-      // eslint-disable-next-line max-depth
-      if (typeof arg === 'string') {
-        throw new Error('Invalid arg');
-      }
-      script.splice(index + 1, 0, arg);
-      return;
     }
     updateScriptValue(arg, script[index], newIndexes);
     return;

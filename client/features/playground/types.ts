@@ -5,7 +5,7 @@ import type {
 } from 'common/types/playground';
 export type blockArg = CommonBlockArg;
 
-export type Block = CommonBlock;
+export type BlockT = CommonBlock;
 export type BLOCK = { id: number; contents: (string | [])[] };
 
 export type READONLY_BLOCK = Readonly<{ [T in keyof BLOCK]: Readonly<BLOCK[T]> }>;
@@ -17,7 +17,7 @@ export type SpriteState = {
 };
 
 export type ScriptState = {
-  script: Block[];
+  script: BlockT[];
   active: boolean;
   stepDelay: number | null;
   stepCount: number[];

@@ -35,7 +35,7 @@ export const moves = (
   nestCount: number,
   setState: Dispatch<SetStateAction<SpriteState>>,
 ): Record<number, () => void> => {
-  const arg = (n: number) => fn(args[n]);
+  const arg = (n: number) => [args[n]].flat().map(fn).at(-1);
   setStepDelay(scriptState, null);
   return {
     0: () => {

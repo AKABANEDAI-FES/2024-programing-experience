@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import type { Dispatch, SetStateAction } from 'react';
 import { moves } from '../constants';
-import type { Block, blockArg, ScriptState, SpriteState } from '../types';
+import type { blockArg, BlockT, ScriptState, SpriteState } from '../types';
 import {
   addNestToLoopCount,
   addNestToStatus,
@@ -17,7 +17,7 @@ export const nestedStepMoveBase = (
   scriptState: ScriptState,
   status: () => boolean,
   nestCount: number,
-  innerScripts: Block[],
+  innerScripts: BlockT[],
   isDeleteNest: () => boolean,
   setState: Dispatch<SetStateAction<SpriteState>>,
   afterFn?: () => void,
@@ -37,9 +37,13 @@ export const nestedStepMoveBase = (
   }
 
   if (scriptState.nestStatus[nestCount]) {
-    moves(fn, innerScripts[scriptState.stepCount[nestCount]].arg, scriptState, nestCount, setState)[
-      innerScripts[scriptState.stepCount[nestCount]].id
-    ]?.();
+    moves(
+      fn,
+      innerScripts[scriptState.stepCount[nestCount]]?.arg,
+      scriptState,
+      nestCount,
+      setState,
+    )[innerScripts[scriptState.stepCount[nestCount]]?.id]?.();
   } else {
     setStepDelay(scriptState, 0);
   }
