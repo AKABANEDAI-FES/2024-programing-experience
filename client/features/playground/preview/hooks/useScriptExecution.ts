@@ -1,5 +1,6 @@
+import type { Block } from 'common/types/playground';
 import { moves } from 'features/playground/constants';
-import type { Block, blockArg, ScriptState, SpriteState } from 'features/playground/types';
+import type { blockArg, ScriptState, SpriteState } from 'features/playground/types';
 import { useEffect, useState } from 'react';
 
 const defaultScriptState = (script: Block[]) => ({
