@@ -37,9 +37,13 @@ export const nestedStepMoveBase = (
   }
 
   if (scriptState.nestStatus[nestCount]) {
-    moves(fn, innerScripts[scriptState.stepCount[nestCount]].arg, scriptState, nestCount, setState)[
-      innerScripts[scriptState.stepCount[nestCount]].id
-    ]?.();
+    moves(
+      fn,
+      innerScripts[scriptState.stepCount[nestCount]]?.arg,
+      scriptState,
+      nestCount,
+      setState,
+    )[innerScripts[scriptState.stepCount[nestCount]]?.id]?.();
   } else {
     setStepDelay(scriptState, 0);
   }

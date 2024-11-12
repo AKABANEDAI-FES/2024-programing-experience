@@ -12,22 +12,23 @@ export const updateScriptValue = (
     throw new Error('Invalid index');
   }
   if (script instanceof Array) {
-    if (typeof arg === 'string') {
-      throw new Error('Invalid arg');
-    }
-    const wrappedArg = [arg].flat(1);
-    if (script[index] === undefined) {
+    if (typeof arg !== 'string') {
+      const wrappedArg = [arg].flat(1);
       // eslint-disable-next-line max-depth
-      if (index === -1) {
-        script.unshift(...wrappedArg);
-      } else {
-        script.push(...wrappedArg);
+      if (script[index] === undefined) {
+        // eslint-disable-next-line max-depth
+        if (index === -1) {
+          script.unshift(...wrappedArg);
+        } else {
+          script.push(...wrappedArg);
+        }
+        return;
       }
-      return;
-    }
-    if (newIndexes.length <= 0) {
-      script.splice(index + 1, 0, ...wrappedArg);
-      return;
+      // eslint-disable-next-line max-depth
+      if (newIndexes.length <= 0) {
+        script.splice(index + 1, 0, ...wrappedArg);
+        return;
+      }
     }
     updateScriptValue(arg, script[index], newIndexes);
     return;
