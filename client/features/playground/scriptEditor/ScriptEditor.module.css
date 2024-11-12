@@ -32,7 +32,6 @@
 }
 
 .scriptPaletteBlockWrapper {
-  z-index: 9999;
   width: 100%;
   max-width: fit-content;
   overflow: hidden;
