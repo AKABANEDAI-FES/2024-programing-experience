@@ -145,27 +145,24 @@ export const ScriptRoot = (props: Props) => {
                 .reverse(),
             },
             ({ scripts }) =>
-              [<></>, ...scripts].reduce(
-                (acc, content, i) =>
-                  i === 0 ? (
-                    content
-                  ) : (
-                    <div
-                      key={`w${i}`}
-                      draggable
-                      className={styles.blockWrapper}
-                      onDragStart={resetEvent('-s', (e) => {
-                        handleDragStart(scriptIndex, [...indexes, i - 1]);
-                        setTargetPos({
-                          x: (e.target as HTMLDivElement).getBoundingClientRect().left - e.clientX,
-                          y: (e.target as HTMLDivElement).getBoundingClientRect().top - e.clientY,
-                        });
-                      })}
-                    >
-                      {acc}
-                      {content}
-                    </div>
-                  ),
+              scripts.reduce(
+                (acc, content, i) => (
+                  <div
+                    key={`w${i}`}
+                    draggable
+                    className={styles.blockWrapper}
+                    onDragStart={resetEvent('-s', (e) => {
+                      handleDragStart(scriptIndex, [...indexes, i]);
+                      setTargetPos({
+                        x: (e.target as HTMLDivElement).getBoundingClientRect().left - e.clientX,
+                        y: (e.target as HTMLDivElement).getBoundingClientRect().top - e.clientY,
+                      });
+                    })}
+                  >
+                    {acc}
+                    {content}
+                  </div>
+                ),
                 <></>,
               ),
           )}
