@@ -1,6 +1,6 @@
 import styles from './Controls.module.css';
 
-type ControlsProps = {
+type Props = {
   isActive: boolean;
   onStartButtonClick: () => void;
   onSpeedChange: (speed: number) => void;
@@ -12,8 +12,8 @@ export const Controls = ({
   onStartButtonClick,
   onSpeedChange,
   statusMessage,
-}: ControlsProps) => (
-  <div>
+}: Props) => (
+  <>
     <button
       className={isActive ? styles.stopButton : styles.startButton}
       onClick={onStartButtonClick}
@@ -28,5 +28,5 @@ export const Controls = ({
       }}
     />
     <div>{statusMessage}</div>
-  </div>
+  </>
 );

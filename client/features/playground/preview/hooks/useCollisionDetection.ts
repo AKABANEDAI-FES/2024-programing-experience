@@ -1,33 +1,17 @@
+import type { ObstacleDto } from 'common/types/obstacle';
 import type { SpriteState } from 'features/playground/types';
-import { useEffect, useState } from 'react';
-import { goal } from '../constants';
-import { checkCollision, checkGoalReached } from '../utils/collision';
+import type { Pos } from 'types';
+import { checkCollision } from '../utils/collision';
 
-export const useCollisionDetection = (state: SpriteState) => {
-  const [hasReachedGoal, setHasReachedGoal] = useState(false);
-  const [collisions, setCollisions] = useState(false);
+type Props = [SpriteState, (Pos & ObstacleDto)[], number];
 
-  const [obstacles] = useState([
-    { x: 100, y: 100, width: 50, height: 50 },
-    { x: 200, y: 200, width: 50, height: 50 },
-  ]);
+export const useCollisionDetection = (...[spriteState, obstaclePoses, gridSize]: Props) => {
+  const hasCollision = checkCollision(
+    spriteState,
+    obstaclePoses.filter((e) => e.type !== 0),
+    gridSize,
+  );
+  const isGoaled = checkCollision(spriteState, [obstaclePoses.find((e) => e.type === 0)], gridSize);
 
-  useEffect(() => {
-    const spriteSize = { width: 30, height: 30 };
-
-    const spriteRect = {
-      left: state.x,
-      right: state.x + spriteSize.width,
-      top: state.y,
-      bottom: state.y + spriteSize.height,
-    };
-
-    const hasCollision = checkCollision(spriteRect, obstacles);
-    const reachedGoal = checkGoalReached(spriteRect, goal);
-
-    setCollisions(hasCollision);
-    setHasReachedGoal(reachedGoal);
-  }, [state]);
-
-  return { hasReachedGoal, collisions };
+  return { isGoaled, hasCollision };
 };

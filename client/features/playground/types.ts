@@ -26,3 +26,8 @@ export type ScriptState = {
 };
 
 export type Scripts = CommonScripts;
+export type Rect = {
+  left: number;
+  top: number;
+  size: number;
+};
