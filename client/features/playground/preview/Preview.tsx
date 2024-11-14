@@ -91,18 +91,7 @@ export const Preview = (props: Props) => {
           isGoaled={isGoaled}
           hasCollision={hasCollision}
         />
-        {OBSTACLES_POSES.map((obstaclePos, i) => (
-          <div
-            key={i}
-            style={{
-              display: 'flex',
-              gridArea: `area${obstaclePos.y}-${obstaclePos.x}`,
-              backgroundColor: obstaclePos.type === 0 ? 'yellowgreen' : 'red',
-            }}
-          >
-            <Obstacles />
-          </div>
-        ))}
+        <Obstacles obstaclePoses={OBSTACLES_POSES} />
       </div>
     </div>
   );
