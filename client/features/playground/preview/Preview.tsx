@@ -1,12 +1,12 @@
 import { AlignBox } from 'components/AlignBox';
 import { useEffect, useRef, useState } from 'react';
 import type { Scripts, SpriteState } from '../types';
-import styles from './Preview.module.css';
-import { Controls } from './components/Controls/Controls';
-import { Obstacle } from './components/Obstacle/Obstacle';
-import { Sprite } from './components/Sprite/Sprite';
+import { ControlBar } from './ControlBar/ControlBar';
 import { useCollisionDetection } from './hooks/useCollisionDetection';
 import { useScriptExecution } from './hooks/useScriptExecution';
+import { Obstacles } from './Obstacles/Obstacles';
+import styles from './Preview.module.css';
+import { Sprite } from './Sprite/Sprite';
 
 type Props = {
   scripts: Scripts;
@@ -68,7 +68,7 @@ export const Preview = (props: Props) => {
   return (
     <div className={styles.main}>
       <AlignBox x={'|..'}>
-        <Controls
+        <ControlBar
           isActive={scriptStates.some(({ active }) => active)}
           onStartButtonClick={handleStartButtonClick}
           onSpeedChange={(speed) => setStepSpeed(speed)}
@@ -100,7 +100,7 @@ export const Preview = (props: Props) => {
               backgroundColor: obstaclePos.type === 0 ? 'yellowgreen' : 'red',
             }}
           >
-            <Obstacle />
+            <Obstacles />
           </div>
         ))}
       </div>

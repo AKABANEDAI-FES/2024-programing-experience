@@ -7,7 +7,7 @@ type Props = {
   statusMessage: string;
 };
 
-export const Controls = ({
+export const ControlBar = ({
   isActive,
   onStartButtonClick,
   onSpeedChange,
