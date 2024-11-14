@@ -1,4 +1,4 @@
-import styles from './Controls.module.css';
+import styles from './ControlBar.module.css';
 
 type Props = {
   isActive: boolean;

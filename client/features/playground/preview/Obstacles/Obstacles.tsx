@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Obstacle.module.css';
+import styles from './Obstacles.module.css';
 
 type Props = Partial<Pick<React.CSSProperties, 'backgroundColor' | 'border'>> & {
   backGroundImgURL?: string;
