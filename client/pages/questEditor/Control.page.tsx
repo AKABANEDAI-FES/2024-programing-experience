@@ -26,7 +26,6 @@ export default function Component({ markdownText, setMarkdownText }: ComponentPr
     setMarkdownText(inputText); // 入力されたテキストを親コンポーネントに渡す
     setInputText(''); // テキスト送信後にフィールドをクリア
   };
-  console.log('aa', inputText);
 
   return (
     <div className={styles.container}>

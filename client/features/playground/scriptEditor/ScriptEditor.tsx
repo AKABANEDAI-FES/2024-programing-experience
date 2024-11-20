@@ -1,4 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
 import type { TargetBlockType } from 'types';
 import type { Scripts } from '../types';
@@ -8,7 +7,7 @@ import { ScriptPalette } from './scriptPalette/ScriptPalette';
 
 type Props = {
   scripts: Scripts;
-  setScripts: Dispatch<SetStateAction<Scripts>>;
+  setScripts: (v: Scripts) => void;
 };
 export const ScriptEditor = (props: Props) => {
   const [targetBlock, setTargetBlock] = useState<TargetBlockType>(null);

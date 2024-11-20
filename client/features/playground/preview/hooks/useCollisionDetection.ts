@@ -1,9 +1,8 @@
-import type { ObstacleDto } from 'common/types/obstacle';
 import type { SpriteState } from 'features/playground/types';
 import type { Pos } from 'types';
 import { checkCollision } from '../utils/collision';
 
-type Props = [SpriteState, (Pos & ObstacleDto)[], number];
+type Props = [SpriteState, (Pos & { type: number })[], number];
 
 export const useCollisionDetection = (...[spriteState, obstaclePoses, gridSize]: Props) => {
   const hasCollision = checkCollision(

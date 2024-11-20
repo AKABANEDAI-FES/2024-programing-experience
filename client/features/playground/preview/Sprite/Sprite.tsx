@@ -14,16 +14,18 @@ export const Sprite = ({
   isGoaled: hasReachedGoal,
   hasCollision: collisions,
   gridSize,
-}: SpriteProps) => (
-  <div
-    className={styles.sprite}
-    style={{
-      top: state.y,
-      width: gridSize,
-      left: state.x,
-      transform: `rotate(${state.direction}deg)`,
-      transitionDuration: `${stepSpeed}s`,
-      backgroundColor: hasReachedGoal ? 'gold' : collisions ? 'red' : 'blue',
-    }}
-  />
-);
+}: SpriteProps) => {
+  return (
+    <div
+      className={styles.sprite}
+      style={{
+        top: state.y,
+        width: gridSize,
+        left: state.x,
+        transform: `rotate(${state.direction}deg)`,
+        transitionDuration: `${stepSpeed}s`,
+        backgroundColor: hasReachedGoal ? 'gold' : collisions ? 'red' : 'blue',
+      }}
+    />
+  );
+};

@@ -1,6 +1,6 @@
 import { AlignBox } from 'components/AlignBox';
 import { useEffect, useRef, useState } from 'react';
-import type { Scripts, SpriteState } from '../types';
+import type { ScriptState, SpriteState } from '../types';
 import { ControlBar } from './ControlBar/ControlBar';
 import { useCollisionDetection } from './hooks/useCollisionDetection';
 import { useScriptExecution } from './hooks/useScriptExecution';
@@ -9,7 +9,8 @@ import styles from './Preview.module.css';
 import { Sprite } from './Sprite/Sprite';
 
 type Props = {
-  scripts: Scripts;
+  scriptStates: ScriptState[];
+  setScriptStates: (v: ScriptState[]) => void;
 };
 
 const OBSTACLES_POSES = [
@@ -31,11 +32,7 @@ const OBSTACLES_POSES = [
 
 const GRID_SEPARATE = 10;
 
-const scriptWithoutPoses = (scripts: Scripts) => scripts.map((scriptObj) => scriptObj.script);
-
-export const Preview = (props: Props) => {
-  const { scripts } = props;
-
+export const Preview = ({ scriptStates, setScriptStates }: Props) => {
   const [stepSpeed, setStepSpeed] = useState(1);
   const [state, setState] = useState<SpriteState>({
     x: 0,
@@ -45,15 +42,16 @@ export const Preview = (props: Props) => {
   const [gridSize, setGridSize] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
-  const { scriptStates, handleStartButtonClick } = useScriptExecution(
-    scriptWithoutPoses(scripts),
+  const { handleStartButtonClick } = useScriptExecution(
+    stepSpeed,
+    scriptStates,
+    setScriptStates,
     setState,
   );
   const { isGoaled, hasCollision } = useCollisionDetection(state, OBSTACLES_POSES, gridSize);
 
   useEffect(() => {
     const handleResize = () => {
-      console.log('resize');
       setGridSize((ref.current?.clientWidth ?? 0) / GRID_SEPARATE);
     };
     window.addEventListener('resize', handleResize);
@@ -63,8 +61,7 @@ export const Preview = (props: Props) => {
 
   useEffect(() => {
     setGridSize((ref.current?.clientWidth ?? 0) / GRID_SEPARATE);
-  }, [ref.current]);
-
+  });
   return (
     <div className={styles.main}>
       <AlignBox x={'|..'}>
@@ -81,7 +78,7 @@ export const Preview = (props: Props) => {
         style={{
           gridTemplateAreas: `"${Array.from({ length: GRID_SEPARATE }, (_, i) =>
             Array.from({ length: GRID_SEPARATE }, (_, j) => `area${i}-${j}`).join(' '),
-          ).join(' " "')}"`,
+          ).join('" "')}"`,
         }}
       >
         <Sprite
