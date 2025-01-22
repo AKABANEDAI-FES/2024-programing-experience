@@ -14,6 +14,9 @@ const defaultScriptState = (script: Block[]) => ({
   nestStatus: [true],
 });
 
+const consoleMethod = <T,>(obj: T, methods: (keyof T)[]) =>
+  console.log(methods.map((method) => obj?.[method]));
+
 export const Playground = () => {
   const [scripts, setScripts] = useState<(Scripts[number] & ScriptState)[]>([]);
   const setScriptPoses = (newScripts: Scripts) => {
@@ -27,6 +30,7 @@ export const Playground = () => {
   const setScriptStates = (newScripts: ScriptState[]) => {
     setScripts((prev) => newScripts.map((s, i) => ({ ...prev[i], ...s })));
   };
+  consoleMethod(scripts[0], ['loopCount', 'nestStatus', 'stepCount']);
   return (
     <div className={styles.main}>
       <ScriptEditor scripts={scripts} setScripts={setScriptPoses} />
