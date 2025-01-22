@@ -62,7 +62,7 @@ export const Preview = ({ scriptStates, setScriptStates }: Props) => {
   useEffect(() => {
     setGridSize((ref.current?.clientWidth ?? 0) / GRID_SEPARATE);
   });
-  console.log(state)
+  console.log(state);
   return (
     <div className={styles.main}>
       <AlignBox x={'|..'}>
