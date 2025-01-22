@@ -1,7 +1,7 @@
+import type { Scripts } from 'common/types/playground';
 import type { BlockT } from 'features/playground/types';
 import { deleteScript } from 'features/playground/utils/deleteScriptValue';
 import { updateScriptValue } from 'features/playground/utils/updateScriptValue';
-import type { Dispatch, SetStateAction } from 'react';
 import { useCallback } from 'react';
 import type { Pos, SetTargetBlockType, TargetBlockType } from 'types';
 
@@ -13,7 +13,7 @@ type UseScriptsProps = {
   targetBlock: TargetBlockType;
   targetPos: { x: number; y: number };
   scripts: ScriptState[];
-  setScripts: Dispatch<SetStateAction<ScriptState[]>>;
+  setScripts: (v: Scripts) => void;
   setTargetBlock: SetTargetBlockType;
 };
 
@@ -36,7 +36,6 @@ export const useScripts = ({
 }: UseScriptsProps): UseScriptsReturn => {
   const handleDrop = useCallback(
     (clientPos: Pos, rectPos: Pos) => {
-      console.log(targetBlock);
       if (!targetBlock) return;
       const current_X = clientPos.x - rectPos.x;
       const current_Y = clientPos.y - rectPos.y;

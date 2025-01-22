@@ -1,7 +1,7 @@
 import type { Block } from 'common/types/playground';
 import { moves } from 'features/playground/constants';
 import type { blockArg, ScriptState, SpriteState } from 'features/playground/types';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const defaultScriptState = (script: Block[]) => ({
   script,
@@ -13,15 +13,11 @@ const defaultScriptState = (script: Block[]) => ({
 });
 
 export const useScriptExecution = (
-  scripts: Block[][],
+  stepSpeed: number,
+  scriptStates: ScriptState[],
+  setScriptStates: (v: ScriptState[]) => void,
   setState: React.Dispatch<React.SetStateAction<SpriteState>>,
 ) => {
-  const [scriptStates, setScriptStates] = useState<ScriptState[]>(
-    scripts?.map((script) => defaultScriptState(script)),
-  );
-
-  const [stepSpeed, setStepSpeed] = useState(1);
-
   const updateScriptState = (updateFn: (newScriptStates: ScriptState[]) => void) => {
     const newScriptStates = structuredClone(scriptStates);
     updateFn(newScriptStates);
@@ -76,5 +72,5 @@ export const useScriptExecution = (
         })),
     );
   };
-  return { scriptStates, handleStartButtonClick, setStepSpeed }; // フックから必要なデータと関数を返す
+  return { handleStartButtonClick };
 };

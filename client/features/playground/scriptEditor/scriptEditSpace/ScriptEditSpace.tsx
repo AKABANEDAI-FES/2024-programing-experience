@@ -9,7 +9,7 @@ import styles from './ScriptEditSpace.module.css';
 
 type Props = {
   scripts: Scripts;
-  setScripts: Dispatch<SetStateAction<Scripts>>;
+  setScripts: (v: Scripts) => void;
   targetBlock: TargetBlockType;
   setTargetBlock: SetTargetBlockType;
   targetPos: { x: number; y: number };

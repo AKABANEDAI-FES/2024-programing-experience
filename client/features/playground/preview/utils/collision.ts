@@ -1,41 +1,23 @@
-type Rect = {
-  left: number;
-  right: number;
-  top: number;
-  bottom: number;
-};
+import type { Pos } from 'types';
 
-type Obstacle = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
+export const checkCollision = (
+  spriteRect: Pos,
+  obstaclePoses: (Pos | undefined)[],
+  size: number,
+): boolean => {
+  const calcRight = (rect: Pos, size: number = 1) => rect.x * size + size;
+  const calcBottom = (rect: Pos, size: number = 1) => rect.y * size + size;
+  const calcLeft = (rect: Pos, size: number = 1) => rect.x * size;
+  const calcTop = (rect: Pos, size: number = 1) => rect.y * size;
 
-type Goal = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
-
-export const checkCollision = (spriteRect: Rect, obstacles: Obstacle[]): boolean => {
-  return obstacles.some(
+  return obstaclePoses.some(
     (obstacle) =>
-      !(
-        spriteRect.left > obstacle.x + obstacle.width ||
-        spriteRect.right < obstacle.x ||
-        spriteRect.top > obstacle.y + obstacle.height ||
-        spriteRect.bottom < obstacle.y
-      ),
-  );
-};
-
-export const checkGoalReached = (spriteRect: Rect, goal: Goal): boolean => {
-  return !(
-    spriteRect.left > goal.x + goal.width ||
-    spriteRect.right < goal.x ||
-    spriteRect.top > goal.y + goal.height ||
-    spriteRect.bottom < goal.y
+      obstacle !== undefined &&
+      ![
+        calcLeft(spriteRect) > calcRight(obstacle, size),
+        calcRight(spriteRect) < calcLeft(obstacle, size),
+        calcTop(spriteRect) > calcBottom(obstacle, size),
+        calcBottom(spriteRect) < calcTop(obstacle, size),
+      ].some(Boolean),
   );
 };
