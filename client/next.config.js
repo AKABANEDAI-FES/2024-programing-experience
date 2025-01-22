@@ -10,10 +10,13 @@ module.exports = {
 
     return config;
   },
-  rewrites: async () => [
-    {
-      source: `${process.env.NEXT_PUBLIC_API_BASE_PATH}/:path*`,
-      destination: `http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}${process.env.NEXT_PUBLIC_API_BASE_PATH}/:path*`,
-    },
-  ],
+  rewrites: async () =>
+    !process.env.NEXT_PUBLIC_API_BASE_PATH
+      ? []
+      : [
+          {
+            source: `${process.env.NEXT_PUBLIC_API_BASE_PATH}/:path*`,
+            destination: `http://localhost:${process.env.NEXT_PUBLIC_SERVER_PORT}${process.env.NEXT_PUBLIC_API_BASE_PATH}/:path*`,
+          },
+        ],
 };
